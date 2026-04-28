@@ -6,8 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Solo Leveling">
-<meta name="theme-color" content="#060610">
-<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#08080F">
 <title>Solo Leveling</title>
 <style>
 /* ============================================================
@@ -684,14 +683,13 @@ const P = {
   vitality: {
     am: [
       { id:'v1', name:'Morning sunlight — go outside', note:'10+ min within 30–60 min of waking. This is Lever 1. Anchors your entire circadian clock.' },
-      { id:'v2', name:'No caffeine until cutoff',       note:'Cortisol peak: 9–10am. Caffeine cutoff: noon. Protect adenosine sensitivity.' },
     ],
     pm: [
-      { id:'v3', name:'Dim lights / warm light only',  note:'Hue Evening Shift at 9pm. Below 100 lux = melatonin production begins. This is non-negotiable.' },
-      { id:'v4', name:'Warm shower (10pm)',             note:'40–42°C for 5–10 min. Peripheral vasodilation → core temp drops post-shower → faster sleep onset.' },
+      { id:'v3', name:'Dim lights — warm light only',  note:'2.5 hrs before in-bed target. Below 100 lux = melatonin production begins. Hue automates this.' },
+      { id:'v4', name:'Warm shower',                   note:'90 min before in-bed target. 40–42°C for 5–10 min. Core temp drop drives faster sleep onset.' },
       { id:'v5', name:'Set room to 66°F',              note:'Sleep requires ~1.5°F core temp drop. Cool room makes this automatic every night.' },
-      { id:'v6', name:'No screens 30 min before bed',  note:'Bright screens suppress melatonin. After 10:30pm: Screen Time Downtime fires. Work with it.' },
-      { id:'v7', name:'In bed by target time',          note:'Check your current ramp target in Settings. You\'re advancing 15 min/week toward 11:30pm.' },
+      { id:'v6', name:'No screens before bed',         note:'60 min before in-bed target. Screen Time Downtime fires automatically — work with it.' },
+      { id:'v7', name:'In bed by tonight\'s target',   note:'Your current ramp target is shown live in the Somnus card above.' },
     ],
   },
 };
@@ -709,16 +707,6 @@ const HAIR = [
   'Leave completely alone until fully cool',
 ];
 
-const SCHED = [
-  ['9:00pm',  'Hue Evening Shift — warm/dim lighting'],
-  ['9:30pm',  'Hue Wind-Down — below 25 lux'],
-  ['10:00pm', 'Warm shower (Lever 2) 🚿'],
-  ['10:30pm', 'Screen Time Downtime fires — devices go dark'],
-  ['11:00pm', 'Cold Turkey + WiFi router kill'],
-  ['11:15pm', 'Phone to hallway 📵'],
-  ['TARGET',  'In bed 🛏️'],
-  ['9:00am',  'Wake anchor — do not move this'],
-];
 
 // ── State ──────────────────────────────────────────────────
 function defaultState() {
@@ -1213,17 +1201,23 @@ function rVitality() {
   const noSomnus = !ss;
 
   // Tonight's schedule — in-bed target highlighted
+  // Schedule derived entirely from ramp target — no hardcoded times
+  const inBedSigned = rampTgt ? ssToSigned(rampTgt) : ssToSigned(finalTgt);
+  const schedMins = [
+    [inBedSigned - 150, 'Hue Evening Shift — warm/dim lighting'],
+    [inBedSigned - 120, 'Hue Wind-Down — below 25 lux'],
+    [inBedSigned - 90,  'Warm shower 🚿 — 40–42°C, 5–10 min'],
+    [inBedSigned - 60,  'Screen Time Downtime fires'],
+    [inBedSigned - 30,  'Cold Turkey + WiFi router kill'],
+    [inBedSigned - 15,  'Phone to hallway 📵'],
+    [inBedSigned,       `In bed 🛏️${em ? ' — EMERGENCY MODE' : ''}`],
+  ];
+  const wakeLabel = fmtHHMM(ss?.settings?.wake || S.cfg.wake);
   const schedH = [
-    ['9:00pm',  'Hue Evening Shift — warm/dim lighting'],
-    ['9:30pm',  'Hue Wind-Down — below 25 lux'],
-    ['10:00pm', 'Warm shower 🚿 — 40–42°C, 5–10 min'],
-    ['10:30pm', 'Screen Time Downtime fires'],
-    ['11:00pm', 'Cold Turkey + WiFi router kill'],
-    ['11:15pm', 'Phone to hallway 📵'],
-    [fmtTgt,   `In bed 🛏️${em ? ' — EMERGENCY MODE' : ''}`],
-    ['9:00am',  'Wake anchor — do not move this'],
-  ].map(([t, d]) => `
-    <div class="sched-row${t===fmtTgt?' tgt':''}">
+    ...schedMins.map(([m, d]) => [fmtHHMM(ssHhmmFromMin(ssFromSigned(m))), d, m === inBedSigned]),
+    [wakeLabel, 'Wake anchor — do not move this', false],
+  ].map(([t, d, isTgt]) => `
+    <div class="sched-row${isTgt?' tgt':''}">
       <div class="sched-time">${t}</div>
       <div class="sched-desc">${d}</div>
     </div>`).join('');
@@ -1244,7 +1238,7 @@ function rVitality() {
       <div class="emrg-ico">🚨</div>
       <div>
         <div class="emrg-ttl">Emergency Sleep Mode Active</div>
-        <div class="emrg-body">${debt7 !== null ? `7-day avg debt: <strong style="color:var(--danger)">${debt7} min</strong>. ` : ''}In bed by 10:30pm. Target 10+ hours. Exit when debt &lt;45 min + 3 nights ≥8h30m. The wired feeling at midnight is cortisol dysregulation, not energy.</div>
+        <div class="emrg-body">${debt7 !== null ? `7-day avg debt: <strong style="color:var(--danger)">${debt7} min</strong>. ` : ''}In bed by ${fmtTgt}. Target 10+ hours. Exit when debt &lt;45 min + 3 consecutive nights ≥8h30m. The wired feeling at midnight is cortisol dysregulation, not energy.</div>
       </div>
     </div>` : ''}
 
@@ -1359,11 +1353,11 @@ function rVitality() {
       </div>
       <div class="ref-body">
         ${[
-          ['11pm',    'WiFi kill (router)',   'All internet — all devices. In your router app.'],
-          ['11pm',    'Cold Turkey (Mac)',    'Locked schedule — survives uninstall + reboot.'],
-          ['10:30pm', 'Screen Time (iOS)',    'Passcode held by trusted person externally.'],
-          ['11:15pm', 'Phone to hallway',     'Physical separation — out of arm\'s reach.'],
-          ['11pm',    'Smart plug on TV',     'Power cut automatically. ~$15 plug.'],
+          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 30))),  'WiFi kill (router)',   'All internet — all devices. In your router app.'],
+          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 30))),  'Cold Turkey (Mac)',    'Locked schedule — survives uninstall + reboot.'],
+          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 60))),  'Screen Time (iOS)',    'Passcode held by trusted person externally.'],
+          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 15))),  'Phone to hallway',     'Physical separation — out of arm\'s reach.'],
+          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 30))),  'Smart plug on TV',     'Power cut automatically. ~$15 plug.'],
         ].map(([t,l,d]) => `
           <div class="ref-step">
             <div class="ref-sn" style="font-size:9px;width:auto;padding:2px 6px;border-radius:6px;min-width:50px;text-align:center">${t}</div>
@@ -1649,13 +1643,6 @@ function tickClock() {
     setTimeout(midCheck, 60000);
   })();
 })();
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () =>
-    navigator.serviceWorker.register("/solo-leveling-web/sw.js")
-  );
-}
 </script>
 </body>
 </html>
