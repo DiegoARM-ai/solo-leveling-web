@@ -1209,9 +1209,8 @@ function rVitality() {
   const schedRows = [
     { t:'9:30pm',   d:'Lights shift — warm & dim (Hue automation)',  tgt:false }, // TIER1 fixed
     { t:'10:00pm',  d:'Warm shower 🚿 — 40–42°C, 5–10 min',          tgt:false }, // TIER1 fixed
-    { t:'10:30pm',  d:'Digital blockade — WiFi off · Cold Turkey · Screen Time', tgt:false }, // TIER1 fixed
+    { t:'10:30pm',  d:'Digital blockade — WiFi off · Cold Turkey · Screen Time · Phone to lockbox', tgt:false }, // TIER1 fixed
     { t:t2(45),     d:'Magnesium glycinate — 200–400mg',              tgt:false }, // TIER2 dynamic
-    { t:t2(30),     d:'Phone to lockbox 📵',                          tgt:false }, // TIER2 dynamic
     { t:fmtTgt,     d:`In bed 🛏️${em?' — EMERGENCY MODE':''}`,       tgt:true  }, // TIER2 in-bed target
     { t:wakeLabel,  d:'Wake anchor — do not move this',               tgt:false },
   ];
@@ -1355,7 +1354,7 @@ function rVitality() {
           ['10:30pm', 'WiFi kill (router)',   'All internet — all devices. In your router app.'],
           ['10:30pm', 'Cold Turkey (Mac)',    'Locked schedule — survives uninstall + reboot.'],
           ['10:30pm', 'Screen Time (iOS)',    'Passcode held by trusted person externally.'],
-          [t2(30),    'Phone to lockbox',     'Physical separation — out of arm\'s reach.'],
+          ['10:30pm', 'Phone to lockbox',     'Physical separation — out of arm\'s reach. Do this at blockade time.'],
           ['10:30pm', 'Smart plug on TV',     'Power cut automatically. ~$15 plug.'],
         ].map(([t,l,d]) => `
           <div class="ref-step">
