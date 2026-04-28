@@ -1200,24 +1200,23 @@ function rVitality() {
   const needMin  = ss?.settings?.sleepNeedMin || 555;
   const noSomnus = !ss;
 
-  // Tonight's schedule — in-bed target highlighted
-  // Schedule derived entirely from ramp target — no hardcoded times
+  // Tonight's schedule — mirrors Somnus's TIER1/TIER2 structure exactly
+  // TIER 1: fixed anchors that never move regardless of ramp position
+  // TIER 2: dynamic items derived from in-bed target
   const inBedSigned = rampTgt ? ssToSigned(rampTgt) : ssToSigned(finalTgt);
-  const schedMins = [
-    [inBedSigned - 150, 'Hue Evening Shift — warm/dim lighting'],
-    [inBedSigned - 120, 'Hue Wind-Down — below 25 lux'],
-    [inBedSigned - 90,  'Warm shower 🚿 — 40–42°C, 5–10 min'],
-    [inBedSigned - 60,  'Screen Time Downtime fires'],
-    [inBedSigned - 30,  'Cold Turkey + WiFi router kill'],
-    [inBedSigned - 15,  'Phone to hallway 📵'],
-    [inBedSigned,       `In bed 🛏️${em ? ' — EMERGENCY MODE' : ''}`],
-  ];
+  function t2(offsetMin) { return fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - offsetMin))); }
   const wakeLabel = fmtHHMM(ss?.settings?.wake || S.cfg.wake);
-  const schedH = [
-    ...schedMins.map(([m, d]) => [fmtHHMM(ssHhmmFromMin(ssFromSigned(m))), d, m === inBedSigned]),
-    [wakeLabel, 'Wake anchor — do not move this', false],
-  ].map(([t, d, isTgt]) => `
-    <div class="sched-row${isTgt?' tgt':''}">
+  const schedRows = [
+    { t:'9:30pm',   d:'Lights shift — warm & dim (Hue automation)',  tgt:false }, // TIER1 fixed
+    { t:'10:00pm',  d:'Warm shower 🚿 — 40–42°C, 5–10 min',          tgt:false }, // TIER1 fixed
+    { t:'10:30pm',  d:'Digital blockade — WiFi off · Cold Turkey · Screen Time', tgt:false }, // TIER1 fixed
+    { t:t2(45),     d:'Magnesium glycinate — 200–400mg',              tgt:false }, // TIER2 dynamic
+    { t:t2(30),     d:'Phone to lockbox 📵',                          tgt:false }, // TIER2 dynamic
+    { t:fmtTgt,     d:`In bed 🛏️${em?' — EMERGENCY MODE':''}`,       tgt:true  }, // TIER2 in-bed target
+    { t:wakeLabel,  d:'Wake anchor — do not move this',               tgt:false },
+  ];
+  const schedH = schedRows.map(({t,d,tgt}) => `
+    <div class="sched-row${tgt?' tgt':''}">
       <div class="sched-time">${t}</div>
       <div class="sched-desc">${d}</div>
     </div>`).join('');
@@ -1353,11 +1352,11 @@ function rVitality() {
       </div>
       <div class="ref-body">
         ${[
-          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 30))),  'WiFi kill (router)',   'All internet — all devices. In your router app.'],
-          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 30))),  'Cold Turkey (Mac)',    'Locked schedule — survives uninstall + reboot.'],
-          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 60))),  'Screen Time (iOS)',    'Passcode held by trusted person externally.'],
-          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 15))),  'Phone to hallway',     'Physical separation — out of arm\'s reach.'],
-          [fmtHHMM(ssHhmmFromMin(ssFromSigned(inBedSigned - 30))),  'Smart plug on TV',     'Power cut automatically. ~$15 plug.'],
+          ['10:30pm', 'WiFi kill (router)',   'All internet — all devices. In your router app.'],
+          ['10:30pm', 'Cold Turkey (Mac)',    'Locked schedule — survives uninstall + reboot.'],
+          ['10:30pm', 'Screen Time (iOS)',    'Passcode held by trusted person externally.'],
+          [t2(30),    'Phone to lockbox',     'Physical separation — out of arm\'s reach.'],
+          ['10:30pm', 'Smart plug on TV',     'Power cut automatically. ~$15 plug.'],
         ].map(([t,l,d]) => `
           <div class="ref-step">
             <div class="ref-sn" style="font-size:9px;width:auto;padding:2px 6px;border-radius:6px;min-width:50px;text-align:center">${t}</div>
