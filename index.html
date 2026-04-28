@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Solo Leveling">
+<meta name="theme-color" content="#060610">
+<link rel="manifest" href="manifest.json">
+<title>Solo Leveling</title>
+<style>
+/* ============================================================
+   SOLO LEVELING — Design System v2 (Solo Leveling Visual Pass)
+   ============================================================ */
+:root {
+  /* Backgrounds */
+  --bg:       #060610;
+  --surface:  #0C0C1A;
+  --card:     #10101E;
+  --card-hi:  #181828;
+  --border:   #1C1C30;
+  --border-b: #262640;
+
+  /* Text */
+  --t1: #E8E8FF;
+  --t2: #7070A0;
+  --t3: #3A3A58;
+
+  /* Stat accent colors */
+  --physique:  #00D4A0;
+  --vitality:  #FFA940;
+  --presence:  #B06EFF;
+  --craft:     #FF5555;
+  --purpose:   #3D9EFF;
+
+  /* Glow versions (for box-shadow / filter) */
+  --glow-physique: rgba(0,212,160,0.45);
+  --glow-vitality: rgba(255,169,64,0.45);
+  --glow-presence: rgba(176,110,255,0.45);
+  --glow-craft:    rgba(255,85,85,0.45);
+  --glow-purpose:  rgba(61,158,255,0.45);
+  --glow-white:    rgba(232,232,255,0.2);
+
+  /* Status */
+  --success: #1FBF58;
+  --warning: #F59E0B;
+  --danger:  #EF4444;
+  --info:    #38BDF8;
+
+  /* Spacing & shape */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+
+  --nav-h: 70px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  color: var(--t1);
+  font-family: var(--font);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Subtle grid texture — the "system overlay" feel */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(61,158,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,158,255,0.022) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+/* ===== LAYOUT ===== */
+#app { width: 100%; height: 100%; overflow: hidden; position: relative; z-index: 1; }
+
+.screen {
+  position: absolute;
+  inset: 0;
+  bottom: calc(var(--nav-h) + var(--safe-b));
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity .22s ease, transform .22s ease;
+  padding-bottom: 32px;
+}
+
+.screen.active {
+  opacity: 1; pointer-events: all; transform: translateY(0);
+}
+
+.wrap { max-width: 430px; margin: 0 auto; padding: 0 16px; }
+
+/* ===== BOTTOM NAV ===== */
+#nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: calc(var(--nav-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: rgba(10,10,20,0.96);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 10px;
+  z-index: 200;
+}
+
+.ni {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 2px 0;
+  cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+  transition: opacity .15s;
+}
+.ni:active { opacity: .7; }
+
+.ni-ico { font-size: 22px; line-height: 1; transition: filter .2s; }
+.ni-lbl {
+  font-size: 10px; font-weight: 700; letter-spacing: .6px;
+  color: var(--t3); text-transform: uppercase; transition: color .2s;
+}
+.ni.active .ni-lbl { color: var(--t1); }
+.ni-pip {
+  width: 20px; height: 2px; border-radius: 1px;
+  background: transparent; transition: background .2s, box-shadow .2s;
+}
+.ni.active .ni-pip {
+  background: var(--t1);
+  box-shadow: 0 0 8px var(--glow-white);
+}
+
+/* ===== HOME SCREEN ===== */
+.h-header {
+  padding: 20px 0 6px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.h-system {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  color: var(--purpose); text-transform: uppercase;
+  margin-bottom: 4px; opacity: .8;
+}
+.h-greeting { font-size: 12px; color: var(--t2); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.h-date     { font-size: 22px; font-weight: 800; color: var(--t1); line-height: 1.2; }
+.h-time     { font-size: 14px; color: var(--t1); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.h-block    { font-size: 10px; color: var(--t3); font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-top: 3px; text-align: right; }
+
+/* Overall ring */
+.oring-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 0 14px;
+}
+.oring-rel { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.oring-txt { position: absolute; text-align: center; }
+.oring-pct { font-size: 32px; font-weight: 900; color: var(--t1); line-height: 1; }
+.oring-lbl { font-size: 10px; color: var(--t2); font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-top: 2px; }
+
+.streak-pill {
+  margin-top: 12px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border-b);
+  padding: 7px 18px; border-radius: 20px;
+  transition: border-color .3s, box-shadow .3s;
+}
+.streak-pill.lit {
+  border-color: rgba(255,169,64,0.5);
+  box-shadow: 0 0 14px rgba(255,169,64,0.18), inset 0 0 20px rgba(255,169,64,0.04);
+}
+.streak-pill span { font-size: 15px; }
+.streak-n { font-size: 16px; font-weight: 900; color: var(--t1); font-variant-numeric: tabular-nums; }
+.streak-w { font-size: 12px; color: var(--t2); font-weight: 600; }
+
+/* Now banner */
+.now-banner {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 13px 15px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+  animation: slideUp .25s ease;
+  position: relative; overflow: hidden;
+}
+.now-banner::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--border-b); border-radius: 0 2px 2px 0;
+}
+.now-banner.urgent {
+  border-color: rgba(245,158,11,.3);
+  box-shadow: 0 0 20px rgba(245,158,11,.06);
+}
+.now-banner.urgent::before { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+.now-banner.clear  {
+  border-color: rgba(31,191,88,.2);
+  box-shadow: 0 0 20px rgba(31,191,88,.05);
+}
+.now-banner.clear::before { background: var(--success); }
+.nb-ico { font-size: 22px; flex-shrink: 0; }
+.nb-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--t3); }
+.nb-ttl { font-size: 14px; font-weight: 700; color: var(--t1); margin-top: 2px; }
+
+/* Stat cards */
+.stat-cards { display: flex; flex-direction: column; gap: 9px; }
+
+.sc {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 15px 15px 15px 20px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
+  transition: background .15s, border-color .2s, box-shadow .2s;
+  -webkit-user-select: none; user-select: none;
+  animation: slideUp .3s ease both;
+}
+.sc::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--sc-color, #fff);
+  box-shadow: 0 0 10px var(--sc-color, #fff);
+  border-radius: 0 2px 2px 0;
+}
+.sc:active {
+  background: var(--card-hi);
+  border-color: var(--sc-color);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--sc-color) 100%, transparent 65%);
+}
+.sc-info { flex: 1; min-width: 0; }
+.sc-stat { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--sc-color); opacity: .85; }
+.sc-mod  { font-size: 17px; font-weight: 800; color: var(--t1); margin-top: 1px; }
+.sc-sub  { font-size: 12px; color: var(--t2); margin-top: 3px; }
+.sc-due  { font-size: 12px; font-weight: 700; color: var(--warning); margin-top: 3px; }
+.sc-done { font-size: 12px; font-weight: 700; color: var(--success); margin-top: 3px; }
+.sc-arrow { color: var(--t3); font-size: 18px; flex-shrink: 0; }
+.cs-badge {
+  display: inline-block; margin-top: 4px;
+  background: var(--border); color: var(--t3);
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  padding: 2px 8px; border-radius: 10px;
+}
+
+/* ===== MODULE HEADER ===== */
+.mod-header {
+  padding: 18px 0 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--card); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--t2); cursor: pointer; flex-shrink: 0;
+  transition: border-color .15s, color .15s;
+  -webkit-user-select: none; user-select: none;
+}
+.back-btn:active { border-color: var(--sc-color); color: var(--t1); }
+.mod-ttl-g { flex: 1; }
+.mod-stat-nm {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--sc-color, var(--t2)); opacity: .85;
+}
+.mod-name {
+  font-size: 26px; font-weight: 900; line-height: 1.1;
+  background: linear-gradient(135deg, var(--t1) 30%, var(--sc-color, var(--t2)) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== PROTOCOL SECTIONS ===== */
+.proto-sec { margin-bottom: 20px; }
+
+.sec-hd {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.sec-ico { font-size: 14px; }
+.sec-ttl { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--t2); }
+.sec-badge { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--t3); }
+.sec-tag-now {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(245,158,11,.1); color: var(--warning);
+  border: 1px solid rgba(245,158,11,.3);
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px;
+  padding: 3px 8px; border-radius: 8px;
+  animation: pulseTag 2s ease-in-out infinite;
+}
+
+/* Task items */
+.ck-list { display: flex; flex-direction: column; gap: 7px; }
+
+.ti {
+  display: flex; align-items: flex-start; gap: 11px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 13px;
+  cursor: pointer;
+  transition: opacity .3s, border-color .2s, background .12s, box-shadow .2s;
+  -webkit-user-select: none; user-select: none;
+}
+.ti:active { background: var(--card-hi); }
+.ti.done {
+  opacity: .38;
+  border-color: transparent;
+}
+.ti.done .ti-name { text-decoration: line-through; color: var(--t3); }
+.ti.done .ti-box {
+  box-shadow: 0 0 8px var(--sc-color, var(--success));
+}
+
+.ti-box {
+  width: 24px; height: 24px; flex-shrink: 0;
+  border: 2px solid var(--border-b); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s, border-color .18s, box-shadow .18s;
+  margin-top: 1px;
+}
+.ti.done .ti-box {
+  background: var(--sc-color, var(--success));
+  border-color: var(--sc-color, var(--success));
+}
+.ti-chk {
+  opacity: 0; font-size: 13px; color: #000;
+  transform: scale(.3);
+  transition: opacity .15s, transform .2s cubic-bezier(.34,1.56,.64,1);
+  font-weight: 900;
+}
+.ti.done .ti-chk { opacity: 1; transform: scale(1); }
+
+.ti-cnt { flex: 1; min-width: 0; }
+.ti-name { font-size: 15px; font-weight: 600; color: var(--t1); line-height: 1.3; }
+.ti-note { font-size: 12px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+/* Progress bar */
+.prog-bar {
+  height: 2px; background: var(--border); border-radius: 2px;
+  margin-top: 10px; overflow: visible;
+}
+.prog-fill {
+  height: 100%; border-radius: 2px; transition: width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 8px var(--sc-color, #fff);
+}
+
+/* All-done state */
+.sec-done {
+  background: rgba(31,191,88,.05); border: 1px solid rgba(31,191,88,.2);
+  border-radius: var(--r-md); padding: 14px;
+  text-align: center; font-size: 13px; font-weight: 800;
+  color: var(--success); letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+/* ===== REFERENCE CARDS ===== */
+.ref-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); overflow: hidden; margin-top: 8px;
+}
+.ref-hd {
+  padding: 13px 14px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; -webkit-user-select: none; user-select: none;
+}
+.ref-ico { font-size: 14px; }
+.ref-ttl { flex: 1; font-size: 14px; font-weight: 600; color: var(--t2); }
+.ref-toggle { font-size: 14px; color: var(--t3); transition: transform .2s; }
+.ref-card.open .ref-toggle { transform: rotate(180deg); }
+.ref-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
+.ref-card.open .ref-body { display: block; }
+
+.ref-step { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.ref-step:last-child { border-bottom: none; }
+.ref-sn {
+  min-width: 22px; height: 22px; border-radius: 50%;
+  background: var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--t2); flex-shrink: 0; margin-top: 1px;
+}
+.ref-st { font-size: 13px; color: var(--t2); line-height: 1.45; }
+
+/* ===== FITNESS CARD ===== */
+.fit-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px; margin-top: 6px;
+}
+.fit-hd {
+  font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--t2); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.fit-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.fit-row:last-of-type { border-bottom: none; }
+.fit-lbl { font-size: 13px; color: var(--t2); }
+.fit-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+.fit-val.hi { color: var(--physique); text-shadow: 0 0 10px var(--glow-physique); }
+
+.w-row { display: flex; gap: 8px; margin-top: 14px; }
+.w-inp {
+  flex: 1; background: var(--surface); border: 1px solid var(--border-b);
+  border-radius: var(--r-sm); padding: 10px 12px;
+  color: var(--t1); font-size: 16px; font-family: var(--font);
+  transition: border-color .15s;
+}
+.w-inp:focus { outline: none; border-color: var(--physique); box-shadow: 0 0 0 3px rgba(0,212,160,.1); }
+.w-btn {
+  background: var(--physique); color: #000; font-weight: 800; font-size: 14px;
+  padding: 10px 18px; border: none; border-radius: var(--r-sm); cursor: pointer;
+  box-shadow: 0 0 14px var(--glow-physique);
+  -webkit-user-select: none; user-select: none;
+  transition: opacity .15s;
+}
+.w-btn:active { opacity: .8; }
+
+/* ===== SLEEP MODULE ===== */
+.sl-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px; margin-bottom: 14px;
+}
+.sl-ttl { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 12px; }
+.sl-btns { display: flex; gap: 8px; }
+.sl-btn {
+  flex: 1; padding: 11px 8px; border: 1px solid var(--border-b);
+  border-radius: var(--r-sm); background: var(--surface);
+  color: var(--t2); font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: all .15s; text-align: center;
+  -webkit-user-select: none; user-select: none;
+}
+.sl-btn.sg {
+  background: rgba(255,169,64,.1); border-color: var(--vitality);
+  color: var(--vitality); box-shadow: 0 0 12px rgba(255,169,64,.2);
+}
+.sl-btn.so { background: rgba(255,255,255,.05); border-color: var(--t2); color: var(--t1); }
+.sl-btn.sb {
+  background: rgba(239,68,68,.1); border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* Metric inputs */
+.met-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.met-col { flex: 1; min-width: 76px; }
+.met-lbl { font-size: 11px; color: var(--t3); margin-bottom: 4px; font-weight: 600; }
+.met-inp {
+  width: 100%; background: var(--surface); border: 1px solid var(--border-b);
+  border-radius: 6px; padding: 8px 10px;
+  color: var(--t1); font-size: 14px; font-family: var(--font);
+}
+.met-inp:focus { outline: none; border-color: var(--vitality); }
+.met-save {
+  width: 100%; margin-top: 10px;
+  background: var(--vitality); color: #000; font-weight: 800; font-size: 13px;
+  padding: 10px; border: none; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 0 14px var(--glow-vitality);
+}
+
+/* Heatmap */
+.hm-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px;
+}
+.hm-dlbls {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 5px;
+}
+.hm-dl { font-size: 9px; text-align: center; color: var(--t3); font-weight: 700; }
+.hm-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.hm-d { aspect-ratio: 1; border-radius: 3px; background: var(--border); }
+.hm-d.g { background: var(--vitality); box-shadow: 0 0 6px rgba(255,169,64,.5); }
+.hm-d.ok { background: rgba(255,169,64,.3); }
+.hm-d.b { background: var(--danger); opacity: .5; }
+.hm-d.empty { background: transparent; }
+.hm-legend {
+  display: flex; gap: 12px; justify-content: center; margin-top: 12px;
+}
+.hm-li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--t2); }
+.hm-li-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+/* Emergency banner */
+.emrg {
+  background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.4);
+  border-radius: var(--r-md); padding: 14px 15px; margin-bottom: 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  box-shadow: 0 0 24px rgba(239,68,68,.08);
+  animation: slideUp .3s ease;
+}
+.emrg-ico { font-size: 20px; flex-shrink: 0; }
+.emrg-ttl { font-size: 13px; font-weight: 800; color: var(--danger); text-transform: uppercase; letter-spacing: .5px; }
+.emrg-body { font-size: 12px; color: var(--t2); margin-top: 4px; line-height: 1.6; }
+
+/* Ramp status card */
+.ramp-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 14px; margin-bottom: 14px;
+}
+.ramp-ttl {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--t3); margin-bottom: 10px;
+}
+.ramp-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.ramp-row:last-child { border-bottom: none; }
+.ramp-lbl { font-size: 13px; color: var(--t2); }
+.ramp-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+.ramp-val.ok { color: var(--vitality); text-shadow: 0 0 8px var(--glow-vitality); }
+.ramp-val.warn { color: var(--warning); }
+
+/* ===== SETTINGS ===== */
+.set-sec { margin-bottom: 24px; }
+.set-sec-ttl {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--t3); margin-bottom: 10px; padding: 0 4px;
+}
+.set-row {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 14px 15px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.set-row:active { background: var(--card-hi); }
+.set-row-lbl { flex: 1; font-size: 15px; font-weight: 600; color: var(--t1); }
+.set-row-sub { font-size: 12px; color: var(--t2); margin-top: 2px; }
+.set-inp {
+  background: var(--surface); border: 1px solid var(--border-b);
+  border-radius: 6px; padding: 6px 10px;
+  color: var(--t1); font-size: 15px; font-family: var(--font);
+  width: 100px; text-align: center; cursor: pointer;
+}
+.set-inp:focus { outline: none; border-color: var(--purpose); box-shadow: 0 0 0 3px rgba(61,158,255,.1); }
+select.set-inp { width: auto; }
+
+.toggle-wrap { display: flex; align-items: center; gap: 8px; }
+.toggle-lbl { font-size: 12px; font-weight: 700; }
+.toggle {
+  width: 44px; height: 26px; border-radius: 13px;
+  position: relative; cursor: pointer;
+  transition: background .2s;
+  -webkit-user-select: none; user-select: none;
+}
+.toggle-knob {
+  width: 22px; height: 22px; border-radius: 50%; background: white;
+  position: absolute; top: 2px; transition: left .2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.5);
+}
+
+/* ===== SCAFFOLD ===== */
+.scaffold { padding: 40px 16px; text-align: center; }
+.scaffold-ico { font-size: 52px; display: block; margin-bottom: 16px; opacity: .2; }
+.scaffold-ttl { font-size: 20px; font-weight: 800; color: var(--t1); margin-bottom: 8px; }
+.scaffold-body { font-size: 14px; color: var(--t2); line-height: 1.6; max-width: 280px; margin: 0 auto; }
+.scaffold-science {
+  margin-top: 24px; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px; text-align: left;
+}
+.scaffold-sci-ttl {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--t3); margin-bottom: 10px;
+}
+.scaffold-sci-body { font-size: 12px; color: var(--t2); line-height: 1.8; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadein  { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes popcheck { 0%{transform:scale(1)} 30%{transform:scale(.88)} 65%{transform:scale(1.08)} 100%{transform:scale(1)} }
+@keyframes glowPulse {
+  0%,100% { filter: drop-shadow(0 0 4px var(--glow-white)); }
+  50%      { filter: drop-shadow(0 0 12px var(--glow-white)); }
+}
+@keyframes pulseTag {
+  0%,100% { opacity:1; }
+  50%      { opacity:.65; }
+}
+@keyframes ringPop {
+  0%   { transform:scale(1); }
+  40%  { transform:scale(1.04); }
+  100% { transform:scale(1); }
+}
+
+.ti.popping { animation: popcheck .3s cubic-bezier(.34,1.56,.64,1); }
+.fadein { animation: fadein .2s ease; }
+.oring-rel { animation: glowPulse 3.5s ease-in-out infinite; }
+
+/* ===== NIGHT SCHEDULE TABLE ===== */
+.sched-table { margin-top: 4px; }
+.sched-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+}
+.sched-row:last-child { border-bottom: none; }
+.sched-time {
+  font-size: 12px; font-weight: 700; color: var(--vitality);
+  min-width: 54px; flex-shrink: 0; padding-top: 1px;
+  font-variant-numeric: tabular-nums;
+}
+.sched-desc { font-size: 13px; color: var(--t2); line-height: 1.4; }
+.sched-row.tgt .sched-time { color: var(--vitality); text-shadow: 0 0 8px var(--glow-vitality); }
+.sched-row.tgt .sched-desc { color: var(--t1); font-weight: 600; }
+
+/* ===== DIVIDER ===== */
+.div { height: 1px; background: var(--border); margin: 6px 0; }
+
+/* ===== FOOTER HINT ===== */
+.footer-hint { padding: 24px 0 8px; text-align: center; color: var(--t3); font-size: 12px; line-height: 1.8; }
+.footer-hint a { color: var(--vitality); text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<nav id="nav">
+  <div class="ni active" data-s="home"       onclick="go('home')">
+    <div class="ni-ico">⚔️</div>
+    <div class="ni-pip"></div>
+    <div class="ni-lbl">Home</div>
+  </div>
+  <div class="ni" data-s="physique" onclick="go('physique')">
+    <div class="ni-ico" style="color:var(--physique)">💪</div>
+    <div class="ni-pip"></div>
+    <div class="ni-lbl">Maximus</div>
+  </div>
+  <div class="ni" data-s="vitality"  onclick="go('vitality')">
+    <div class="ni-ico" style="color:var(--vitality)">🌙</div>
+    <div class="ni-pip"></div>
+    <div class="ni-lbl">Somnus</div>
+  </div>
+  <div class="ni" data-s="settings"  onclick="go('settings')">
+    <div class="ni-ico">⚙️</div>
+    <div class="ni-pip"></div>
+    <div class="ni-lbl">Settings</div>
+  </div>
+</nav>
+
+<script>
+/* ============================================================
+   SOLO LEVELING — Core System
+   ============================================================ */
+
+// ── Constants ──────────────────────────────────────────────
+const KEY   = 'sl_v1';
+const DAYS  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const COLS  = { physique:'#00C896', vitality:'#FFB347', presence:'#A855F7', craft:'#FF6060', purpose:'#4A9EFF' };
+
+// ── Protocols ──────────────────────────────────────────────
+const P = {
+  physique: {
+    am: [
+      { id:'a1', name:'Apply minoxidil to beard',   note:'Before or during morning sunlight — dries in ~5 min' },
+      { id:'a2', name:'Morning sunlight',            note:'10+ min outside. Minoxidil absorbs during this. Cortisol spike anchors your clock.' },
+      { id:'a3', name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
+      { id:'a4', name:'Niacinamide serum',          note:'The Ordinary 10% + Zinc' },
+      { id:'a5', name:'Moisturizer',                note:'CeraVe Moisturizing Cream' },
+      { id:'a6', name:'SPF — never skip',           note:'EltaMD UV Clear or La Roche-Posay Anthelios. Final step, every single day.' },
+      { id:'a7', name:'Style hair',                 note:'Sea salt spray on damp hair → blow dry outward toward temples. See Hair Protocol ↓' },
+    ],
+    aft: [
+      { id:'f1', name:'Log today\'s weight',        note:'Daily trend matters more than any single reading' },
+      { id:'f2', name:'Hit protein target',         note:'170g today — track in your app' },
+      { id:'f3', name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
+    ],
+    pm: [
+      { id:'p1', name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
+      { id:'p2', name:'Pat dry, brush teeth',       note:'~5 min. Face dries while you do other tasks.' },
+      { id:'p3', name:'Apply minoxidil to beard',   note:'Let dry ~5 min while doing other things' },
+      { id:'p4', name:'Moisturizer (buffer layer)', note:'Sandwich method — dramatically reduces tretinoin irritation' },
+      { id:'p5', name:'Tretinoin 0.025%',           note:'Pea-sized amount, whole face. Avoid eye area.' },
+      { id:'p6', name:'Moisturizer (sealing layer)',note:'Generous amount — lock in the tretinoin sandwich' },
+    ],
+    wk: [
+      { id:'w1', name:'Derma roll beard area',      note:'0.5mm roller, full beard zone. Firm even pressure.' },
+      { id:'w2', name:'Wait 30–60 min',             note:'Let skin settle completely before next step' },
+      { id:'w3', name:'Apply minoxidil post-roll',  note:'Enhanced absorption — this is why you roll' },
+    ],
+  },
+  vitality: {
+    am: [
+      { id:'v1', name:'Morning sunlight — go outside', note:'10+ min within 30–60 min of waking. This is Lever 1. Anchors your entire circadian clock.' },
+      { id:'v2', name:'No caffeine until cutoff',       note:'Cortisol peak: 9–10am. Caffeine cutoff: noon. Protect adenosine sensitivity.' },
+    ],
+    pm: [
+      { id:'v3', name:'Dim lights / warm light only',  note:'Hue Evening Shift at 9pm. Below 100 lux = melatonin production begins. This is non-negotiable.' },
+      { id:'v4', name:'Warm shower (10pm)',             note:'40–42°C for 5–10 min. Peripheral vasodilation → core temp drops post-shower → faster sleep onset.' },
+      { id:'v5', name:'Set room to 66°F',              note:'Sleep requires ~1.5°F core temp drop. Cool room makes this automatic every night.' },
+      { id:'v6', name:'No screens 30 min before bed',  note:'Bright screens suppress melatonin. After 10:30pm: Screen Time Downtime fires. Work with it.' },
+      { id:'v7', name:'In bed by target time',          note:'Check your current ramp target in Settings. You\'re advancing 15 min/week toward 11:30pm.' },
+    ],
+  },
+};
+
+const HAIR = [
+  'Towel dry to ~70% wet',
+  'Apply sea salt spray + heat protectant (Kenra Platinum) — work through with fingers',
+  'Rough dry with fingers to ~80% — airflow forward and downward, NOT up',
+  'Round brush front section only (temple to temple) — lift at root, arc forward and outward',
+  'Cold shot to lock front — hold brush in position, 3–4 seconds',
+  'Finger dry sides — push diagonally outward toward temples + slightly forward',
+  'Cold shot on sides',
+  'Twist small sections while still warm to define texture',
+  'Optional: tiny amount Hanz de Fuko Claymation through fingers for definition',
+  'Leave completely alone until fully cool',
+];
+
+const SCHED = [
+  ['9:00pm',  'Hue Evening Shift — warm/dim lighting'],
+  ['9:30pm',  'Hue Wind-Down — below 25 lux'],
+  ['10:00pm', 'Warm shower (Lever 2) 🚿'],
+  ['10:30pm', 'Screen Time Downtime fires — devices go dark'],
+  ['11:00pm', 'Cold Turkey + WiFi router kill'],
+  ['11:15pm', 'Phone to hallway 📵'],
+  ['TARGET',  'In bed 🛏️'],
+  ['9:00am',  'Wake anchor — do not move this'],
+];
+
+// ── State ──────────────────────────────────────────────────
+function defaultState() {
+  return {
+    v: 2,
+    cfg: {
+      wake:         '09:00',
+      sleep:        '23:30',
+      dermaDay:     1,         // Monday
+      rampTarget:   '00:45',   // Current onset (12:45am start)
+      rampFinal:    '23:30',   // 11:30pm goal
+      rampWeek:     0,
+      emergency:    false,
+      imported:     false,
+    },
+    streaks: {
+      overall: { n: 0, last: null },
+    },
+    log:    {},   // dateKey → {taskId: bool}
+    sleep:  {},   // dateKey → {good, oura, debt, rhr, auto}
+    weight: [],   // [{date, w}]
+  };
+}
+
+let S = (function(){
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) {
+      const p = JSON.parse(r);
+      if (p && p.v >= 1) return p;
+    }
+  } catch(_){}
+  return defaultState();
+})();
+
+// ── Somnus Bridge — live read/write of somnus_state_v1 ─────
+// Both apps share the same localStorage origin on GitHub Pages
+// (diegoarm-ai.github.io), so this is a direct shared-memory bridge.
+const SS_KEY = 'somnus_state_v1';
+
+function getSS() {
+  try { const r = localStorage.getItem(SS_KEY); return r ? JSON.parse(r) : null; }
+  catch(_) { return null; }
+}
+function writeSS(ss) {
+  try { localStorage.setItem(SS_KEY, JSON.stringify(ss)); } catch(_) {}
+}
+
+// Somnus ramp math — ported from somnus/index.html (read-only)
+function ssToMin(hhmm)       { const p=hhmm.split(':').map(Number); return p[0]*60+p[1]; }
+function ssHhmmFromMin(m)    { m=((m%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
+function ssToSigned(hhmm)    { const m=ssToMin(hhmm); return m<720?m+1440:m; }
+function ssFromSigned(s)     { return ((s%1440)+1440)%1440; }
+function ssDaysBetween(a,b)  { return Math.floor((new Date(b+'T00:00:00Z')-new Date(a+'T00:00:00Z'))/86400000); }
+function ssDaysAgo(n)        { const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
+
+function ssFinalTarget(ss) {
+  if (!ss) return '23:30';
+  const need = ss.settings?.sleepNeedMin || 555;
+  const eff  = (ss.settings?.efficiencyPct || 87.5) / 100;
+  const win  = Math.round(need / eff);
+  const wake = ssToMin(ss.settings?.wake || '09:00');
+  return ssHhmmFromMin(((wake - win) % 1440 + 1440) % 1440);
+}
+
+function ssIsEmergency(ss) {
+  if (!ss) return false;
+  if (ss.emergency?.manualOverride === 'off') return false;
+  if (ss.emergency?.manualOverride === 'on')  return true;
+  const gaps = [];
+  for (let i=1;i<=7;i++) { const e=ss.data?.[ssDaysAgo(i)]; if(e&&typeof e.gap==='number') gaps.push(e.gap); }
+  return gaps.length >= 3 && (gaps.reduce((a,b)=>a+b,0)/gaps.length) > 90;
+}
+
+function ssRampTarget(ss) {
+  if (!ss) return null;
+  if (ssIsEmergency(ss)) return '22:30';
+  const final = ssFinalTarget(ss);
+  if (!ss.ramp?.startedAt || !ss.ramp?.startOnset) return final;
+  const elapsed  = Math.max(0, ssDaysBetween(ss.ramp.startedAt, dk()));
+  const calWeek  = Math.floor(elapsed / 7);
+  const holds    = ss.ramp.weeksHeld || [];
+  let totalHolds = 0;
+  for (let i=0;i<calWeek&&i<holds.length;i++) totalHolds += (holds[i]||0);
+  const advances     = Math.max(0, calWeek - totalHolds);
+  const startSigned  = ssToSigned(ss.ramp.startOnset);
+  const finalSigned  = ssToSigned(final);
+  let rampSigned     = startSigned - 15 * advances;
+  if (rampSigned < finalSigned) rampSigned = finalSigned;
+  if (rampSigned > startSigned) rampSigned = startSigned;
+  return ssHhmmFromMin(ssFromSigned(rampSigned));
+}
+
+function ss7dayAdherence(ss) {
+  if (!ss?.data) return null;
+  const entries = [];
+  for (let i=1;i<=7;i++) { const e=ss.data[ssDaysAgo(i)]; if(e?.status) entries.push(e); }
+  if (entries.length < 2) return null;
+  const good = entries.filter(e=>e.status==='yes'||e.status==='social').length;
+  return Math.round(good / entries.length * 100);
+}
+
+function ss7dayValves(ss) {
+  if (!ss?.valves) return 0;
+  let c = 0;
+  for (let i=1;i<=7;i++) { const v=ss.valves[ssDaysAgo(i)]; if(v) c+=v; }
+  return c;
+}
+
+function ssDebtAvg7(ss) {
+  if (!ss?.data) return null;
+  const gaps = [];
+  for (let i=1;i<=7;i++) { const e=ss.data?.[ssDaysAgo(i)]; if(e&&typeof e.gap==='number') gaps.push(e.gap); }
+  if (gaps.length < 2) return null;
+  return Math.round(gaps.reduce((a,b)=>a+b,0)/gaps.length);
+}
+
+function ssLastStatus(ss) {
+  return ss?.data?.[ssDaysAgo(1)]?.status || null;
+}
+
+function ssRampWeek(ss) {
+  if (!ss?.ramp?.startedAt) return null;
+  return Math.floor(Math.max(0, ssDaysBetween(ss.ramp.startedAt, dk())) / 7);
+}
+
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(_){}
+}
+
+// ── Time utilities ─────────────────────────────────────────
+function dk(d = new Date()) { return d.toISOString().slice(0,10); }
+
+function block() {
+  const h = new Date().getHours();
+  const wh = parseInt(S.cfg.wake) || 9;
+  if (h >= wh && h < 12) return 'morning';
+  if (h >= 12 && h < 18) return 'afternoon';
+  if (h >= 18 && h < 22) return 'evening';
+  return 'night';
+}
+
+function isWkDay() { return new Date().getDay() === S.cfg.dermaDay; }
+
+function fmtHHMM(t) {
+  if (!t) return '11:30pm';
+  const [hh, mm] = t.split(':').map(Number);
+  const p = hh >= 12 ? 'pm' : 'am';
+  const d = hh > 12 ? hh - 12 : (hh === 0 ? 12 : hh);
+  return mm ? `${d}:${mm.toString().padStart(2,'0')}${p}` : `${d}${p}`;
+}
+
+function greeting() {
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+}
+
+// ── Completion ─────────────────────────────────────────────
+function dayLog(key = dk()) {
+  if (!S.log[key]) S.log[key] = {};
+  return S.log[key];
+}
+
+function done(id) { return !!dayLog()[id]; }
+
+function toggle(id) {
+  const l = dayLog();
+  l[id] = !l[id];
+  S.log[dk()] = l;
+  recalcStreak();
+  save();
+}
+
+function allTasksToday() {
+  const wk = isWkDay();
+  const tasks = [
+    ...P.physique.am,
+    ...P.physique.aft,
+    ...(wk ? P.physique.wk : P.physique.pm),
+    ...P.vitality.am,
+    ...P.vitality.pm,
+  ];
+  return tasks;
+}
+
+function pct(tasks) {
+  if (!tasks.length) return 0;
+  return Math.round(tasks.filter(t => done(t.id)).length / tasks.length * 100);
+}
+
+function overallPct() { return pct(allTasksToday()); }
+
+function modPct(mod) {
+  const wk = isWkDay();
+  const m = {
+    physique: [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)],
+    vitality: [...P.vitality.am, ...P.vitality.pm],
+  };
+  return m[mod] ? pct(m[mod]) : 0;
+}
+
+function pendingNow() {
+  const b = block();
+  const wk = isWkDay();
+  let tasks = [];
+  if (b === 'morning')   tasks = [...P.physique.am, ...P.vitality.am];
+  if (b === 'afternoon') tasks = P.physique.aft;
+  if (b === 'evening')   tasks = [...P.vitality.pm, ...(wk ? P.physique.wk : [])];
+  if (b === 'night')     tasks = [...(wk ? P.physique.wk : P.physique.pm), ...P.vitality.pm];
+  return tasks.filter(t => !done(t.id)).length;
+}
+
+// ── Streak ─────────────────────────────────────────────────
+function recalcStreak() {
+  const today = dk();
+  const yest  = dk(new Date(Date.now() - 86400000));
+  const p = overallPct();
+  if (p >= 80) {
+    if (S.streaks.overall.last === yest) S.streaks.overall.n++;
+    else if (S.streaks.overall.last !== today) S.streaks.overall.n = 1;
+    S.streaks.overall.last = today;
+  }
+}
+
+// ── SVG Ring ───────────────────────────────────────────────
+function ring(p, size=56, sw=4, col='#fff') {
+  const r = (size - sw) / 2;
+  const c = size / 2;
+  const circ = 2 * Math.PI * r;
+  const d = circ * (p/100);
+  const glowId = 'gf' + size + col.replace(/[^a-z0-9]/gi,'');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none">
+    <defs>
+      <filter id="${glowId}" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <circle cx="${c}" cy="${c}" r="${r}" stroke="#1C1C30" stroke-width="${sw}"/>
+    <circle cx="${c}" cy="${c}" r="${r}" stroke="${col}" stroke-width="${sw}"
+      stroke-dasharray="${d} ${circ-d}" stroke-linecap="round"
+      transform="rotate(-90 ${c} ${c})"
+      filter="url(#${glowId})"
+      style="transition:stroke-dasharray .5s cubic-bezier(.4,0,.2,1)"/>
+  </svg>`;
+}
+
+// ── Navigation ─────────────────────────────────────────────
+let cur = 'home';
+
+function go(s) {
+  document.querySelectorAll('.ni').forEach(el => el.classList.toggle('active', el.dataset.s === s));
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('s-' + s);
+  if (el) { el.classList.add('active'); el.scrollTop = 0; }
+  cur = s;
+  render(s);
+}
+
+// ── Render dispatcher ──────────────────────────────────────
+function render(s) {
+  switch(s) {
+    case 'home':     rHome();     break;
+    case 'physique': rPhysique(); break;
+    case 'vitality': rVitality(); break;
+    case 'presence': rScaffold('presence'); break;
+    case 'craft':    rScaffold('craft');    break;
+    case 'purpose':  rScaffold('purpose'); break;
+    case 'settings': rSettings(); break;
+  }
+}
+
+// ── Home ───────────────────────────────────────────────────
+function rHome() {
+  const now    = new Date();
+  const b      = block();
+  const oPct   = overallPct();
+  const pend   = pendingNow();
+  const streak = S.streaks.overall.n;
+
+  const blockMeta = {
+    morning:   { ico:'🌅', lbl:'Morning Block',   ttl:'AM protocols active' },
+    afternoon: { ico:'☀️', lbl:'Afternoon Block',  ttl:'Training block active' },
+    evening:   { ico:'🌆', lbl:'Evening Block',    ttl:'Wind-down protocols active' },
+    night:     { ico:'🌙', lbl:'Night Block',      ttl:'PM routine active' },
+  }[b];
+
+  const stats = [
+    { s:'physique', name:'Physique', mod:'Maximus',     ico:'💪', active:true },
+    { s:'vitality', name:'Vitality', mod:'Somnus',      ico:'🌙', active:true },
+    { s:'presence', name:'Presence', mod:'Coming Soon', ico:'⚡', active:false },
+    { s:'craft',    name:'Craft',    mod:'Coming Soon', ico:'🔥', active:false },
+    { s:'purpose',  name:'Purpose',  mod:'Coming Soon', ico:'🎯', active:false },
+  ];
+
+  const cardsH = stats.map(c => {
+    const col = COLS[c.s];
+    const cp  = c.active ? modPct(c.s) : 0;
+    const wk  = isWkDay();
+    const pending = c.active
+      ? (() => {
+          const tasks = c.s === 'physique'
+            ? [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)]
+            : [...P.vitality.am, ...P.vitality.pm];
+          return tasks.filter(t => !done(t.id)).length;
+        })()
+      : null;
+    return `
+    <div class="sc" style="--sc-color:${col}" onclick="go('${c.s}')">
+      <div class="sc-info">
+        <div class="sc-stat">${c.name}</div>
+        <div class="sc-mod">${c.mod}</div>
+        ${c.active
+          ? (pending > 0
+              ? `<div class="sc-due">▲ ${pending} task${pending!==1?'s':''} remaining</div>`
+              : `<div class="sc-done">✓ Complete</div>`)
+          : `<div class="cs-badge">Protocol TBD</div>`}
+      </div>
+      <div>${ring(cp, 48, 3.5, col)}</div>
+      <div class="sc-arrow">›</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('s-home').innerHTML = `
+  <div class="wrap">
+    <div class="h-header">
+      <div>
+        <div class="h-system">◈ System Online</div>
+        <div class="h-greeting">${greeting()}, Diego</div>
+        <div class="h-date">${DAYS[now.getDay()]}, ${MONS[now.getMonth()]} ${now.getDate()}</div>
+      </div>
+      <div>
+        <div class="h-time" id="live-clock">${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</div>
+        <div class="h-block">${b} block</div>
+      </div>
+    </div>
+
+    <div class="oring-wrap">
+      <div class="oring-rel">
+        ${ring(oPct, 108, 6, oPct >= 80 ? '#00D4A0' : oPct >= 40 ? '#E8E8FF' : '#3D9EFF')}
+        <div class="oring-txt">
+          <div class="oring-pct">${oPct}%</div>
+          <div class="oring-lbl">Today</div>
+        </div>
+      </div>
+      <div class="streak-pill ${streak > 0 ? 'lit' : ''}">
+        <span>${streak > 0 ? '🔥' : '○'}</span>
+        <span class="streak-n">${streak}</span>
+        <span class="streak-w">day streak</span>
+      </div>
+    </div>
+
+    <div class="now-banner ${pend > 0 ? 'urgent' : 'clear'}">
+      <div class="nb-ico">${pend > 0 ? blockMeta.ico : '✅'}</div>
+      <div>
+        <div class="nb-lbl">${blockMeta.lbl}</div>
+        <div class="nb-ttl">${pend > 0 ? `${pend} task${pend!==1?'s':''} due right now` : 'All caught up for this block'}</div>
+      </div>
+    </div>
+
+    <div class="stat-cards">${cardsH}</div>
+  </div>`;
+}
+
+// ── Physique ───────────────────────────────────────────────
+function rPhysique() {
+  const b   = block();
+  const wk  = isWkDay();
+  const cp  = modPct('physique');
+  const col = COLS.physique;
+
+  const hairH = HAIR.map((s,i) => `
+    <div class="ref-step">
+      <div class="ref-sn">${i+1}</div>
+      <div class="ref-st">${s}</div>
+    </div>`).join('');
+
+  const todayW = S.weight.find(w => w.date === dk());
+
+  document.getElementById('s-physique').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm">Physique</div>
+        <div class="mod-name">Maximus</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+
+    ${proto('☀️','Morning Routine', P.physique.am, col, b==='morning')}
+    ${proto('💪','Training & Nutrition', P.physique.aft, col, b==='afternoon')}
+    ${wk
+      ? `${proto('🩸',`Dermaroll Day — ${DAYS[new Date().getDay()]}`, P.physique.wk, col, b==='evening'||b==='night')}
+         <div style="background:rgba(255,179,71,.07);border:1px solid rgba(255,179,71,.25);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--vitality);font-weight:600">
+           ⚠️ Skip tretinoin tonight — this is your weekly dermaroll night
+         </div>`
+      : proto('🌙','PM Routine', P.physique.pm, col, b==='night')}
+
+    <div class="ref-card" id="r-hair">
+      <div class="ref-hd" onclick="toggleRef('r-hair')">
+        <div class="ref-ico">💇</div>
+        <div class="ref-ttl">Hair Styling Protocol</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">${hairH}</div>
+    </div>
+
+    <div class="fit-card" style="margin-top:16px">
+      <div class="fit-hd">📊 Current Cut Stats</div>
+      <div class="fit-row">
+        <span class="fit-lbl">Goal</span>
+        <span class="fit-val">11–12% BF (from 14.1%)</span>
+      </div>
+      <div class="fit-row">
+        <span class="fit-lbl">Daily deficit</span>
+        <span class="fit-val hi">350–400 cal</span>
+      </div>
+      <div class="fit-row">
+        <span class="fit-lbl">Protein target</span>
+        <span class="fit-val hi">170g / day</span>
+      </div>
+      <div class="fit-row">
+        <span class="fit-lbl">Priority lifts</span>
+        <span class="fit-val" style="font-size:12px;text-align:right">Lat pulls · OHP · Inc bench · Rows</span>
+      </div>
+      <div class="fit-row">
+        <span class="fit-lbl">Current weight</span>
+        <span class="fit-val hi" id="w-disp">${todayW ? todayW.w + ' lbs' : '—'}</span>
+      </div>
+      <div class="w-row">
+        <input type="number" class="w-inp" id="w-inp" placeholder="${todayW ? todayW.w : '170.6'} lbs" step="0.1" min="100" max="350">
+        <button class="w-btn" onclick="logW()">Log</button>
+      </div>
+    </div>
+    <div class="footer-hint">Stats: 27yo · 5\'8.5" · 170.6 lbs · 14.1% BF · FFMI 20.8<br>Target: 11–12% BF</div>
+  </div>`;
+}
+
+function proto(ico, ttl, tasks, col, isNow) {
+  const ndone = tasks.filter(t => done(t.id)).length;
+  const total = tasks.length;
+  const allDone = ndone === total;
+  const p = total ? Math.round(ndone/total*100) : 0;
+
+  const itemsH = tasks.map(t => `
+    <div class="ti ${done(t.id)?'done':''}" id="ti-${t.id}" onclick="tapTask('${t.id}')" style="--sc-color:${col}">
+      <div class="ti-box"><span class="ti-chk">✓</span></div>
+      <div class="ti-cnt">
+        <div class="ti-name">${t.name}</div>
+        ${t.note ? `<div class="ti-note">${t.note}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  return `
+  <div class="proto-sec">
+    <div class="sec-hd">
+      <span class="sec-ico">${ico}</span>
+      <span class="sec-ttl">${ttl}</span>
+      ${isNow
+        ? `<span class="sec-tag-now">Active Now</span>`
+        : `<span class="sec-badge">${ndone}/${total}</span>`}
+    </div>
+    ${allDone
+      ? `<div class="sec-done">✓ Complete</div>`
+      : `<div class="ck-list">${itemsH}</div>`}
+    <div class="prog-bar" style="margin-top:10px">
+      <div class="prog-fill" style="width:${p}%;background:${col}"></div>
+    </div>
+  </div>`;
+}
+
+// ── Vitality ───────────────────────────────────────────────
+function rVitality() {
+  const b   = block();
+  const cp  = modPct('vitality');
+  const col = COLS.vitality;
+
+  // Live read from Somnus
+  const ss       = getSS();
+  const em       = ssIsEmergency(ss);
+  const rampTgt  = ssRampTarget(ss);
+  const finalTgt = ssFinalTarget(ss);
+  const fmtTgt   = fmtHHMM(rampTgt || finalTgt);
+  const fmtFinal = fmtHHMM(finalTgt);
+  const adh7     = ss7dayAdherence(ss);
+  const valves7  = ss7dayValves(ss);
+  const debt7    = ssDebtAvg7(ss);
+  const lastStat = ssLastStatus(ss);
+  const rampWk   = ssRampWeek(ss);
+  const needMin  = ss?.settings?.sleepNeedMin || 555;
+  const noSomnus = !ss;
+
+  // Tonight's schedule — in-bed target highlighted
+  const schedH = [
+    ['9:00pm',  'Hue Evening Shift — warm/dim lighting'],
+    ['9:30pm',  'Hue Wind-Down — below 25 lux'],
+    ['10:00pm', 'Warm shower 🚿 — 40–42°C, 5–10 min'],
+    ['10:30pm', 'Screen Time Downtime fires'],
+    ['11:00pm', 'Cold Turkey + WiFi router kill'],
+    ['11:15pm', 'Phone to hallway 📵'],
+    [fmtTgt,   `In bed 🛏️${em ? ' — EMERGENCY MODE' : ''}`],
+    ['9:00am',  'Wake anchor — do not move this'],
+  ].map(([t, d]) => `
+    <div class="sched-row${t===fmtTgt?' tgt':''}">
+      <div class="sched-time">${t}</div>
+      <div class="sched-desc">${d}</div>
+    </div>`).join('');
+
+  document.getElementById('s-vitality').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm">Vitality</div>
+        <div class="mod-name">Somnus</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+
+    ${em ? `
+    <div class="emrg">
+      <div class="emrg-ico">🚨</div>
+      <div>
+        <div class="emrg-ttl">Emergency Sleep Mode Active</div>
+        <div class="emrg-body">${debt7 !== null ? `7-day avg debt: <strong style="color:var(--danger)">${debt7} min</strong>. ` : ''}In bed by 10:30pm. Target 10+ hours. Exit when debt &lt;45 min + 3 nights ≥8h30m. The wired feeling at midnight is cortisol dysregulation, not energy.</div>
+      </div>
+    </div>` : ''}
+
+    <!-- Last Night Log — writes directly to somnus_state_v1 -->
+    <div class="sl-card">
+      <div class="sl-ttl">Last night — did you follow the protocol?</div>
+      <div class="sl-btns">
+        <div class="sl-btn ${lastStat==='yes'?'sg':''}"    onclick="logNight('yes')">✓ Yes</div>
+        <div class="sl-btn ${lastStat==='social'?'so':''}" onclick="logNight('social')">◑ Social</div>
+        <div class="sl-btn ${lastStat==='no'?'sb':''}"     onclick="logNight('no')">✗ No</div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--t3);line-height:1.6">
+        ${noSomnus
+          ? '⚠️ Somnus not found on this device. Open Somnus at least once to connect.'
+          : 'Synced live with Somnus. Use Somnus for lever picker, metrics, weekly scorecard.'}
+      </div>
+    </div>
+
+    <!-- Live Somnus Summary -->
+    <div class="ramp-card">
+      <div class="ramp-ttl">📊 Sleep System — Live from Somnus</div>
+
+      ${noSomnus ? `
+      <div style="padding:16px 0;text-align:center;color:var(--t3);font-size:13px;line-height:1.6">
+        No Somnus data found.<br>Open Somnus once to initialize, then return here.
+      </div>` : `
+      <div class="ramp-row">
+        <span class="ramp-lbl">Tonight's in-bed target</span>
+        <span class="ramp-val ok" style="font-size:16px;font-weight:800">${fmtTgt}</span>
+      </div>
+      <div class="ramp-row">
+        <span class="ramp-lbl">Final target</span>
+        <span class="ramp-val">${fmtFinal}</span>
+      </div>
+      ${rampWk !== null ? `
+      <div class="ramp-row">
+        <span class="ramp-lbl">Ramp week</span>
+        <span class="ramp-val">Week ${rampWk}</span>
+      </div>` : ''}
+      <div class="ramp-row">
+        <span class="ramp-lbl">7-day adherence</span>
+        <span class="ramp-val ${adh7===null?'':adh7>=80?'ok':'warn'}">${adh7!==null ? adh7+'%' : '—'}</span>
+      </div>
+      <div class="ramp-row">
+        <span class="ramp-lbl">Valve count (7d)</span>
+        <span class="ramp-val ${valves7>=3?'warn':''}">${valves7}${valves7>=3?' ⚠️':''}</span>
+      </div>
+      ${debt7 !== null ? `
+      <div class="ramp-row">
+        <span class="ramp-lbl">Avg debt (7d)</span>
+        <span class="ramp-val ${debt7>90?'warn':debt7<=30?'ok':''}">${debt7} min</span>
+      </div>` : ''}
+      <div class="ramp-row">
+        <span class="ramp-lbl">Sleep need (Whoop)</span>
+        <span class="ramp-val">${Math.floor(needMin/60)}h ${String(needMin%60).padStart(2,'0')}m</span>
+      </div>
+      <div class="ramp-row">
+        <span class="ramp-lbl">Caffeine cutoff</span>
+        <span class="ramp-val">Noon</span>
+      </div>
+      <div class="ramp-row">
+        <span class="ramp-lbl">Last meal</span>
+        <span class="ramp-val">${em ? '7:00pm (emergency)' : '8:30pm'}</span>
+      </div>
+      <div class="ramp-row">
+        <span class="ramp-lbl">Workout cutoff</span>
+        <span class="ramp-val">8:30pm</span>
+      </div>`}
+
+      <a href="https://diegoarm-ai.github.io/sleep-tracker-web/" target="_blank"
+         style="display:flex;align-items:center;justify-content:space-between;
+                padding:12px 0 2px;margin-top:6px;border-top:1px solid var(--border);
+                text-decoration:none">
+        <span style="font-size:13px;font-weight:600;color:var(--vitality)">Open full Somnus tracker →</span>
+        <span style="color:var(--vitality);font-size:16px">›</span>
+      </a>
+    </div>
+
+    ${proto('☀️','Morning Protocol', P.vitality.am, col, b==='morning')}
+
+    <div class="ref-card" id="r-sched">
+      <div class="ref-hd" onclick="toggleRef('r-sched')">
+        <div class="ref-ico">📋</div>
+        <div class="ref-ttl">Tonight's Wind-Down Schedule</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div class="sched-table">${schedH}</div>
+        <div style="margin-top:12px;font-size:12px;color:var(--t3);line-height:1.5">
+          Tier 1 cues (9pm–11pm) are fixed every night — building the habit loop automatically.
+          Only the in-bed target moves during the ramp (15 min/week).
+        </div>
+      </div>
+    </div>
+
+    ${proto('🌙','Evening Wind-Down', P.vitality.pm, col, b==='evening'||b==='night')}
+
+    <div class="proto-sec">
+      <div class="sec-hd">
+        <span class="sec-ico">📅</span>
+        <span class="sec-ttl">28-Day Adherence</span>
+        ${adh7 !== null ? `<span class="sec-badge" style="margin-left:auto;color:${adh7>=80?'var(--success)':'var(--warning)'}">${adh7}% this week</span>` : ''}
+      </div>
+      ${heatmap(ss)}
+    </div>
+
+    <div class="ref-card" id="r-stack">
+      <div class="ref-hd" onclick="toggleRef('r-stack')">
+        <div class="ref-ico">🛡️</div>
+        <div class="ref-ttl">Inevitability Stack — Lever 3</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        ${[
+          ['11pm',    'WiFi kill (router)',   'All internet — all devices. In your router app.'],
+          ['11pm',    'Cold Turkey (Mac)',    'Locked schedule — survives uninstall + reboot.'],
+          ['10:30pm', 'Screen Time (iOS)',    'Passcode held by trusted person externally.'],
+          ['11:15pm', 'Phone to hallway',     'Physical separation — out of arm\'s reach.'],
+          ['11pm',    'Smart plug on TV',     'Power cut automatically. ~$15 plug.'],
+        ].map(([t,l,d]) => `
+          <div class="ref-step">
+            <div class="ref-sn" style="font-size:9px;width:auto;padding:2px 6px;border-radius:6px;min-width:50px;text-align:center">${t}</div>
+            <div class="ref-st"><strong style="color:var(--t1)">${l}</strong><br>${d}</div>
+          </div>`).join('')}
+        <div style="margin-top:10px;font-size:12px;color:var(--t3);line-height:1.5">
+          Any one layer is breakable. All 5 together is almost inevitable. Target: 80–90% adherence, not 100%.
+        </div>
+      </div>
+    </div>
+
+    <a href="https://diegoarm-ai.github.io/sleep-tracker-web/" target="_blank"
+       style="display:flex;align-items:center;gap:12px;
+              background:rgba(255,179,71,.07);border:1px solid rgba(255,179,71,.2);
+              border-radius:14px;padding:16px;margin-top:4px;text-decoration:none;color:var(--vitality)">
+      <span style="font-size:22px">🌙</span>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:700">Open Somnus</div>
+        <div style="font-size:11px;opacity:.65;margin-top:2px">Lever picker · Ramp management · Evening countdown · Weekly scorecard</div>
+      </div>
+      <span style="font-size:22px">›</span>
+    </a>
+  </div>`;
+}
+
+// ── Heatmap — reads from somnus_state_v1 ───────────────────
+function heatmap(ss) {
+  const today    = new Date(); today.setHours(0,0,0,0);
+  const startDay = new Date(today.getTime() - 27 * 86400000);
+  const dow      = startDay.getDay();
+  const empties  = Array(dow).fill('<div class="hm-d empty"></div>').join('');
+
+  const cells = [];
+  for (let i = 0; i < 28; i++) {
+    const d      = new Date(startDay.getTime() + i * 86400000);
+    const k      = dk(d);
+    const e      = ss?.data?.[k];
+    const status = e?.status;
+    const valve  = (ss?.valves?.[k] || 0) > 0;
+    const ft     = d > today;
+    let cls = 'hm-d';
+    if      (ft)               cls += ' empty';
+    else if (status === 'yes')    cls += ' g';
+    else if (status === 'social') cls += ' ok';
+    else if (status === 'no')     cls += ' b';
+    cells.push(`<div class="${cls}" title="${k}">
+      ${valve && !ft ? '<div style="width:4px;height:4px;border-radius:50%;background:rgba(168,85,247,.85);position:absolute;top:2px;left:2px"></div>' : ''}
+    </div>`);
+  }
+
+  // Ensure hm-d has position:relative for the valve dot
+  return `
+  <div class="hm-wrap">
+    <div class="hm-dlbls">${['S','M','T','W','T','F','S'].map(d=>`<div class="hm-dl">${d}</div>`).join('')}</div>
+    <div class="hm-grid" style="position:relative">${empties}${cells.join('')}</div>
+    <div class="hm-legend">
+      <div class="hm-li"><div class="hm-li-dot" style="background:var(--vitality)"></div>Good</div>
+      <div class="hm-li"><div class="hm-li-dot" style="background:rgba(255,179,71,.35)"></div>Social</div>
+      <div class="hm-li"><div class="hm-li-dot" style="background:var(--danger);opacity:.55"></div>Missed</div>
+      <div class="hm-li"><div class="hm-li-dot" style="background:rgba(168,85,247,.65)"></div>Valve</div>
+    </div>
+  </div>`;
+}
+
+// ── Scaffold ───────────────────────────────────────────────
+const SCAFFOLD_INFO = {
+  presence: {
+    ico:'⚡', ttl:'Presence',
+    body:'Attraction · social abundance · charisma · relationship depth · close bonds. Protocol in development.',
+    sci:`Waldinger & Schulz (Harvard, 80yr) — close relationships #1 predictor of happiness<br>
+         Ambady & Rosenthal — thin slices of behavior predict long-term impressions<br>
+         Carney, Cuddy & Yap — expansive posture and dominance signals<br>
+         Dunbar — social brain hypothesis, relationship maintenance load`,
+  },
+  craft: {
+    ico:'🔥', ttl:'Craft',
+    body:'Deep work · skill compounding · career · financial hygiene · wealth building. Protocol in development.',
+    sci:`Ericsson & Pool — deliberate practice and expertise development<br>
+         Newport "Deep Work" — distraction-free work produces disproportionate value<br>
+         Csikszentmihalyi — flow states during cognitively demanding work<br>
+         Adams — talent stacking at uncommon intersections`,
+  },
+  purpose: {
+    ico:'🎯', ttl:'Purpose',
+    body:'Goals · meta-strategy · clarity · meaning · direction. Protocol in development.',
+    sci:`Locke & Latham — Goal Setting Theory (most replicated in psychology)<br>
+         Gollwitzer — implementation intentions double goal achievement<br>
+         Oettingen — WOOP and mental contrasting<br>
+         Seligman PERMA — Meaning as distinct from Accomplishment`,
+  },
+};
+
+function rScaffold(s) {
+  const i = SCAFFOLD_INFO[s];
+  const col = COLS[s];
+  document.getElementById('s-' + s).innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${col}">${i.ttl}</div>
+        <div class="mod-name">Protocol TBD</div>
+      </div>
+    </div>
+    <div class="scaffold">
+      <span class="scaffold-ico">${i.ico}</span>
+      <div class="scaffold-ttl">Coming Soon</div>
+      <div class="scaffold-body">${i.body}</div>
+      <div class="scaffold-science">
+        <div class="scaffold-sci-ttl">Research Foundation</div>
+        <div class="scaffold-sci-body">${i.sci}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Settings ───────────────────────────────────────────────
+function rSettings() {
+  const dayOpts = DAYS.map((d,i) =>
+    `<option value="${i}" ${S.cfg.dermaDay==i?'selected':''}>${d}</option>`).join('');
+
+  document.getElementById('s-settings').innerHTML = `
+  <div class="wrap">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm">System</div>
+        <div class="mod-name">Settings</div>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">Schedule</div>
+      <div class="set-row">
+        <div><div class="set-row-lbl">Wake Time</div><div class="set-row-sub">Your fixed alarm — don't move this</div></div>
+        <input type="time" class="set-inp" value="${S.cfg.wake}" onchange="setCfg('wake',this.value)">
+      </div>
+      <div class="set-row">
+        <div><div class="set-row-lbl">Lights Out Target</div><div class="set-row-sub">Final sleep target (11:30pm)</div></div>
+        <input type="time" class="set-inp" value="${S.cfg.sleep}" onchange="setCfg('sleep',this.value)">
+      </div>
+      <div class="set-row">
+        <div><div class="set-row-lbl">Dermaroll Day</div><div class="set-row-sub">Weekly beard dermaroll — skip tretinoin this night</div></div>
+        <select class="set-inp" onchange="setCfg('dermaDay',parseInt(this.value))">${dayOpts}</select>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">Sleep System</div>
+      <div class="set-row" onclick="window.open('https://diegoarm-ai.github.io/sleep-tracker-web/','_blank')" style="cursor:pointer">
+        <div>
+          <div class="set-row-lbl">Somnus Tracker</div>
+          <div class="set-row-sub">Log sleep, manage ramp &amp; emergency mode</div>
+        </div>
+        <div style="color:var(--t3)">›</div>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">Progress</div>
+      <div class="set-row">
+        <div class="set-row-lbl">Overall Streak</div>
+        <div style="font-size:22px;font-weight:900;color:var(--t1)">${S.streaks.overall.n} 🔥</div>
+      </div>
+      <div class="set-row">
+        <div class="set-row-lbl">Today's Completion</div>
+        <div style="font-size:22px;font-weight:900;color:var(--t1)">${overallPct()}%</div>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">Data</div>
+      <div class="set-row" onclick="exportD()" style="cursor:pointer">
+        <div class="set-row-lbl">Export Data (JSON)</div>
+        <div style="color:var(--t3)">›</div>
+      </div>
+      <div class="set-row" onclick="if(confirm('Reset ALL progress? This cannot be undone.'))resetD()" style="cursor:pointer">
+        <div class="set-row-lbl" style="color:var(--danger)">Reset All Data</div>
+        <div style="color:var(--danger)">›</div>
+      </div>
+    </div>
+
+    <div class="footer-hint">
+      Solo Leveling v1.0 · Built for Diego · April 2026
+    </div>
+  </div>`;
+}
+
+// ── Event handlers ─────────────────────────────────────────
+function tapTask(id) {
+  const el = document.getElementById('ti-' + id);
+  if (!el) return;
+  toggle(id);
+  const isDone = done(id);
+  el.classList.toggle('done', isDone);
+  el.classList.add('popping');
+  setTimeout(() => el.classList.remove('popping'), 350);
+  // Update rings on home if visible
+  if (cur === 'home') rHome();
+}
+
+function toggleRef(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+function logNight(status) {
+  // Write status to Somnus state (source of truth)
+  const ss = getSS();
+  if (!ss) return;
+  const yesterday = ssDaysAgo(1);
+  if (!ss.data) ss.data = {};
+  if (!ss.data[yesterday]) ss.data[yesterday] = {};
+  ss.data[yesterday].status = status;
+  ss.data[yesterday].auto   = false;
+  writeSS(ss);
+  // Re-render Vitality to reflect new status
+  rVitality();
+}
+
+function logW() {
+  const inp = document.getElementById('w-inp');
+  const w   = parseFloat(inp?.value);
+  if (!inp || isNaN(w)) return;
+  const today = dk();
+  const idx   = S.weight.findIndex(x => x.date === today);
+  if (idx >= 0) S.weight[idx].w = w;
+  else S.weight.push({ date: today, w });
+  S.weight = S.weight.slice(-90);
+  save();
+  const disp = document.getElementById('w-disp');
+  if (disp) disp.textContent = w + ' lbs';
+  inp.value = '';
+  inp.placeholder = w + ' lbs';
+}
+
+function setCfg(k, v) {
+  S.cfg[k] = v;
+  save();
+}
+
+
+function exportD() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], {type:'application/json'});
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(blob),
+    download: `solo-leveling-${dk()}.json`
+  });
+  a.click();
+}
+
+function resetD() {
+  localStorage.removeItem(KEY);
+  S = defaultState();
+  save();
+  go('home');
+}
+
+// ── Live clock ─────────────────────────────────────────────
+function tickClock() {
+  const el = document.getElementById('live-clock');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+}
+
+// ── Init ───────────────────────────────────────────────────
+(function init() {
+  const app = document.getElementById('app');
+  ['home','physique','vitality','presence','craft','purpose','settings'].forEach(id => {
+    const d = document.createElement('div');
+    d.id = 's-' + id;
+    d.className = 'screen' + (id === 'home' ? ' active' : '');
+    app.appendChild(d);
+  });
+
+  rHome();
+
+  setInterval(tickClock, 30000);
+
+  // Midnight reset check
+  (function midCheck() {
+    const n = new Date();
+    if (n.getHours() === 0 && n.getMinutes() < 2) recalcStreak();
+    setTimeout(midCheck, 60000);
+  })();
+})();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () =>
+    navigator.serviceWorker.register("/solo-leveling-web/sw.js")
+  );
+}
+</script>
+</body>
+</html>
