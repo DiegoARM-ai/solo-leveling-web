@@ -761,7 +761,8 @@ function ssHhmmFromMin(m)    { m=((m%1440)+1440)%1440; return String(Math.floor(
 function ssToSigned(hhmm)    { const m=ssToMin(hhmm); return m<720?m+1440:m; }
 function ssFromSigned(s)     { return ((s%1440)+1440)%1440; }
 function ssDaysBetween(a,b)  { return Math.floor((new Date(b+'T00:00:00Z')-new Date(a+'T00:00:00Z'))/86400000); }
-function ssDaysAgo(n)        { const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
+function localDk(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function ssDaysAgo(n)        { const d=new Date(); d.setDate(d.getDate()-n); return localDk(d); }
 
 function ssFinalTarget(ss) {
   if (!ss) return '23:30';
@@ -838,7 +839,7 @@ function save() {
 }
 
 // ── Time utilities ─────────────────────────────────────────
-function dk(d = new Date()) { return d.toISOString().slice(0,10); }
+function dk(d = new Date()) { return localDk(d); }
 
 function block() {
   const h = new Date().getHours();
