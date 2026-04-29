@@ -1049,12 +1049,16 @@ function getBottleneck() {
 function bottleneckBanner() {
   const bn = getBottleneck();
   if (!bn) return '';
-  // Compute what rank you'd reach if bottleneck was gone
-  const modLabel = bn.mods.map(m => `${MOD_NAMES[m]} (${MOD_STAT[m]})`).join(' + ');
-  const isMulti  = bn.mods.length > 1;
-  const subtext  = bn.level === 1
-    ? `RANK CEILING LOCKED. ALL STATS LIMITED WHILE ${isMulti ? 'THESE MODULES REMAIN' : 'THIS MODULE REMAINS'} AT ${lvStr(1)}.`
-    : `ADVANCE ${isMulti ? 'THESE MODULES' : 'THIS MODULE'} TO ${lvStr(bn.level + 1)} TO UNLOCK THE NEXT RANK TIER.`;
+  const vals  = Object.values(S.levels);
+  const maxLv = Math.max(...vals);
+  // Only surface the banner when modules have actually diverged.
+  // When all are equal the pulsing card borders already say it — no need for a full banner.
+  if (maxLv === bn.level) return '';
+  const modLabel = bn.mods.map(m => MOD_NAMES[m]).join(' + ');
+  const gap      = maxLv - bn.level;
+  const subtext  = gap >= 2
+    ? `${gap} LEVELS BEHIND THE PACK. THIS IS YOUR RANK CEILING.`
+    : `ONE LEVEL BEHIND. ADVANCE TO ${lvStr(bn.level + 1)} TO UNLOCK THE NEXT RANK TIER.`;
   return `
   <div class="bn-banner">
     <div class="bn-ico">◈</div>
@@ -1380,10 +1384,10 @@ function rHome() {
   const streak = S.streaks.overall.n;
 
   const blockMeta = {
-    morning:   { ico:'🌅', lbl:'Morning Block',   ttl:'AM protocols active' },
-    afternoon: { ico:'☀️', lbl:'Afternoon Block',  ttl:'Training block active' },
-    evening:   { ico:'🌆', lbl:'Evening Block',    ttl:'Wind-down protocols active' },
-    night:     { ico:'🌙', lbl:'Night Block',      ttl:'PM routine active' },
+    morning:   { ico:'🌅', lbl:'Morning Block',   mod:'physique' },
+    afternoon: { ico:'☀️', lbl:'Afternoon Block',  mod:'physique' },
+    evening:   { ico:'🌆', lbl:'Evening Block',    mod:'vitality' },
+    night:     { ico:'🌙', lbl:'Night Block',      mod:'vitality' },
   }[b];
 
   const stats = [
@@ -1466,12 +1470,14 @@ function rHome() {
 
     ${bottleneckBanner()}
 
-    <div class="now-banner ${pend > 0 ? 'urgent' : 'clear'}">
+    <div class="now-banner ${pend > 0 ? 'urgent' : 'clear'}"
+         ${pend > 0 ? `onclick="go('${blockMeta.mod}')" style="cursor:pointer"` : ''}>
       <div class="nb-ico">${pend > 0 ? blockMeta.ico : '✅'}</div>
-      <div>
+      <div style="flex:1">
         <div class="nb-lbl">${blockMeta.lbl}</div>
         <div class="nb-ttl">${pend > 0 ? `${pend} OBJECTIVE${pend!==1?'S':''} PENDING` : 'ALL OBJECTIVES COMPLETE'}</div>
       </div>
+      ${pend > 0 ? `<div style="color:var(--t3);font-size:20px;flex-shrink:0;line-height:1">›</div>` : ''}
     </div>
 
     <div class="stat-cards">${cardsH}</div>
