@@ -615,6 +615,61 @@ select.set-inp { width: auto; }
 /* ===== FOOTER HINT ===== */
 .footer-hint { padding: 24px 0 8px; text-align: center; color: var(--t3); font-size: 12px; line-height: 1.8; }
 .footer-hint a { color: var(--vitality); text-decoration: none; }
+
+/* ===== RANK & LEVEL SYSTEM ===== */
+.rank-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  margin-top: 10px; margin-bottom: 2px;
+}
+.rank-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; border-radius: 14px;
+  font-size: 24px; font-weight: 900; letter-spacing: 1px;
+  border: 2px solid; transition: box-shadow .4s;
+}
+.rank-E { color: var(--t3); border-color: var(--border-b); background: var(--card); }
+.rank-D { color: var(--success); border-color: rgba(31,191,88,.45); background: rgba(31,191,88,.07); box-shadow: 0 0 16px rgba(31,191,88,.14); }
+.rank-C { color: var(--info); border-color: rgba(56,189,248,.45); background: rgba(56,189,248,.07); box-shadow: 0 0 16px rgba(56,189,248,.14); }
+.rank-B { color: var(--presence); border-color: rgba(176,110,255,.45); background: rgba(176,110,255,.07); box-shadow: 0 0 20px rgba(176,110,255,.18); }
+.rank-A { color: var(--vitality); border-color: rgba(255,169,64,.45); background: rgba(255,169,64,.07); box-shadow: 0 0 20px rgba(255,169,64,.18); }
+.rank-S { color: #FFD700; border-color: rgba(255,215,0,.55); background: rgba(255,215,0,.07); box-shadow: 0 0 28px rgba(255,215,0,.25); }
+.rank-lbl { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--t3); }
+
+.lv-sc-badge {
+  display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 6px;
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px;
+  background: color-mix(in srgb, var(--sc-color) 12%, transparent);
+  color: var(--sc-color);
+  border: 1px solid color-mix(in srgb, var(--sc-color) 28%, transparent);
+  margin-top: 3px;
+}
+
+.lv-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 14px 15px;
+  margin-bottom: 16px;
+}
+.lv-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.lv-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--t2); }
+.lv-badge-lg { font-size: 16px; font-weight: 900; color: var(--sc-color); font-variant-numeric: tabular-nums; }
+.lv-xp-txt { font-size: 12px; color: var(--t2); font-weight: 700; font-variant-numeric: tabular-nums; }
+.lv-sub { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+.lv-target-txt { font-size: 10px; color: var(--t3); }
+.lv-pct-txt { font-size: 10px; font-weight: 800; color: var(--sc-color); }
+.lv-up-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px; padding: 8px 14px; border-radius: 10px;
+  background: color-mix(in srgb, var(--sc-color) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sc-color) 35%, transparent);
+  font-size: 12px; font-weight: 700; color: var(--sc-color);
+  cursor: pointer; -webkit-user-select: none; user-select: none;
+  transition: background .15s;
+  width: 100%;  justify-content: center;
+}
+.lv-up-btn:active { background: color-mix(in srgb, var(--sc-color) 20%, transparent); }
 </style>
 </head>
 <body>
@@ -629,7 +684,7 @@ select.set-inp { width: auto; }
   <div class="ni" data-s="physique" onclick="go('physique')">
     <div class="ni-ico" style="color:var(--physique)">💪</div>
     <div class="ni-pip"></div>
-    <div class="ni-lbl">Maximus</div>
+    <div class="ni-lbl">Adonis</div>
   </div>
   <div class="ni" data-s="vitality"  onclick="go('vitality')">
     <div class="ni-ico" style="color:var(--vitality)">🌙</div>
@@ -658,43 +713,44 @@ const COLS  = { physique:'#00C896', vitality:'#FFB347', presence:'#A855F7', craf
 const P = {
   physique: {
     am: [
-      { id:'a1', name:'Apply minoxidil to beard',   note:'Before or during morning sunlight — dries in ~5 min' },
-      { id:'a2', name:'Morning sunlight',            note:'10+ min outside. Minoxidil absorbs during this. Cortisol spike anchors your clock.' },
-      { id:'a3', name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
-      { id:'a4', name:'Niacinamide serum',          note:'The Ordinary 10% + Zinc' },
-      { id:'a5', name:'Moisturizer',                note:'CeraVe Moisturizing Cream' },
-      { id:'a6', name:'SPF — never skip',           note:'EltaMD UV Clear or La Roche-Posay Anthelios. Final step, every single day.' },
-      { id:'a7', name:'Style hair',                 note:'Sea salt spray on damp hair → blow dry outward toward temples. See Hair Protocol ↓' },
+      { id:'a1', xp:2,  name:'Apply minoxidil to beard',   note:'Before or during morning sunlight — dries in ~5 min' },
+      { id:'a2', xp:3,  name:'Morning sunlight',            note:'10+ min outside. Minoxidil absorbs during this. Cortisol spike anchors your clock.' },
+      { id:'a3', xp:2,  name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
+      { id:'a4', xp:2,  name:'Niacinamide serum',          note:'The Ordinary 10% + Zinc' },
+      { id:'a5', xp:1,  name:'Moisturizer',                note:'CeraVe Moisturizing Cream' },
+      { id:'a6', xp:3,  name:'SPF — never skip',           note:'EltaMD UV Clear or La Roche-Posay Anthelios. Final step, every single day.' },
+      { id:'a7', xp:2,  name:'Style hair',                 note:'Sea salt spray on damp hair → blow dry outward toward temples. See Hair Protocol ↓' },
     ],
     aft: [
-      { id:'f1', name:'Log today\'s weight',        note:'Daily trend matters more than any single reading' },
-      { id:'f2', name:'Hit protein target',         note:'170g today — track in your app' },
-      { id:'f3', name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
+      { id:'f1', xp:5,  name:'Log today\'s weight',        note:'Daily trend matters more than any single reading' },
+      { id:'f2', xp:15, name:'Hit protein target',         note:'170g today — track in your app' },
+      { id:'f3', xp:30, name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
     ],
     pm: [
-      { id:'p1', name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
-      { id:'p2', name:'Pat dry, brush teeth',       note:'~5 min. Face dries while you do other tasks.' },
-      { id:'p3', name:'Apply minoxidil to beard',   note:'Let dry ~5 min while doing other things' },
-      { id:'p4', name:'Moisturizer (buffer layer)', note:'Sandwich method — dramatically reduces tretinoin irritation' },
-      { id:'p5', name:'Tretinoin 0.025%',           note:'Pea-sized amount, whole face. Avoid eye area.' },
-      { id:'p6', name:'Moisturizer (sealing layer)',note:'Generous amount — lock in the tretinoin sandwich' },
+      { id:'p1', xp:2,  name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
+      { id:'p2', xp:1,  name:'Pat dry, brush teeth',       note:'~5 min. Face dries while you do other tasks.' },
+      { id:'p3', xp:4,  name:'Apply minoxidil to beard',   note:'Let dry ~5 min while doing other things' },
+      { id:'p4', xp:2,  name:'Moisturizer (buffer layer)', note:'Sandwich method — dramatically reduces tretinoin irritation' },
+      { id:'p5', xp:8,  name:'Tretinoin 0.025%',           note:'Pea-sized amount, whole face. Avoid eye area.' },
+      { id:'p6', xp:3,  name:'Moisturizer (sealing layer)',note:'Generous amount — lock in the tretinoin sandwich' },
     ],
     wk: [
-      { id:'w1', name:'Derma roll beard area',      note:'0.5mm roller, full beard zone. Firm even pressure.' },
-      { id:'w2', name:'Wait 30–60 min',             note:'Let skin settle completely before next step' },
-      { id:'w3', name:'Apply minoxidil post-roll',  note:'Enhanced absorption — this is why you roll' },
+      { id:'w1', xp:10, name:'Derma roll beard area',      note:'0.5mm roller, full beard zone. Firm even pressure.' },
+      { id:'w2', xp:5,  name:'Wait 30–60 min',             note:'Let skin settle completely before next step' },
+      { id:'w3', xp:10, name:'Apply minoxidil post-roll',  note:'Enhanced absorption — this is why you roll' },
     ],
   },
   vitality: {
     am: [
-      { id:'v1', name:'Morning sunlight — go outside', note:'10+ min within 30–60 min of waking. This is Lever 1. Anchors your entire circadian clock.' },
+      { id:'v0', xp:20, name:'Wake at anchor time',            note:'Within 15 min of 9:00am. This is the single most important sleep behavior — it anchors your entire circadian clock.' },
+      { id:'v1', xp:10, name:'Morning sunlight — go outside',  note:'10+ min within 30–60 min of waking. This is Lever 1. Anchors your entire circadian clock.' },
     ],
     pm: [
-      { id:'v3', name:'Dim lights — warm light only',  note:'2.5 hrs before in-bed target. Below 100 lux = melatonin production begins. Hue automates this.' },
-      { id:'v4', name:'Warm shower',                   note:'90 min before in-bed target. 40–42°C for 5–10 min. Core temp drop drives faster sleep onset.' },
-      { id:'v5', name:'Set room to 66°F',              note:'Sleep requires ~1.5°F core temp drop. Cool room makes this automatic every night.' },
-      { id:'v6', name:'No screens before bed',         note:'60 min before in-bed target. Screen Time Downtime fires automatically — work with it.' },
-      { id:'v7', name:'In bed by tonight\'s target',   note:'Your current ramp target is shown live in the Somnus card above.' },
+      { id:'v3', xp:5,  name:'Dim lights — warm light only',  note:'2.5 hrs before in-bed target. Below 100 lux = melatonin production begins. Hue automates this.' },
+      { id:'v4', xp:15, name:'Warm shower',                   note:'90 min before in-bed target. 40–42°C for 5–10 min. Core temp drop drives faster sleep onset.' },
+      { id:'v5', xp:5,  name:'Set room to 66°F',              note:'Sleep requires ~1.5°F core temp drop. Cool room makes this automatic every night.' },
+      { id:'v6', xp:15, name:'No screens before bed',         note:'60 min before in-bed target. Screen Time Downtime fires automatically — work with it.' },
+      { id:'v7', xp:20, name:'In bed by tonight\'s target',   note:'Your current ramp target is shown live in the Somnus card above.' },
     ],
   },
 };
@@ -716,7 +772,7 @@ const HAIR = [
 // ── State ──────────────────────────────────────────────────
 function defaultState() {
   return {
-    v: 2,
+    v: 3,
     cfg: {
       wake:         '09:00',
       sleep:        '23:30',
@@ -733,7 +789,39 @@ function defaultState() {
     log:    {},   // dateKey → {taskId: bool}
     sleep:  {},   // dateKey → {good, oura, debt, rhr, auto}
     weight: [],   // [{date, w}]
+    xp: {
+      physique: { weekly: 0, weekKey: '' },
+      vitality: { weekly: 0, weekKey: '' },
+      presence: { weekly: 0, weekKey: '' },
+      craft:    { weekly: 0, weekKey: '' },
+      purpose:  { weekly: 0, weekKey: '' },
+    },
+    levels: {
+      physique: 1,
+      vitality: 1,
+      presence: 1,
+      craft:    1,
+      purpose:  1,
+    },
   };
+}
+
+function migrateState(s) {
+  if (!s.xp) s.xp = {
+    physique: { weekly: 0, weekKey: '' },
+    vitality: { weekly: 0, weekKey: '' },
+    presence: { weekly: 0, weekKey: '' },
+    craft:    { weekly: 0, weekKey: '' },
+    purpose:  { weekly: 0, weekKey: '' },
+  };
+  if (!s.levels) s.levels = { physique: 1, vitality: 1, presence: 1, craft: 1, purpose: 1 };
+  // ensure all mods exist
+  ['physique','vitality','presence','craft','purpose'].forEach(m => {
+    if (!s.xp[m]) s.xp[m] = { weekly: 0, weekKey: '' };
+    if (s.levels[m] === undefined) s.levels[m] = 1;
+  });
+  s.v = 3;
+  return s;
 }
 
 let S = (function(){
@@ -741,11 +829,121 @@ let S = (function(){
     const r = localStorage.getItem(KEY);
     if (r) {
       const p = JSON.parse(r);
-      if (p && p.v >= 1) return p;
+      if (p && p.v >= 1) return migrateState(p);
     }
   } catch(_){}
   return defaultState();
 })();
+
+// ── Task → module + XP lookup (built from P) ──────────────
+const TASK_MOD = {};
+const TASK_XP  = {};
+(function buildLookup() {
+  const blocks = {
+    physique: ['am','aft','pm','wk'],
+    vitality: ['am','pm'],
+  };
+  Object.entries(blocks).forEach(([mod, bls]) => {
+    bls.forEach(bl => {
+      (P[mod][bl] || []).forEach(t => {
+        TASK_MOD[t.id] = mod;
+        TASK_XP[t.id]  = t.xp || 0;
+      });
+    });
+  });
+})();
+
+// ── XP system ─────────────────────────────────────────────
+function weekKey(d = new Date()) {
+  const date = new Date(d);
+  date.setHours(0,0,0,0);
+  const jan1 = new Date(date.getFullYear(), 0, 1);
+  const wn   = Math.ceil(((date - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return `${date.getFullYear()}-W${String(wn).padStart(2,'0')}`;
+}
+
+function initXP(mod) {
+  if (!S.xp) S.xp = {};
+  const wk = weekKey();
+  if (!S.xp[mod] || S.xp[mod].weekKey !== wk) {
+    S.xp[mod] = { weekly: 0, weekKey: wk };
+  }
+}
+
+function getWeeklyXP(mod) { initXP(mod); return S.xp[mod].weekly; }
+
+function addXP(mod, delta) {
+  initXP(mod);
+  S.xp[mod].weekly = Math.max(0, S.xp[mod].weekly + delta);
+}
+
+// Weekly XP targets for each level gate (index = current level → target to show)
+const XP_TARGETS = {
+  physique: { 1:400, 2:450, 3:500, 4:510, 5:510, 6:510, 7:510, 8:510, 9:540, 10:540 },
+  vitality: { 1:380, 2:420, 3:490, 4:490, 5:530, 6:550, 7:570, 8:590, 9:610, 10:630 },
+  presence: { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
+  craft:    { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
+  purpose:  { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
+};
+
+// ── Rank calculation ───────────────────────────────────────
+function calcRank() {
+  if (!S.levels) return 'E';
+  const vals = Object.values(S.levels);
+  const min  = Math.min(...vals);
+  if (vals.every(l => l >= 9)) return 'S';
+  if (vals.every(l => l >= 7)) return 'A';
+  if (vals.every(l => l >= 5) && vals.filter(l => l >= 7).length >= 2) return 'B';
+  if (vals.every(l => l >= 3) && vals.filter(l => l >= 5).length >= 2) return 'C';
+  if (min >= 2 && vals.filter(l => l >= 3).length >= 3) return 'D';
+  return 'E';
+}
+
+// ── Level bar HTML ─────────────────────────────────────────
+function lvBar(mod, col) {
+  const lv      = S.levels?.[mod] || 1;
+  const wxp     = getWeeklyXP(mod);
+  const target  = XP_TARGETS[mod]?.[lv] || 0;
+  const pct     = target > 0 ? Math.min(100, Math.round(wxp / target * 100)) : 0;
+  const atTarget = target > 0 && wxp >= target;
+  const maxLv   = lv >= 10;
+  const showLvUp = atTarget && !maxLv;
+
+  return `
+  <div class="lv-section">
+    <div class="lv-row">
+      <span class="lv-label">Level</span>
+      <span class="lv-badge-lg" style="color:${col}">Lv ${lv}</span>
+    </div>
+    ${target > 0 ? `
+    <div class="prog-bar">
+      <div class="prog-fill" style="width:${pct}%;background:${col}"></div>
+    </div>
+    <div class="lv-sub">
+      <span class="lv-target-txt">Target: ${target} XP/week for Lv ${lv+1}</span>
+      <span class="lv-pct-txt" style="color:${atTarget?col:'var(--t3)'}">${wxp} XP${atTarget?' ✓':''}</span>
+    </div>` : `
+    <div class="lv-sub"><span class="lv-target-txt">Protocol in development — XP coming soon</span></div>`}
+    ${showLvUp ? `
+    <div class="lv-up-btn" style="--sc-color:${col}" onclick="promptLvUp('${mod}')">
+      ▲ Claim Level ${lv+1} — verify real-world gate first
+    </div>` : ''}
+  </div>`;
+}
+
+// ── Level-up prompt ────────────────────────────────────────
+function promptLvUp(mod) {
+  const lv  = S.levels?.[mod] || 1;
+  const next = lv + 1;
+  const names = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', craft:'Prometheus', purpose:'Seneca' };
+  const msg = `Claim ${names[mod]} Level ${next}?\n\nConfirm you've met the real-world gate for Level ${next} (see ADONIS.md or SOMNUS_levels.md).\n\nXP gate ✓ (you're hitting weekly target)\nOutcome gate — you confirm this is true.`;
+  if (confirm(msg)) {
+    if (!S.levels) S.levels = {};
+    S.levels[mod] = next;
+    save();
+    render(cur);
+  }
+}
 
 // ── Somnus Bridge — live read/write of somnus_state_v1 ─────
 // Both apps share the same localStorage origin on GitHub Pages
@@ -879,9 +1077,14 @@ function dayLog(key = dk()) {
 function done(id) { return !!dayLog()[id]; }
 
 function toggle(id) {
-  const l = dayLog();
-  l[id] = !l[id];
+  const l      = dayLog();
+  const wasDone = !!l[id];
+  l[id] = !wasDone;
   S.log[dk()] = l;
+  // XP tracking
+  const mod   = TASK_MOD[id];
+  const xpVal = TASK_XP[id] || 0;
+  if (mod && xpVal) addXP(mod, wasDone ? -xpVal : xpVal);
   recalcStreak();
   save();
 }
@@ -1001,11 +1204,11 @@ function rHome() {
   }[b];
 
   const stats = [
-    { s:'physique', name:'Physique', mod:'Maximus',     ico:'💪', active:true },
-    { s:'vitality', name:'Vitality', mod:'Somnus',      ico:'🌙', active:true },
-    { s:'presence', name:'Presence', mod:'Coming Soon', ico:'⚡', active:false },
-    { s:'craft',    name:'Craft',    mod:'Coming Soon', ico:'🔥', active:false },
-    { s:'purpose',  name:'Purpose',  mod:'Coming Soon', ico:'🎯', active:false },
+    { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪', active:true },
+    { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', active:true },
+    { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡', active:false },
+    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', active:false },
+    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:false },
   ];
 
   const cardsH = stats.map(c => {
@@ -1020,6 +1223,7 @@ function rHome() {
           return tasks.filter(t => !done(t.id)).length;
         })()
       : null;
+    const lv = S.levels?.[c.s] || 1;
     return `
     <div class="sc" style="--sc-color:${col}" onclick="go('${c.s}')">
       <div class="sc-info">
@@ -1030,6 +1234,7 @@ function rHome() {
               ? `<div class="sc-due">▲ ${pending} task${pending!==1?'s':''} remaining</div>`
               : `<div class="sc-done">✓ Complete</div>`)
           : `<div class="cs-badge">Protocol TBD</div>`}
+        <div class="lv-sc-badge" style="--sc-color:${col}">Lv ${lv}</div>
       </div>
       <div>${ring(cp, 48, 3.5, col)}</div>
       <div class="sc-arrow">›</div>
@@ -1062,6 +1267,10 @@ function rHome() {
         <span>${streak > 0 ? '🔥' : '○'}</span>
         <span class="streak-n">${streak}</span>
         <span class="streak-w">day streak</span>
+      </div>
+      <div class="rank-wrap">
+        <div class="rank-badge rank-${calcRank()}">${calcRank()}</div>
+        <div class="rank-lbl">Current Rank</div>
       </div>
     </div>
 
@@ -1098,10 +1307,11 @@ function rPhysique() {
       <div class="back-btn" onclick="go('home')">‹</div>
       <div class="mod-ttl-g">
         <div class="mod-stat-nm">Physique</div>
-        <div class="mod-name">Maximus</div>
+        <div class="mod-name">Adonis</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
+    ${lvBar('physique', col)}
 
     ${proto('☀️','Morning Routine', P.physique.am, col, b==='morning')}
     ${proto('💪','Training & Nutrition', P.physique.aft, col, b==='afternoon')}
@@ -1239,6 +1449,7 @@ function rVitality() {
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
+    ${lvBar('vitality', col)}
 
     ${em ? `
     <div class="emrg">
@@ -1432,27 +1643,27 @@ function heatmap(ss) {
 // ── Scaffold ───────────────────────────────────────────────
 const SCAFFOLD_INFO = {
   presence: {
-    ico:'⚡', ttl:'Presence',
-    body:'Attraction · social abundance · charisma · relationship depth · close bonds. Protocol in development.',
-    sci:`Waldinger & Schulz (Harvard, 80yr) — close relationships #1 predictor of happiness<br>
+    ico:'⚡', ttl:'Presence', mod:'Apollo',
+    body:'Social & romantic abundance · charisma · attraction · relationship depth · close bonds. Protocol in development.',
+    sci:`Waldinger & Schulz (Harvard, 80yr) — close relationships #1 predictor of happiness and longevity<br>
+         Holt-Lunstad — social isolation carries same mortality risk as smoking 15 cigarettes/day<br>
          Ambady & Rosenthal — thin slices of behavior predict long-term impressions<br>
-         Carney, Cuddy & Yap — expansive posture and dominance signals<br>
-         Dunbar — social brain hypothesis, relationship maintenance load`,
+         Antonakis et al. — specific charismatic behaviors and their measurable effects`,
   },
   craft: {
-    ico:'🔥', ttl:'Craft',
+    ico:'🔥', ttl:'Craft', mod:'Prometheus',
     body:'Deep work · skill compounding · career · financial hygiene · wealth building. Protocol in development.',
     sci:`Ericsson & Pool — deliberate practice and expertise development<br>
          Newport "Deep Work" — distraction-free work produces disproportionate value<br>
          Csikszentmihalyi — flow states during cognitively demanding work<br>
-         Adams — talent stacking at uncommon intersections`,
+         Killingsworth et al. (2021) — happiness continues rising with income for most people`,
   },
   purpose: {
-    ico:'🎯', ttl:'Purpose',
-    body:'Goals · meta-strategy · clarity · meaning · direction. Protocol in development.',
+    ico:'🎯', ttl:'Purpose', mod:'Seneca',
+    body:'Philosophy & direction · vision · goal hierarchy · equanimity · meaning. Protocol in development.',
     sci:`Locke & Latham — Goal Setting Theory (most replicated in psychology)<br>
-         Gollwitzer — implementation intentions double goal achievement<br>
-         Oettingen — WOOP and mental contrasting<br>
+         Hölzel et al. (2011) — mindfulness produces measurable brain structure changes<br>
+         Emmons & McCullough (2003) — gratitude practices increase wellbeing<br>
          Seligman PERMA — Meaning as distinct from Accomplishment`,
   },
 };
@@ -1466,12 +1677,13 @@ function rScaffold(s) {
       <div class="back-btn" onclick="go('home')">‹</div>
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${col}">${i.ttl}</div>
-        <div class="mod-name">Protocol TBD</div>
+        <div class="mod-name">${i.mod}</div>
       </div>
     </div>
+    ${lvBar(s, col)}
     <div class="scaffold">
       <span class="scaffold-ico">${i.ico}</span>
-      <div class="scaffold-ttl">Coming Soon</div>
+      <div class="scaffold-ttl">Protocol in Development</div>
       <div class="scaffold-body">${i.body}</div>
       <div class="scaffold-science">
         <div class="scaffold-sci-ttl">Research Foundation</div>
@@ -1533,6 +1745,43 @@ function rSettings() {
         <div class="set-row-lbl">Today's Completion</div>
         <div style="font-size:22px;font-weight:900;color:var(--t1)">${overallPct()}%</div>
       </div>
+      <div class="set-row">
+        <div class="set-row-lbl">Overall Rank</div>
+        <div style="font-size:22px;font-weight:900;color:var(--t1)">${calcRank()}</div>
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">Level Management</div>
+      <div style="padding:4px 0 10px;font-size:12px;color:var(--t3);line-height:1.5">
+        Level-up requires both gates: weekly XP target hit AND real-world outcome verified. See module docs to confirm gates before claiming.
+      </div>
+      ${[
+        { mod:'physique', name:'Adonis',     col:'var(--physique)' },
+        { mod:'vitality', name:'Somnus',     col:'var(--vitality)' },
+        { mod:'presence', name:'Apollo',     col:'var(--presence)' },
+        { mod:'craft',    name:'Prometheus', col:'var(--craft)'    },
+        { mod:'purpose',  name:'Seneca',     col:'var(--purpose)'  },
+      ].map(({ mod, name, col }) => {
+        const lv    = S.levels?.[mod] || 1;
+        const wxp   = getWeeklyXP(mod);
+        const tgt   = XP_TARGETS[mod]?.[lv] || 0;
+        const atTgt = tgt > 0 && wxp >= tgt;
+        return `
+        <div class="set-row">
+          <div>
+            <div class="set-row-lbl" style="color:${col}">${name}</div>
+            <div class="set-row-sub">${wxp} XP this week${tgt > 0 ? ' · target ' + tgt : ''}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:18px;font-weight:900;color:${col}">Lv ${lv}</div>
+            ${lv < 10 ? `<div onclick="promptLvUp('${mod}')"
+              style="font-size:11px;font-weight:700;color:${atTgt?col:'var(--t3)'};cursor:pointer;padding:4px 10px;border-radius:8px;border:1px solid ${atTgt?col:'var(--border-b)'};background:${atTgt?`color-mix(in srgb, ${col} 10%, transparent)`:'var(--card)'}">
+              ${atTgt ? '▲ Claim' : 'Lv '+(lv+1)}
+            </div>` : '<div style="font-size:11px;color:var(--t3)">MAX</div>'}
+          </div>
+        </div>`;
+      }).join('')}
     </div>
 
     <div class="set-sec">
@@ -1548,7 +1797,7 @@ function rSettings() {
     </div>
 
     <div class="footer-hint">
-      Solo Leveling v1.0 · Built for Diego · April 2026
+      Solo Leveling v2.0 · Built for Diego · April 2026
     </div>
   </div>`;
 }
