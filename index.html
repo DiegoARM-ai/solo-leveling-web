@@ -359,7 +359,12 @@ body::before {
   border-radius: var(--r-md); padding: 14px;
   text-align: center; font-size: 13px; font-weight: 800;
   color: var(--success); letter-spacing: .5px;
-  text-transform: uppercase;
+  text-transform: uppercase; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.sec-done .sec-done-undo {
+  font-size: 10px; font-weight: 600; color: var(--t3);
+  letter-spacing: .3px; text-transform: uppercase; opacity: .7;
 }
 
 /* ===== REFERENCE CARDS ===== */
@@ -1172,7 +1177,10 @@ function proto(ico, ttl, tasks, col, isNow) {
         : `<span class="sec-badge">${ndone}/${total}</span>`}
     </div>
     ${allDone
-      ? `<div class="sec-done">✓ Complete</div>`
+      ? `<div class="sec-done" onclick="uncompleteSection([${tasks.map(t=>`'${t.id}'`).join(',')}])">
+           <span>✓ Complete</span>
+           <span class="sec-done-undo">↩ tap to edit</span>
+         </div>`
       : `<div class="ck-list">${itemsH}</div>`}
     <div class="prog-bar" style="margin-top:10px">
       <div class="prog-fill" style="width:${p}%;background:${col}"></div>
@@ -1546,6 +1554,18 @@ function rSettings() {
 }
 
 // ── Event handlers ─────────────────────────────────────────
+function uncompleteSection(ids) {
+  const l = dayLog();
+  ids.forEach(id => { l[id] = false; });
+  S.log[dk()] = l;
+  recalcStreak();
+  save();
+  // Re-render current tab
+  if (cur === 'maximus') rMaximus();
+  else if (cur === 'somnus') rSomnus();
+  else if (cur === 'home') rHome();
+}
+
 function tapTask(id) {
   const el = document.getElementById('ti-' + id);
   if (!el) return;
