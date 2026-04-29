@@ -1053,14 +1053,14 @@ function bottleneckBanner() {
   const modLabel = bn.mods.map(m => `${MOD_NAMES[m]} (${MOD_STAT[m]})`).join(' + ');
   const isMulti  = bn.mods.length > 1;
   const subtext  = bn.level === 1
-    ? `${isMulti ? 'These modules are' : 'This module is'} the floor for your entire character. Every other gain is limited while ${isMulti ? 'they remain' : 'it remains'} at Lv 1.`
-    : `Bringing ${isMulti ? 'these' : 'this'} to Lv ${bn.level + 1} unlocks the next rank tier.`;
+    ? `RANK CEILING LOCKED. ALL STATS LIMITED WHILE ${isMulti ? 'THESE MODULES REMAIN' : 'THIS MODULE REMAINS'} AT ${lvStr(1)}.`
+    : `ADVANCE ${isMulti ? 'THESE MODULES' : 'THIS MODULE'} TO ${lvStr(bn.level + 1)} TO UNLOCK THE NEXT RANK TIER.`;
   return `
   <div class="bn-banner">
     <div class="bn-ico">◈</div>
     <div>
-      <div class="bn-tag">Critical Path</div>
-      <div class="bn-ttl">${modLabel} · Lv ${bn.level}</div>
+      <div class="bn-tag">[ CRITICAL PATH ]</div>
+      <div class="bn-ttl">${modLabel} · ${lvStr(bn.level)}</div>
       <div class="bn-sub">${subtext}</div>
     </div>
   </div>`;
@@ -1079,21 +1079,21 @@ function lvBar(mod, col) {
   return `
   <div class="lv-section">
     <div class="lv-row">
-      <span class="lv-label">Level</span>
-      <span class="lv-badge-lg" style="color:${col}">Lv ${lv}</span>
+      <span class="lv-label">STAT LEVEL</span>
+      <span class="lv-badge-lg" style="color:${col}">${lvStr(lv)}</span>
     </div>
     ${target > 0 ? `
     <div class="prog-bar">
       <div class="prog-fill" style="width:${pct}%;background:${col}"></div>
     </div>
     <div class="lv-sub">
-      <span class="lv-target-txt">Target: ${target} XP/week for Lv ${lv+1}</span>
+      <span class="lv-target-txt">TARGET: ${target} XP/WK · GATE ${lvStr(lv+1)}</span>
       <span class="lv-pct-txt" style="color:${atTarget?col:'var(--t3)'}">${wxp} XP${atTarget?' ✓':''}</span>
     </div>` : `
-    <div class="lv-sub"><span class="lv-target-txt">Protocol in development — XP coming soon</span></div>`}
+    <div class="lv-sub"><span class="lv-target-txt">[ PROTOCOL NOT YET ASSIGNED — XP PENDING ]</span></div>`}
     ${showLvUp ? `
     <div class="lv-up-btn" style="--sc-color:${col}" onclick="promptLvUp('${mod}')">
-      ▲ Claim Level ${lv+1} — verify real-world gate first
+      [ ▲ LEVEL UP ] CLAIM ${lvStr(lv+1)} — CONFIRM REAL-WORLD GATE
     </div>` : ''}
   </div>`;
 }
@@ -1115,7 +1115,7 @@ function promptLvUp(mod) {
   const lv  = S.levels?.[mod] || 1;
   const next = lv + 1;
   const names = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', craft:'Prometheus', purpose:'Seneca' };
-  const msg = `Claim ${names[mod]} Level ${next}?\n\nConfirm you've met the real-world gate for Level ${next} (see ADONIS.md or SOMNUS_levels.md).\n\nXP gate ✓ (you're hitting weekly target)\nOutcome gate — you confirm this is true.`;
+  const msg = `[ LEVEL UP CONFIRMATION ]\n\n${names[mod].toUpperCase()} → ${lvStr(next)}\n\nBOTH GATES REQUIRED:\n· XP GATE — weekly target sustained ✓\n· OUTCOME GATE — real-world measurement confirmed\n\nVerify the ${lvStr(next)} outcome gate in your module doc before proceeding.\n\nCONFIRM LEVEL UP?`;
   if (confirm(msg)) {
     if (!S.levels) S.levels = {};
     S.levels[mod] = next;
@@ -1247,6 +1247,9 @@ function greeting() {
   const h = new Date().getHours();
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
 }
+
+// Zero-padded level string — SL system style
+function lvStr(n) { return 'LV.' + String(n).padStart(2, '0'); }
 
 // ── Completion ─────────────────────────────────────────────
 function dayLog(key = dk()) {
@@ -1415,12 +1418,12 @@ function rHome() {
         <div class="sc-mod">${c.mod}</div>
         ${c.active
           ? (pending > 0
-              ? `<div class="sc-due">▲ ${pending} task${pending!==1?'s':''} remaining</div>`
-              : `<div class="sc-done">✓ Complete</div>`)
-          : `<div class="cs-badge">Protocol TBD</div>`}
+              ? `<div class="sc-due">▲ ${pending} OBJECTIVE${pending!==1?'S':''} REMAINING</div>`
+              : `<div class="sc-done">✓ COMPLETE</div>`)
+          : `<div class="cs-badge">[ LOCKED ]</div>`}
         <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
-          <div class="lv-sc-badge" style="--sc-color:${col}">Lv ${lv}</div>
-          ${isBn ? `<div class="bn-crit-badge">Critical Path</div>` : ''}
+          <div class="lv-sc-badge" style="--sc-color:${col}">${lvStr(lv)}</div>
+          ${isBn ? `<div class="bn-crit-badge">[ CRITICAL PATH ]</div>` : ''}
         </div>
       </div>
       <div>${ring(cp, 48, 3.5, col)}</div>
@@ -1432,7 +1435,7 @@ function rHome() {
   <div class="wrap">
     <div class="h-header">
       <div>
-        <div class="h-system">◈ System Online</div>
+        <div class="h-system">◈ [ SYSTEM ONLINE ]</div>
         <div class="h-greeting">${greeting()}, Diego</div>
         <div class="h-date">${DAYS[now.getDay()]}, ${MONS[now.getMonth()]} ${now.getDate()}</div>
       </div>
@@ -1453,11 +1456,11 @@ function rHome() {
       <div class="streak-pill ${streak > 0 ? 'lit' : ''}">
         <span>${streak > 0 ? '🔥' : '○'}</span>
         <span class="streak-n">${streak}</span>
-        <span class="streak-w">day streak</span>
+        <span class="streak-w">DAY STREAK</span>
       </div>
       <div class="rank-wrap">
         <div class="rank-badge rank-${calcRank()}">${calcRank()}</div>
-        <div class="rank-lbl">Current Rank</div>
+        <div class="rank-lbl">HUNTER RANK</div>
       </div>
     </div>
 
@@ -1467,7 +1470,7 @@ function rHome() {
       <div class="nb-ico">${pend > 0 ? blockMeta.ico : '✅'}</div>
       <div>
         <div class="nb-lbl">${blockMeta.lbl}</div>
-        <div class="nb-ttl">${pend > 0 ? `${pend} task${pend!==1?'s':''} due right now` : 'All caught up for this block'}</div>
+        <div class="nb-ttl">${pend > 0 ? `${pend} OBJECTIVE${pend!==1?'S':''} PENDING` : 'ALL OBJECTIVES COMPLETE'}</div>
       </div>
     </div>
 
@@ -1572,7 +1575,7 @@ function proto(ico, ttl, tasks, col, isNow) {
       <span class="sec-ico">${ico}</span>
       <span class="sec-ttl">${ttl}</span>
       ${isNow
-        ? `<span class="sec-tag-now">Active Now</span>`
+        ? `<span class="sec-tag-now">[ ACTIVE ]</span>`
         : `<span class="sec-badge">${ndone}/${total}</span>`}
     </div>
     ${allDone
@@ -1872,7 +1875,7 @@ function rScaffold(s) {
     ${lvBar(s, col)}
     <div class="scaffold">
       <span class="scaffold-ico">${i.ico}</span>
-      <div class="scaffold-ttl">Protocol in Development</div>
+      <div class="scaffold-ttl">[ MODULE LOCKED ]</div>
       <div class="scaffold-body">${i.body}</div>
       <div class="scaffold-science">
         <div class="scaffold-sci-ttl">Research Foundation</div>
@@ -1963,11 +1966,11 @@ function rSettings() {
             <div class="set-row-sub">${wxp} XP this week${tgt > 0 ? ' · target ' + tgt : ''}</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="font-size:18px;font-weight:900;color:${col}">Lv ${lv}</div>
+            <div style="font-size:16px;font-weight:700;color:${col};font-family:var(--font-display);letter-spacing:1px">${lvStr(lv)}</div>
             ${lv < 10 ? `<div onclick="promptLvUp('${mod}')"
               style="font-size:11px;font-weight:700;color:${atTgt?col:'var(--t3)'};cursor:pointer;padding:4px 10px;border-radius:8px;border:1px solid ${atTgt?col:'var(--border-b)'};background:${atTgt?`color-mix(in srgb, ${col} 10%, transparent)`:'var(--card)'}">
-              ${atTgt ? '▲ Claim' : 'Lv '+(lv+1)}
-            </div>` : '<div style="font-size:11px;color:var(--t3)">MAX</div>'}
+              ${atTgt ? `[ ▲ CLAIM ]` : lvStr(lv+1)}
+            </div>` : '<div style="font-size:11px;color:var(--t3);letter-spacing:1px">[ MAX ]</div>'}
           </div>
         </div>`;
       }).join('')}
@@ -1986,7 +1989,7 @@ function rSettings() {
     </div>
 
     <div class="footer-hint">
-      Solo Leveling v2.0 · Built for Diego · April 2026
+      [ SYSTEM v2.0 ] · SOLO LEVELING · APRIL 2026
     </div>
   </div>`;
 }
