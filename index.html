@@ -404,6 +404,61 @@ body::before {
 .ref-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
 .ref-card.open .ref-body { display: block; }
 
+/* ===== TRAINING REFERENCE CARD ===== */
+.tr-ex { border-bottom: 1px solid var(--border); }
+.tr-ex:last-child { border-bottom: none; }
+.tr-ex-hd {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 0; cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+}
+.tr-ex-num {
+  min-width: 20px; height: 20px; border-radius: 50%;
+  background: var(--border); display: flex; align-items: center;
+  justify-content: center; font-size: 10px; font-weight: 700;
+  color: var(--t2); flex-shrink: 0;
+}
+.tr-ex-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--t1); line-height: 1.3; }
+.tr-ex-meta { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.tr-sets { font-size: 11px; font-weight: 700; color: var(--physique); white-space: nowrap; }
+.tr-rir {
+  font-size: 10px; padding: 2px 5px; border-radius: 4px;
+  background: rgba(0,212,160,0.1); color: var(--physique); white-space: nowrap;
+}
+.tr-rest-btn {
+  font-size: 10px; padding: 2px 7px; border-radius: 4px;
+  background: var(--card-hi); color: var(--t2);
+  border: 1px solid var(--border); cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  min-width: 52px; text-align: center;
+  -webkit-user-select: none; user-select: none; white-space: nowrap;
+}
+.tr-rest-btn.active {
+  background: rgba(0,212,160,0.15); color: var(--physique);
+  border-color: rgba(0,212,160,0.35); font-weight: 700;
+}
+.tr-rest-btn.done {
+  background: rgba(31,191,88,0.15); color: var(--success);
+  border-color: rgba(31,191,88,0.35);
+}
+.tr-cue {
+  display: none; font-size: 12px; color: var(--t2);
+  padding: 0 0 11px 28px; line-height: 1.55; font-style: italic;
+}
+.tr-ex.open .tr-cue { display: block; }
+.tr-day-tag {
+  font-size: 11px; color: var(--t3); font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 10px 0 8px;
+}
+.tr-hint {
+  padding: 10px 0 2px; text-align: center;
+  font-size: 11px; color: var(--t3);
+}
+.tr-special {
+  padding: 16px 0; text-align: center; color: var(--t2); font-size: 13px;
+}
+
 .ref-step { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
 .ref-step:last-child { border-bottom: none; }
 .ref-sn {
@@ -917,6 +972,78 @@ const HAIR = [
   'Leave completely alone until fully cool',
 ];
 
+
+// ── Training Program ───────────────────────────────────────
+const TRAINING = {
+  1: {
+    name: 'Push A', emoji: '💪',
+    focus: 'Upper Chest · Lateral Delts · Triceps',
+    ex: [
+      { n:'Incline Dumbbell Press (30°)',          s:'4 × 8–10',      rir:'RIR 2', rest:'2–3 min', sec:150, cue:'Feel your upper chest stretch at the bottom — press and push your hands toward each other at the top, feel the upper pec squeeze' },
+      { n:'Low-to-High Cable Fly',                 s:'3 × 12–15',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Pull up and together like hugging someone above you — feel the upper chest doing the pulling throughout the entire arc' },
+      { n:'Leaning Cable Lateral Raise',           s:'4 × 15–20',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Drive your elbow up and out — feel the side of your shoulder doing all the pulling' },
+      { n:'Overhead Cable Tricep Extension',       s:'3 × 12–15',     rir:'RIR 2', rest:'90 sec',  sec:90,  cue:'Reach your hands as low as possible behind your head — feel the long head of your tricep fully stretch, then press to absolute lockout' },
+      { n:'Tricep Rope Pushdown',                  s:'3 × 12–15',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Spread the rope apart at the bottom — full lockout, 1-second squeeze' },
+    ]
+  },
+  2: {
+    name: 'Pull A', emoji: '🔗',
+    focus: 'Lats · Rear Delts · Biceps',
+    ex: [
+      { n:'Neutral-Grip Lat Pulldown',             s:'4 × 8–12',      rir:'RIR 2', rest:'2 min',   sec:120, cue:'Pull your elbows down to your back pockets — feel your lats fully lengthen as the bar rises, don\'t let the shoulder shrug up' },
+      { n:'Single-Arm Lat Pulldown',               s:'3 × 10–12',     rir:'RIR 2', rest:'90 sec',  sec:90,  cue:'Reach fully overhead at the top for a complete lat stretch — pull your elbow to your hip pocket, feel each side independently' },
+      { n:'Straight-Arm Cable Pulldown',           s:'3 × 12–15',     rir:'RIR 2', rest:'90 sec',  sec:90,  cue:'Treat your hands as hooks — arms stay straight, hinge only at the shoulder, feel your lats pulling the rope to your thighs' },
+      { n:'Face Pull',                             s:'4 × 15–20',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Pull to your ears, elbows high — finish in a double bicep pose, feel the rear delt and external rotators squeeze, not the traps' },
+      { n:'Prone Rear Delt Fly',                   s:'3 × 15–20',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Elbows at shoulder height — drive them up and out, feel the rear delt pulling your arms apart. The bench removes your ability to cheat.' },
+      { n:'Incline Dumbbell Curl',                 s:'3 × 10–12',     rir:'RIR 2', rest:'90 sec',  sec:90,  cue:'Arm fully behind your body at the bottom — keep your elbow pinned back as you curl, feel the bicep contracting from a deep stretch' },
+      { n:'Hammer Curl',                           s:'2 × 12–15',     rir:'RIR 2', rest:'75 sec',  sec:75,  cue:'Feel the brachialis stretch at the bottom — controlled eccentric, neutral grip the entire rep' },
+    ]
+  },
+  3: null,
+  4: {
+    name: 'Legs + Delts', emoji: '🦵',
+    focus: 'Quads · Hamstrings · Glutes · Lateral Delts',
+    ex: [
+      { n:'Hack Squat',                            s:'4 × 10–12',     rir:'RIR 2', rest:'2–3 min', sec:150, cue:'Feel the quad stretch deep at the bottom — push through the full foot, drive the platform away' },
+      { n:'Bulgarian Split Squat',                 s:'3 × 10–12/leg', rir:'RIR 2', rest:'2–3 min', sec:150, cue:'Sink straight down, torso upright — feel the tension load in your front quad and glute before driving up' },
+      { n:'Romanian Deadlift',                     s:'3 × 10–12',     rir:'RIR 2', rest:'2–3 min', sec:150, cue:'Reach your hips to the wall behind you — feel your hamstrings load progressively as you descend, bar stays close to your legs' },
+      { n:'Leg Extension',                         s:'4 × 15–20',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Feel the quad stretch fully at the bottom — extend completely, hold 1 second at the top' },
+      { n:'Seated Leg Curl',                       s:'3 × 12–15',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Feel the hamstring stretch at full extension — curl to the end of the ROM, squeeze at the top' },
+      { n:'Hip Abduction Machine',                 s:'3 × 15–20',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Press your legs apart while keeping your pelvis neutral — feel the side of your glute doing the work, not your hip flexors' },
+      { n:'Leaning Cable Lateral Raise',           s:'4 × 15–20',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Drive your elbow up and out — feel the side of your shoulder doing all the pulling' },
+    ]
+  },
+  5: {
+    name: 'Push B — Shoulders', emoji: '🎯',
+    focus: 'Lateral Delts · Rear Delts · Upper Chest · Arms',
+    ex: [
+      { n:'Leaning Cable Lateral Raise',           s:'4 × 15–20',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Drive your elbow up and out — feel the side of your shoulder doing all the pulling. Maximum lean, maximum stretch.' },
+      { n:'Seated DB Lateral Raise (2-sec ecc)',   s:'4 × 12–15',     rir:'RIR 2', rest:'90 sec',  sec:90,  cue:'Drive your elbow up and out, thumb slightly down — 2 sec up, 2 sec down. Feel the lateral delt pulling your arm from the bottom.' },
+      { n:'DB Lateral Raise w/ 2-sec pause',      s:'2 × 15–20',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Drive your elbow up and out — hold 2 seconds at parallel before lowering slowly. Adds time under tension.' },
+      { n:'Reverse Pec Deck',                      s:'3 × 15–20',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Elbows at shoulder height — drive them back and apart, feel the rear delt pulling. Not your traps, not your hands.' },
+      { n:'Incline Dumbbell Press (30°)',          s:'4 × 10–12',     rir:'RIR 2', rest:'2 min',   sec:120, cue:'Feel the upper chest stretch at the bottom — press and push your hands toward each other at the top' },
+      { n:'Close-Grip Bench Press',                s:'3 × 8–10',      rir:'RIR 2', rest:'2 min',   sec:120, cue:'Elbows tucked against your lats as you lower — feel the tricep stretch at the bottom, drive to full lockout' },
+      { n:'Tricep Rope Pushdown',                  s:'3 × 12–15',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Spread the rope apart at the bottom — full lockout, 1-second squeeze' },
+      { n:'Preacher Curl',                         s:'3 × 10–12',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Lower until arms are fully straight — own the eccentric all the way down. Curl from the fully stretched position.' },
+      { n:'Bayesian Cable Curl',                   s:'2 × 12–15',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Arm behind your hip at the start — feel the bicep fully stretched before you curl. Supinate your wrist at the top.' },
+    ]
+  },
+  6: {
+    name: 'Pull B', emoji: '🔗',
+    focus: 'Back Thickness · Rear Delts · Posterior Chain',
+    ex: [
+      { n:'Barbell Row (45° lean)',                s:'4 × 6–8',       rir:'RIR 2', rest:'2–3 min', sec:150, cue:'45° lean — not parallel to floor. Drive elbows past your torso — feel lats and mid-back squeeze at the top' },
+      { n:'Chest-Supported Row',                   s:'3 × 10–12',     rir:'RIR 2', rest:'2 min',   sec:120, cue:'Let your shoulder blades fully protract forward at the bottom — retract and row, feel your mid-back squeeze at the top' },
+      { n:'Seated Cable Row (neutral, close)',     s:'3 × 12–15',     rir:'RIR 2', rest:'2 min',   sec:120, cue:'Drive your elbows back past your sides — feel the mid-back squeeze at full retraction. Full stretch forward before each rep.' },
+      { n:'Reverse Pec Deck',                      s:'4 × 15–20',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Elbows at shoulder height — drive them back and apart, feel the rear delt pulling. Not your traps, not your hands.' },
+      { n:'Leaning Cable Lateral Raise',           s:'2 × 15–20',     rir:'RIR 1', rest:'90 sec',  sec:90,  cue:'Drive your elbow up and out — feel the side of your shoulder doing all the pulling. Maintenance volume, keep quality high.' },
+      { n:'Nordic Curl / Lying Leg Curl',          s:'3 × 8–12',      rir:'RIR 2', rest:'2–3 min', sec:150, cue:'Resist gravity on the way down — feel your hamstrings working hard to control the descent. The eccentric is the point.' },
+      { n:'Barbell Hip Thrust',                    s:'4 × 8–12',      rir:'RIR 2', rest:'2 min',   sec:120, cue:'Drive your hips to the ceiling — tuck your pelvis at the top and squeeze your glutes hard. Chin tucked. No lower back arch.' },
+      { n:'Standing Calf Raise',                   s:'4 × 15–20',     rir:'RIR 1', rest:'75 sec',  sec:75,  cue:'Full stretch at the bottom, pause 1 second — rise to maximum height, pause and squeeze. No bouncing.' },
+    ]
+  },
+  0: null,
+};
 
 // ── State ──────────────────────────────────────────────────
 function defaultState() {
@@ -1567,6 +1694,8 @@ function rPhysique() {
          </div>`
       : proto('🌙','PM Routine', P.physique.pm, col, b==='night')}
 
+    ${renderTrainingCard()}
+
     <div class="ref-card" id="r-hair">
       <div class="ref-hd" onclick="toggleRef('r-hair')">
         <div class="ref-ico">💇</div>
@@ -2086,6 +2215,90 @@ function tapTask(id) {
 function toggleRef(id) {
   const el = document.getElementById(id);
   if (el) el.classList.toggle('open');
+}
+
+// ── Training Card ──
+let _trTimer = null;
+let _trTimerEl = null;
+
+function trRestStart(e, sec, btnEl) {
+  e.stopPropagation();
+  if (_trTimerEl === btnEl && _trTimer) {
+    clearInterval(_trTimer); _trTimer = null;
+    btnEl.textContent = btnEl.dataset.orig; btnEl.className = 'tr-rest-btn'; _trTimerEl = null;
+    return;
+  }
+  if (_trTimer) {
+    clearInterval(_trTimer); _trTimer = null;
+    if (_trTimerEl) { _trTimerEl.textContent = _trTimerEl.dataset.orig; _trTimerEl.className = 'tr-rest-btn'; }
+  }
+  _trTimerEl = btnEl;
+  if (!btnEl.dataset.orig) btnEl.dataset.orig = btnEl.textContent;
+  let remaining = sec;
+  btnEl.className = 'tr-rest-btn active';
+  function tick() {
+    if (remaining <= 0) {
+      clearInterval(_trTimer); _trTimer = null;
+      btnEl.textContent = '✓ Go'; btnEl.className = 'tr-rest-btn done';
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      setTimeout(() => {
+        if (_trTimerEl === btnEl) { btnEl.textContent = btnEl.dataset.orig; btnEl.className = 'tr-rest-btn'; _trTimerEl = null; }
+      }, 3000);
+      return;
+    }
+    const m = Math.floor(remaining / 60); const s = remaining % 60;
+    btnEl.textContent = m + ':' + String(s).padStart(2,'0');
+    remaining--;
+  }
+  tick(); _trTimer = setInterval(tick, 1000);
+}
+
+function trToggleCue(el) { el.classList.toggle('open'); }
+
+function renderTrainingCard() {
+  if (_trTimer) { clearInterval(_trTimer); _trTimer = null; _trTimerEl = null; }
+  const dow = new Date().getDay();
+  const session = TRAINING[dow];
+  const dayName = DAYS[dow];
+  const autoOpen = !!session && block() === 'afternoon';
+  let bodyHtml = '';
+  if (dow === 3) {
+    bodyHtml = `<div class="tr-special">🏃 Run day — no lifting. Recovery between blocks.</div>`;
+  } else if (dow === 0) {
+    bodyHtml = `<div class="tr-special">🛌 Full rest day. Recovery is part of the program.</div>`;
+  } else if (session) {
+    const exHtml = session.ex.map((ex, i) => `
+      <div class="tr-ex" onclick="trToggleCue(this)">
+        <div class="tr-ex-hd">
+          <div class="tr-ex-num">${i+1}</div>
+          <div class="tr-ex-name">${ex.n}</div>
+          <div class="tr-ex-meta">
+            <span class="tr-sets">${ex.s}</span>
+            <span class="tr-rir">${ex.rir}</span>
+            <span class="tr-rest-btn" data-orig="${ex.rest}"
+              onclick="trRestStart(event,${ex.sec},this)">${ex.rest}</span>
+          </div>
+        </div>
+        <div class="tr-cue">${ex.cue}</div>
+      </div>`).join('');
+    bodyHtml = `
+      <div class="tr-day-tag">${dayName} · ${session.focus}</div>
+      ${exHtml}
+      <div class="tr-hint">Tap exercise for cue · Tap rest time to start timer</div>`;
+  }
+  const ico = session ? session.emoji : (dow === 3 ? '🏃' : '🛌');
+  const ttl = session
+    ? `${session.name} <span style="color:var(--t3);font-size:12px;font-weight:500">— ${dayName}</span>`
+    : `${dow === 3 ? 'Run Day' : 'Rest Day'} <span style="color:var(--t3);font-size:12px;font-weight:500">— ${dayName}</span>`;
+  return `
+    <div class="ref-card ${autoOpen ? 'open' : ''}" id="r-training">
+      <div class="ref-hd" onclick="toggleRef('r-training')">
+        <div class="ref-ico">${ico}</div>
+        <div class="ref-ttl" style="color:var(--physique)">${ttl}</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">${bodyHtml}</div>
+    </div>`;
 }
 
 function logNight(status) {
