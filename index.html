@@ -670,6 +670,45 @@ select.set-inp { width: auto; }
   width: 100%;  justify-content: center;
 }
 .lv-up-btn:active { background: color-mix(in srgb, var(--sc-color) 20%, transparent); }
+
+/* ===== BOTTLENECK SYSTEM ===== */
+.bn-banner {
+  background: rgba(245,158,11,.05);
+  border: 1px solid rgba(245,158,11,.28);
+  border-radius: var(--r-lg); padding: 13px 15px;
+  margin-bottom: 14px;
+  display: flex; align-items: flex-start; gap: 12px;
+  position: relative; overflow: hidden;
+  animation: slideUp .25s ease;
+}
+.bn-banner::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--warning); box-shadow: 0 0 8px rgba(245,158,11,.6);
+  border-radius: 0 2px 2px 0;
+}
+.bn-ico { font-size: 18px; flex-shrink: 0; padding-top: 1px; }
+.bn-tag {
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--warning); margin-bottom: 3px;
+}
+.bn-ttl { font-size: 14px; font-weight: 800; color: var(--t1); line-height: 1.3; }
+.bn-sub { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+/* Bottleneck stat card pulse */
+@keyframes bnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+  50%       { box-shadow: 0 0 0 3px rgba(245,158,11,.18); }
+}
+.sc.bn-stat {
+  border-color: rgba(245,158,11,.35) !important;
+  animation: bnPulse 2.8s ease-in-out infinite;
+}
+.bn-crit-badge {
+  display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 5px;
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px;
+  background: rgba(245,158,11,.1); color: var(--warning);
+  border: 1px solid rgba(245,158,11,.3); margin-top: 3px;
+}
 </style>
 </head>
 <body>
@@ -897,6 +936,38 @@ function calcRank() {
   if (vals.every(l => l >= 3) && vals.filter(l => l >= 5).length >= 2) return 'C';
   if (min >= 2 && vals.filter(l => l >= 3).length >= 3) return 'D';
   return 'E';
+}
+
+// ── Bottleneck detection ───────────────────────────────────
+const MOD_NAMES = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', craft:'Prometheus', purpose:'Seneca' };
+const MOD_STAT  = { physique:'Physique', vitality:'Vitality', presence:'Presence', craft:'Craft', purpose:'Purpose' };
+
+function getBottleneck() {
+  if (!S.levels) return null;
+  const entries = Object.entries(S.levels);
+  const minLv   = Math.min(...entries.map(([,v]) => v));
+  const mods    = entries.filter(([,v]) => v === minLv).map(([k]) => k);
+  return { level: minLv, mods };
+}
+
+function bottleneckBanner() {
+  const bn = getBottleneck();
+  if (!bn) return '';
+  // Compute what rank you'd reach if bottleneck was gone
+  const modLabel = bn.mods.map(m => `${MOD_NAMES[m]} (${MOD_STAT[m]})`).join(' + ');
+  const isMulti  = bn.mods.length > 1;
+  const subtext  = bn.level === 1
+    ? `${isMulti ? 'These modules are' : 'This module is'} the floor for your entire character. Every other gain is limited while ${isMulti ? 'they remain' : 'it remains'} at Lv 1.`
+    : `Bringing ${isMulti ? 'these' : 'this'} to Lv ${bn.level + 1} unlocks the next rank tier.`;
+  return `
+  <div class="bn-banner">
+    <div class="bn-ico">◈</div>
+    <div>
+      <div class="bn-tag">Critical Path</div>
+      <div class="bn-ttl">${modLabel} · Lv ${bn.level}</div>
+      <div class="bn-sub">${subtext}</div>
+    </div>
+  </div>`;
 }
 
 // ── Level bar HTML ─────────────────────────────────────────
@@ -1211,10 +1282,14 @@ function rHome() {
     { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:false },
   ];
 
+  const bn      = getBottleneck();
+  const bnMods  = new Set(bn?.mods || []);
+
   const cardsH = stats.map(c => {
-    const col = COLS[c.s];
-    const cp  = c.active ? modPct(c.s) : 0;
-    const wk  = isWkDay();
+    const col    = COLS[c.s];
+    const cp     = c.active ? modPct(c.s) : 0;
+    const wk     = isWkDay();
+    const isBn   = bnMods.has(c.s);
     const pending = c.active
       ? (() => {
           const tasks = c.s === 'physique'
@@ -1225,7 +1300,7 @@ function rHome() {
       : null;
     const lv = S.levels?.[c.s] || 1;
     return `
-    <div class="sc" style="--sc-color:${col}" onclick="go('${c.s}')">
+    <div class="sc ${isBn ? 'bn-stat' : ''}" style="--sc-color:${col}" onclick="go('${c.s}')">
       <div class="sc-info">
         <div class="sc-stat">${c.name}</div>
         <div class="sc-mod">${c.mod}</div>
@@ -1234,7 +1309,10 @@ function rHome() {
               ? `<div class="sc-due">▲ ${pending} task${pending!==1?'s':''} remaining</div>`
               : `<div class="sc-done">✓ Complete</div>`)
           : `<div class="cs-badge">Protocol TBD</div>`}
-        <div class="lv-sc-badge" style="--sc-color:${col}">Lv ${lv}</div>
+        <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
+          <div class="lv-sc-badge" style="--sc-color:${col}">Lv ${lv}</div>
+          ${isBn ? `<div class="bn-crit-badge">Critical Path</div>` : ''}
+        </div>
       </div>
       <div>${ring(cp, 48, 3.5, col)}</div>
       <div class="sc-arrow">›</div>
@@ -1273,6 +1351,8 @@ function rHome() {
         <div class="rank-lbl">Current Rank</div>
       </div>
     </div>
+
+    ${bottleneckBanner()}
 
     <div class="now-banner ${pend > 0 ? 'urgent' : 'clear'}">
       <div class="nb-ico">${pend > 0 ? blockMeta.ico : '✅'}</div>
