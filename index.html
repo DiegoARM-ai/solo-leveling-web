@@ -787,6 +787,30 @@ select.set-inp { width: auto; }
   border: 1px solid rgba(245,158,11,.3); margin-top: 3px;
 }
 
+/* ===== SLEEP FOCUS BANNER ===== */
+/* Distinct from level-gap bottleneck — fires on real metrics, not level parity */
+.sf-banner {
+  background: rgba(255,169,64,.06);
+  border: 1px solid rgba(255,169,64,.28);
+  border-radius: var(--r-lg); padding: 13px 15px;
+  margin-bottom: 14px;
+  display: flex; align-items: flex-start; gap: 12px;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  animation: slideUp .25s ease;
+}
+.sf-banner::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--vitality); box-shadow: 0 0 8px rgba(255,169,64,.55);
+  border-radius: 0 2px 2px 0;
+}
+.sf-tag {
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--vitality); margin-bottom: 3px;
+}
+.sf-ttl { font-size: 14px; font-weight: 800; color: var(--t1); line-height: 1.3; }
+.sf-sub { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
 /* ===== VISUAL OVERHAUL — Solo Leveling System Aesthetic ===== */
 
 /* Scan line body overlay — barely perceptible, adds depth */
@@ -924,11 +948,13 @@ const P = {
       { id:'a5', xp:1,  name:'Moisturizer',                note:'CeraVe Moisturizing Cream' },
       { id:'a6', xp:3,  name:'SPF — never skip',           note:'EltaMD UV Clear or La Roche-Posay Anthelios. Final step, every single day.' },
       { id:'a7', xp:2,  name:'Style hair',                 note:'Sea salt spray on damp hair → blow dry outward toward temples. See Hair Protocol ↓' },
+      { id:'a8', xp:3,  name:'Supplements (morning)',      note:'Vitamin D3 5000 IU + K2-MK7 100mcg · Boron 10mg · Creatine 5g — take with breakfast (fat aids D3 absorption)' },
     ],
     aft: [
       { id:'f1', xp:5,  name:'Log today\'s weight',        note:'Daily trend matters more than any single reading' },
       { id:'f2', xp:15, name:'Hit protein target',         note:'170g today — track in your app' },
       { id:'f3', xp:30, name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
+      { id:'f4', xp:2,  name:'Supplements (dinner)',       note:'Zinc picolinate 25mg with food — not near workout (blocks absorption). Magnesium glycinate 400mg pre-bed.' },
     ],
     pm: [
       { id:'p1', xp:2,  name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
@@ -1058,6 +1084,9 @@ function defaultState() {
       rampWeek:     0,
       emergency:    false,
       imported:     false,
+      sleepDebt:    null,   // current debt in minutes (from Whoop) — update weekly
+      sleepEff:     null,   // 7-day avg efficiency % (from Oura) — update weekly
+      sleepCon:     null,   // 7-day consistency % (from Oura) — update weekly
     },
     streaks: {
       overall: { n: 0, last: null },
@@ -1091,6 +1120,9 @@ function migrateState(s) {
     purpose:  { weekly: 0, weekKey: '' },
   };
   if (!s.levels) s.levels = { physique: 1, vitality: 1, presence: 1, craft: 1, purpose: 1 };
+  if (s.cfg.sleepDebt === undefined) s.cfg.sleepDebt = null;
+  if (s.cfg.sleepEff  === undefined) s.cfg.sleepEff  = null;
+  if (s.cfg.sleepCon  === undefined) s.cfg.sleepCon  = null;
   // ensure all mods exist
   ['physique','vitality','presence','craft','purpose'].forEach(m => {
     if (!s.xp[m]) s.xp[m] = { weekly: 0, weekKey: '' };
@@ -1207,6 +1239,39 @@ function bottleneckBanner() {
       <div class="bn-tag">[ CRITICAL PATH ]</div>
       <div class="bn-ttl">${modLabel} · ${lvStr(bn.level)}</div>
       <div class="bn-sub">${subtext}</div>
+    </div>
+  </div>`;
+}
+
+// ── Sleep focus — metric-based bottleneck (independent of level gap) ──
+// Fires when Whoop/Oura numbers are below evidence-based thresholds.
+// Thresholds: debt > 60 min OR efficiency < 80% OR consistency < 70%.
+// User updates these weekly in Settings → Sleep System.
+function getSleepFocus() {
+  const debt = S.cfg.sleepDebt ?? null;  // minutes
+  const eff  = S.cfg.sleepEff  ?? null;  // percent
+  const con  = S.cfg.sleepCon  ?? null;  // percent
+  const triggers = [];
+  if (debt !== null && debt > 60) {
+    const h = Math.floor(debt / 60);
+    const m = debt % 60;
+    triggers.push(m > 0 ? `${h}h ${m}m debt` : `${h}h debt`);
+  }
+  if (eff !== null && eff < 80)  triggers.push(`${eff}% efficiency`);
+  if (con !== null && con < 70)  triggers.push(`${con}% consistency`);
+  return triggers.length > 0 ? triggers : null;
+}
+
+function sleepFocusBanner() {
+  const triggers = getSleepFocus();
+  if (!triggers) return '';
+  return `
+  <div class="sf-banner" onclick="go('vitality')">
+    <div class="bn-ico">🌙</div>
+    <div>
+      <div class="sf-tag">[ ACTIVE BOTTLENECK ]</div>
+      <div class="sf-ttl">Somnus · Sleep Deficit Unresolved</div>
+      <div class="sf-sub">${triggers.join(' · ')} — This is your #1 rank limiter. Everything else compounds on top of this.</div>
     </div>
   </div>`;
 }
@@ -1642,6 +1707,7 @@ function rHome() {
       </div>
     </div>
 
+    ${sleepFocusBanner()}
     ${bottleneckBanner()}
 
     <div class="now-banner ${pend > 0 ? 'urgent' : 'clear'}"
@@ -2107,6 +2173,36 @@ function rSettings() {
           <div class="set-row-sub">Log sleep, manage ramp &amp; emergency mode</div>
         </div>
         <div style="color:var(--t3)">›</div>
+      </div>
+      <div style="padding:6px 0 4px;font-size:11px;color:var(--t3);line-height:1.5;font-weight:600;letter-spacing:.5px">
+        BOTTLENECK METRICS — update weekly from Whoop + Oura
+      </div>
+      <div class="set-row">
+        <div>
+          <div class="set-row-lbl">Sleep Debt</div>
+          <div class="set-row-sub">Current debt in minutes (Whoop)</div>
+        </div>
+        <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="600"
+               value="${S.cfg.sleepDebt ?? ''}" placeholder="min"
+               onchange="setCfg('sleepDebt', this.value !== '' ? parseInt(this.value) : null); rHome()">
+      </div>
+      <div class="set-row">
+        <div>
+          <div class="set-row-lbl">Sleep Efficiency</div>
+          <div class="set-row-sub">7-day avg % (Oura) — flag below 80</div>
+        </div>
+        <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="100"
+               value="${S.cfg.sleepEff ?? ''}" placeholder="%"
+               onchange="setCfg('sleepEff', this.value !== '' ? parseInt(this.value) : null); rHome()">
+      </div>
+      <div class="set-row">
+        <div>
+          <div class="set-row-lbl">Sleep Consistency</div>
+          <div class="set-row-sub">7-day avg % (Oura) — flag below 70</div>
+        </div>
+        <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="100"
+               value="${S.cfg.sleepCon ?? ''}" placeholder="%"
+               onchange="setCfg('sleepCon', this.value !== '' ? parseInt(this.value) : null); rHome()">
       </div>
     </div>
 
