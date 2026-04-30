@@ -1248,9 +1248,11 @@ function bottleneckBanner() {
 // Thresholds: debt > 60 min OR efficiency < 80% OR consistency < 70%.
 // User updates these weekly in Settings → Sleep System.
 function getSleepFocus() {
-  const debt = S.cfg.sleepDebt ?? null;  // minutes
-  const eff  = S.cfg.sleepEff  ?? null;  // percent
-  const con  = S.cfg.sleepCon  ?? null;  // percent
+  // Prefer live Somnus data; fall back to manually entered Settings values.
+  const ss   = getSS();
+  const debt = ssDebtAvg7(ss)   ?? S.cfg.sleepDebt ?? null;  // minutes
+  const eff  = ssEffAvg7(ss)    ?? S.cfg.sleepEff  ?? null;  // percent
+  const con  = ssConsistPct7(ss)?? S.cfg.sleepCon  ?? null;  // percent
   const triggers = [];
   if (debt !== null && debt > 60) {
     const h = Math.floor(debt / 60);
@@ -1449,6 +1451,28 @@ function ssDebtAvg7(ss) {
   for (let i=1;i<=7;i++) { const e=ss.data?.[ssDaysAgo(i)]; if(e&&typeof e.gap==='number') gaps.push(e.gap); }
   if (gaps.length < 2) return null;
   return Math.round(gaps.reduce((a,b)=>a+b,0)/gaps.length);
+}
+
+function ssEffAvg7(ss) {
+  // 7-day average of nightly Oura efficiency logs
+  if (!ss?.data) return null;
+  const vals = [];
+  for (let i=1;i<=7;i++) { const e=ss.data?.[ssDaysAgo(i)]; if(e&&typeof e.ouraEff==='number') vals.push(e.ouraEff); }
+  if (vals.length < 2) return null;
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+
+function ssConsistPct7(ss) {
+  // % of last 7 nights where protocol was followed (yes or social = on schedule)
+  // Mirrors Somnus scorecard logic
+  if (!ss?.data) return null;
+  let logged = 0, onTime = 0;
+  for (let i=1;i<=7;i++) {
+    const e = ss.data?.[ssDaysAgo(i)];
+    if (e?.status) { logged++; if (e.status==='yes'||e.status==='social') onTime++; }
+  }
+  if (logged < 2) return null;
+  return Math.round(onTime / 7 * 100);  // out of 7 nights, matching Somnus scorecard
 }
 
 function ssLastStatus(ss) {
@@ -2174,34 +2198,34 @@ function rSettings() {
         </div>
         <div style="color:var(--t3)">›</div>
       </div>
-      <div style="padding:6px 0 4px;font-size:11px;color:var(--t3);line-height:1.5;font-weight:600;letter-spacing:.5px">
-        BOTTLENECK METRICS — update weekly from Whoop + Oura
+      <div style="padding:6px 0 4px;font-size:11px;color:var(--t3);line-height:1.5">
+        Bottleneck metrics auto-read from Somnus (debt, efficiency, consistency). Override below only if Somnus data is stale.
       </div>
       <div class="set-row">
         <div>
-          <div class="set-row-lbl">Sleep Debt</div>
-          <div class="set-row-sub">Current debt in minutes (Whoop)</div>
+          <div class="set-row-lbl">Debt override</div>
+          <div class="set-row-sub">Manual fallback if Somnus not synced (min)</div>
         </div>
         <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="600"
-               value="${S.cfg.sleepDebt ?? ''}" placeholder="min"
+               value="${S.cfg.sleepDebt ?? ''}" placeholder="auto"
                onchange="setCfg('sleepDebt', this.value !== '' ? parseInt(this.value) : null); rHome()">
       </div>
       <div class="set-row">
         <div>
-          <div class="set-row-lbl">Sleep Efficiency</div>
-          <div class="set-row-sub">7-day avg % (Oura) — flag below 80</div>
+          <div class="set-row-lbl">Efficiency override</div>
+          <div class="set-row-sub">Manual fallback — flag fires below 80%</div>
         </div>
         <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="100"
-               value="${S.cfg.sleepEff ?? ''}" placeholder="%"
+               value="${S.cfg.sleepEff ?? ''}" placeholder="auto"
                onchange="setCfg('sleepEff', this.value !== '' ? parseInt(this.value) : null); rHome()">
       </div>
       <div class="set-row">
         <div>
-          <div class="set-row-lbl">Sleep Consistency</div>
-          <div class="set-row-sub">7-day avg % (Oura) — flag below 70</div>
+          <div class="set-row-lbl">Consistency override</div>
+          <div class="set-row-sub">Manual fallback — flag fires below 70%</div>
         </div>
         <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="100"
-               value="${S.cfg.sleepCon ?? ''}" placeholder="%"
+               value="${S.cfg.sleepCon ?? ''}" placeholder="auto"
                onchange="setCfg('sleepCon', this.value !== '' ? parseInt(this.value) : null); rHome()">
       </div>
     </div>
