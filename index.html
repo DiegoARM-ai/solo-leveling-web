@@ -632,6 +632,105 @@ select.set-inp { width: auto; }
   box-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
 
+/* ===== APOLLO MODULE ===== */
+.apollo-pipe-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(168,85,247,.10); border: 1px solid rgba(168,85,247,.35);
+  border-radius: var(--r-lg); padding: 14px 16px;
+  margin-bottom: 8px; cursor: pointer;
+  -webkit-user-select: none; user-select: none;
+  transition: background .15s, border-color .2s;
+}
+.apollo-pipe-btn:active { background: rgba(168,85,247,.18); border-color: rgba(168,85,247,.6); }
+.apollo-pipe-ico { font-size: 18px; flex-shrink: 0; }
+.apollo-pipe-info { flex:1; padding: 0 12px; }
+.apollo-pipe-lbl { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--presence); opacity:.8; }
+.apollo-pipe-ttl { font-size: 15px; font-weight: 700; color: var(--t1); margin-top: 1px; }
+.apollo-pipe-sub { font-size: 12px; color: var(--t2); margin-top: 2px; }
+.apollo-pipe-arrow { color: var(--presence); font-size: 18px; opacity:.7; }
+
+.apollo-ref-sep {
+  display: flex; align-items: center; gap: 10px;
+  margin: 20px 0 10px;
+}
+.apollo-ref-sep-line { flex:1; height:1px; background: var(--border); }
+.apollo-ref-sep-lbl { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--t3); text-transform: uppercase; }
+
+.princ-item {
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  display: flex; gap: 11px; align-items: flex-start;
+}
+.princ-item:last-child { border-bottom: none; padding-bottom: 4px; }
+.princ-num {
+  min-width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(168,85,247,.15); border: 1px solid rgba(168,85,247,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: var(--presence);
+  flex-shrink: 0; margin-top: 1px; font-family: var(--font-display);
+}
+.princ-body { flex: 1; }
+.princ-name { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
+.princ-desc { font-size: 12px; color: var(--t2); line-height: 1.5; margin-bottom: 5px; }
+.princ-op {
+  font-size: 11px; color: var(--presence); font-style: italic; line-height: 1.5;
+  background: rgba(168,85,247,.07); border-left: 2px solid rgba(168,85,247,.4);
+  padding: 5px 8px; border-radius: 0 4px 4px 0;
+}
+.princ-fail { font-size: 11px; color: var(--t3); line-height: 1.5; margin-top: 5px; }
+
+.sig-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.sig-table th {
+  font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--t3); text-align: left; padding: 0 8px 8px 0;
+}
+.sig-table td { font-size: 12px; padding: 6px 8px 6px 0; vertical-align: top; line-height: 1.4; border-bottom: 1px solid var(--border); }
+.sig-table tr:last-child td { border-bottom: none; }
+.sig-g { color: #1FBF58; font-weight: 800; }
+.sig-y { color: var(--warning); font-weight: 800; }
+.sig-r { color: var(--danger); font-weight: 800; }
+
+.hes-rule {
+  margin-top: 12px; padding: 10px 12px;
+  background: rgba(168,85,247,.07); border: 1px solid rgba(168,85,247,.2);
+  border-radius: var(--r-sm); font-size: 12px; color: var(--t2); line-height: 1.5;
+}
+.hes-rule strong { color: var(--presence); }
+
+.text-rule { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--t2); line-height: 1.4; }
+.text-rule:last-child { border-bottom: none; }
+.text-rule strong { color: var(--t1); font-weight: 700; }
+.text-template {
+  margin-top: 10px; padding: 10px 12px;
+  background: rgba(168,85,247,.07); border: 1px solid rgba(168,85,247,.2);
+  border-radius: var(--r-sm); font-size: 12px; color: var(--t1); line-height: 1.6;
+  font-style: italic;
+}
+
+.predate-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+}
+.predate-item:last-child { border-bottom: none; }
+.predate-box {
+  width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0;
+  border: 1.5px solid rgba(168,85,247,.5); margin-top: 1px;
+  background: rgba(168,85,247,.07); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--presence);
+  -webkit-user-select: none; user-select: none;
+  transition: background .15s, border-color .15s;
+}
+.predate-box.checked { background: rgba(168,85,247,.25); border-color: var(--presence); }
+.predate-txt { flex: 1; }
+.predate-name { font-size: 13px; font-weight: 600; color: var(--t1); }
+.predate-note { font-size: 11px; color: var(--t2); margin-top: 2px; line-height: 1.4; }
+.predate-reset {
+  margin-top: 12px; text-align: center;
+  font-size: 11px; color: var(--t3); cursor: pointer;
+  padding: 6px; -webkit-user-select: none; user-select: none;
+}
+.predate-reset:active { color: var(--t2); }
+
 /* ===== SCAFFOLD ===== */
 .scaffold { padding: 40px 16px; text-align: center; }
 .scaffold-ico { font-size: 52px; display: block; margin-bottom: 16px; opacity: .2; }
@@ -982,6 +1081,14 @@ const P = {
       { id:'v7', xp:20, name:'In bed by tonight\'s target',   note:'Your current ramp target is shown live in the Somnus card above.' },
     ],
   },
+  presence: {
+    daily: [
+      { id:'pr1', xp:5,  name:'Swipe session',                note:'Quality over volume — engage with profiles you\'re actually interested in' },
+      { id:'pr2', xp:3,  name:'Respond to all matches',       note:'Within 24h — a dormant pipeline dies. Every unanswered match is a dead lead.' },
+      { id:'pr3', xp:4,  name:'Send openers to new matches',  note:'Hit your daily opener target. Lead with something specific — no "hey" or "what\'s up"' },
+      { id:'pr4', xp:3,  name:'Move conversations toward a date', note:'5–7 messages max — no pen pals. Propose within 3–5 exchanges. Specific venue + binary timing.' },
+    ],
+  },
 };
 
 const HAIR = [
@@ -1086,13 +1193,15 @@ function defaultState() {
       sleepDebt:    null,   // current debt in minutes (from Whoop) — update weekly
       sleepEff:     null,   // 7-day avg efficiency % (from Oura) — update weekly
       sleepCon:     null,   // 7-day consistency % (from Oura) — update weekly
+      pipelineUrl:  '',     // Apollo: Notion pipeline page URL
     },
     streaks: {
       overall: { n: 0, last: null },
     },
-    log:    {},   // dateKey → {taskId: bool}
-    sleep:  {},   // dateKey → {good, oura, debt, rhr, auto}
-    weight: [],   // [{date, w}]
+    log:      {},   // dateKey → {taskId: bool}
+    sleep:    {},   // dateKey → {good, oura, debt, rhr, auto}
+    weight:   [],   // [{date, w}]
+    preDate:  {},   // pre-date checklist state (pd1–pd7)
     xp: {
       physique: { weekly: 0, weekKey: '' },
       vitality: { weekly: 0, weekKey: '' },
@@ -1119,9 +1228,11 @@ function migrateState(s) {
     purpose:  { weekly: 0, weekKey: '' },
   };
   if (!s.levels) s.levels = { physique: 1, vitality: 1, presence: 1, craft: 1, purpose: 1 };
-  if (s.cfg.sleepDebt === undefined) s.cfg.sleepDebt = null;
-  if (s.cfg.sleepEff  === undefined) s.cfg.sleepEff  = null;
-  if (s.cfg.sleepCon  === undefined) s.cfg.sleepCon  = null;
+  if (s.cfg.sleepDebt   === undefined) s.cfg.sleepDebt   = null;
+  if (s.cfg.sleepEff    === undefined) s.cfg.sleepEff    = null;
+  if (s.cfg.sleepCon    === undefined) s.cfg.sleepCon    = null;
+  if (s.cfg.pipelineUrl === undefined) s.cfg.pipelineUrl = '';
+  if (!s.preDate) s.preDate = {};
   // ensure all mods exist
   ['physique','vitality','presence','craft','purpose'].forEach(m => {
     if (!s.xp[m]) s.xp[m] = { weekly: 0, weekKey: '' };
@@ -1188,7 +1299,7 @@ function addXP(mod, delta) {
 const XP_TARGETS = {
   physique: { 1:400, 2:450, 3:500, 4:510, 5:510, 6:510, 7:510, 8:510, 9:540, 10:540 },
   vitality: { 1:380, 2:420, 3:490, 4:490, 5:530, 6:550, 7:570, 8:590, 9:610, 10:630 },
-  presence: { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
+  presence: { 1:105, 2:200, 3:230, 4:230, 5:260, 6:280, 7:280, 8:300, 9:320, 10:350 },
   craft:    { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
   purpose:  { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
 };
@@ -1562,6 +1673,7 @@ function modPct(mod) {
   const m = {
     physique: [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)],
     vitality: [...P.vitality.am, ...P.vitality.pm],
+    presence: P.presence.daily,
   };
   return m[mod] ? pct(m[mod]) : 0;
 }
@@ -1630,7 +1742,7 @@ function render(s) {
     case 'home':     rHome();     break;
     case 'physique': rPhysique(); break;
     case 'vitality': rVitality(); break;
-    case 'presence': rScaffold('presence'); break;
+    case 'presence': rPresence(); break;
     case 'craft':    rScaffold('craft');    break;
     case 'purpose':  rScaffold('purpose'); break;
     case 'settings': rSettings(); break;
@@ -1655,7 +1767,7 @@ function rHome() {
   const stats = [
     { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪', active:true },
     { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', active:true },
-    { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡', active:false },
+    { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡', active:true },
     { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', active:false },
     { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:false },
   ];
@@ -1672,6 +1784,8 @@ function rHome() {
       ? (() => {
           const tasks = c.s === 'physique'
             ? [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)]
+            : c.s === 'presence'
+            ? P.presence.daily
             : [...P.vitality.am, ...P.vitality.pm];
           return tasks.filter(t => !done(t.id)).length;
         })()
@@ -2104,6 +2218,231 @@ function heatmap(ss) {
   </div>`;
 }
 
+// ── Apollo ─────────────────────────────────────────────────
+function rPresence() {
+  const col = COLS.presence;
+  const cp  = modPct('presence');
+  const pipeUrl = S.cfg.pipelineUrl || '';
+
+  const PRINCIPLES = [
+    {
+      n:'P1', name:'Default Forward',
+      desc:'The default is to advance. Stop only when you see a clear red signal — not when you lack a green light. Green and yellow both mean go.',
+      op:'If you\'re asking yourself "should I?" — the moment is live. Hesitation doesn\'t buy you a better moment. It closes the one you\'re in.',
+      fail:'Waiting for explicit permission that almost never comes. Treating the absence of a green light as a red.'
+    },
+    {
+      n:'P2', name:'Abundance Frame',
+      desc:'Your attractiveness is anchored in your own self-sufficiency — not her response to you. You\'re looking for the right partner, not trying to close every interaction.',
+      op:'Before every text or action: am I doing this because I genuinely want to, or because I\'m managing her perception of me? If the latter — don\'t.',
+      fail:'The anxious-signal loop: she takes hours to reply → you follow up. Short reply → long reply back. Match her investment or stay slightly below it.'
+    },
+    {
+      n:'P3', name:'Steady State',
+      desc:'Your emotional ground doesn\'t move with hers. Her energy will fluctuate — a cold text, a weird mood, a reschedule. Most of it isn\'t about you.',
+      op:'When her energy unexpectedly drops — do nothing differently. Same pace, same warmth, same direction. Don\'t ask what\'s wrong. Just stay.',
+      fail:'Reading ambiguous signals as rejection and preemptively withdrawing. You pull back, she reads it as disinterest, and you lose twice on nothing.'
+    },
+    {
+      n:'P4', name:'Leadership as Service',
+      desc:'She feels most secure when you lead. Having direction is your job — not hers. Ambiguity creates anxiety, which kills attraction.',
+      op:'Always have the next move ready. You pick the venue, the timing, when to transition. Never "what do you want to do?" — offer two options or just move.',
+      fail:'Confusing agreeableness with leadership. Being responsive to what she wants is not leading. Leadership requires initiative you take, not permission you receive.'
+    },
+    {
+      n:'P5', name:'No Resets',
+      desc:'On date 2+, don\'t start from zero. Attraction doesn\'t need rebuilding — it needs continuing. Man-to-woman framing must be re-established within the first 10 minutes.',
+      op:'Date 2 onward: light touch, strong eye contact, or a callback to a charged moment from last time — within the first 10 min. Then escalate past the prior high watermark.',
+      fail:'Opening date 2 with "so how\'s your week been?" and spending 45 minutes rebuilding comfort you already built.'
+    },
+    {
+      n:'P6', name:'Calibrated Investment',
+      desc:'Invest in proportion to demonstrated interest — not projected potential. Over-investing early signals neediness and burns resources on someone who hasn\'t earned them.',
+      op:'Date 1 = casual, low spend, conversation-forward. Date 2 = more adventurous. Date 3 = more intimate. After three dates you have enough signal.',
+      fail:'Reluctant persistence — pushing through when you\'re not excited about her. That\'s procrastination on a decision you\'ve already made.'
+    },
+    {
+      n:'P7', name:'Set the Stage',
+      desc:'Remove friction to zero at the moments that matter most. A great evening can end on a sidewalk because logistics were unclear. Preparation is hospitality.',
+      op:'Run the Pre-Date Checklist below before any date 2+. The invite: "I\'ve got a good bottle of wine at my place if you want to keep the night going." One ask. Drop it either way.',
+      fail:'Skipping the checklist and then improvising logistics when the moment is live. The checklist runs before you leave — not after she says yes.'
+    },
+    {
+      n:'P8', name:'Volume + Iteration',
+      desc:'Skill is built through reps, not reflection. ~10 genuine at-bats per week. 1+ first date per week. Optimize for learning rate, not win rate.',
+      op:'One post-date question only: what was the highest moment of tension or attraction, and did I capitalize on it? The answer is almost always: I could have moved sooner.',
+      fail:'Spiraling on a single interaction instead of using it as one calibration data point. The system runs on volume — no single outcome matters that much.'
+    },
+  ];
+
+  const principlesH = PRINCIPLES.map(p => `
+    <div class="princ-item">
+      <div class="princ-num">${p.n}</div>
+      <div class="princ-body">
+        <div class="princ-name">${p.name}</div>
+        <div class="princ-desc">${p.desc}</div>
+        <div class="princ-op">${p.op}</div>
+        <div class="princ-fail">⚠ Failure mode: ${p.fail}</div>
+      </div>
+    </div>`).join('');
+
+  const PRE_DATE = [
+    { id:'pd1', name:'Clean sheets, cleared space',   note:'Non-negotiable — don\'t improvise this' },
+    { id:'pd2', name:'Dim/warm lighting ready',       note:'One switch — never overhead. Set it before you leave.' },
+    { id:'pd3', name:'One scent source',              note:'Candle or subtle diffuser — not aggressive' },
+    { id:'pd4', name:'Ambient music loaded',          note:'Playable immediately — don\'t let this be a production' },
+    { id:'pd5', name:'Water on the counter',          note:'Small thing. Matters.' },
+    { id:'pd6', name:'Temperature comfortable',       note:'Err slightly warm — cold rooms break the mood' },
+    { id:'pd7', name:'$5 flowers (Trader Joe\'s / Target)', note:'Morning of — if you think there\'s a reasonable chance she\'s coming home. High ROI, low effort. Trader Joe\'s is cheapest.' },
+  ];
+
+  const preDateH = PRE_DATE.map(item => {
+    const ck = (S.preDate || {})[item.id] ? 'checked' : '';
+    return `
+    <div class="predate-item">
+      <div class="predate-box ${ck}" id="pd-${item.id}" onclick="togglePreDate('${item.id}')">
+        ${ck ? '✓' : ''}
+      </div>
+      <div class="predate-txt">
+        <div class="predate-name">${item.name}</div>
+        <div class="predate-note">${item.note}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('s-presence').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${col}">Presence</div>
+        <div class="mod-name">Apollo</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+    ${lvBar('presence', col)}
+
+    ${proto('📲', 'Daily App Protocol', P.presence.daily, col, false)}
+
+    <div class="apollo-pipe-btn" onclick="${pipeUrl ? `window.open('${pipeUrl}','_blank')` : `alert('Add your Notion pipeline URL in Settings → Apollo')`}">
+      <div class="apollo-pipe-ico">🗂</div>
+      <div class="apollo-pipe-info">
+        <div class="apollo-pipe-lbl">Pipeline</div>
+        <div class="apollo-pipe-ttl">Open Social CRM</div>
+        <div class="apollo-pipe-sub">${pipeUrl ? 'Prospect → Lead → Following Up → … → Closed' : 'Add your Notion URL in Settings → Apollo'}</div>
+      </div>
+      <div class="apollo-pipe-arrow">›</div>
+    </div>
+
+    <div class="apollo-ref-sep">
+      <div class="apollo-ref-sep-line"></div>
+      <div class="apollo-ref-sep-lbl">Reference</div>
+      <div class="apollo-ref-sep-line"></div>
+    </div>
+
+    <div class="ref-card" id="r-principles">
+      <div class="ref-hd" onclick="toggleRef('r-principles')">
+        <div class="ref-ico">🧠</div>
+        <div class="ref-ttl" style="color:var(--presence)">The 8 Principles — Behavioral OS</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">${principlesH}</div>
+    </div>
+
+    <div class="ref-card" id="r-signals">
+      <div class="ref-hd" onclick="toggleRef('r-signals')">
+        <div class="ref-ico">🚦</div>
+        <div class="ref-ttl">Signal Vocabulary — Green / Yellow / Red</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <table class="sig-table">
+          <tr>
+            <th>Signal</th>
+            <th>What it looks like</th>
+            <th>Do</th>
+          </tr>
+          <tr>
+            <td><span class="sig-g">Green</span></td>
+            <td>Sustained eye contact, seeking your proximity, touching you first, laughing easily, mirroring your energy, staying past the natural conversation end</td>
+            <td>Move forward</td>
+          </tr>
+          <tr>
+            <td><span class="sig-y">Yellow</span></td>
+            <td>Energy dip, shorter answers, distracted — but she hasn't left or physically pulled back</td>
+            <td>Test. Slightly increase proximity or light touch. Her response tells you everything.</td>
+          </tr>
+          <tr>
+            <td><span class="sig-r">Red</span></td>
+            <td>Physically pulling back from touch, body turning away, checking phone repeatedly, hard topic pivot, "I should probably head out"</td>
+            <td>Stop. Pause and recalibrate.</td>
+          </tr>
+        </table>
+        <div class="hes-rule">
+          <strong>The Hesitation Rule:</strong> If you're asking yourself "should I?" — the moment is live. The fact that you noticed it means the window is open. Hesitation doesn't buy you a better moment. It closes the one you're in.
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--t2);line-height:1.5">
+          <strong style="color:var(--t1)">Touch sequence:</strong> Early touch (arm, shoulder — natural, unremarkable) → maintain and slightly increase → reduce distance → slow your energy → held eye contact → move for the kiss. You are not waiting for words. You are reading her body.
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-texting">
+      <div class="ref-hd" onclick="toggleRef('r-texting')">
+        <div class="ref-ico">💬</div>
+        <div class="ref-ttl">Texting Rules</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div class="text-rule"><strong>Phone exists to close distance to an in-person meeting</strong> — not to build the relationship. Get in, be briefly interesting, close toward a plan.</div>
+        <div class="text-rule"><strong>Keep it short.</strong> Almost always 1–2 sentences. Length signals effort and investment. Brevity signals abundance.</div>
+        <div class="text-rule"><strong>Lead with statements, not questions.</strong> "I feel like you have a strong opinion about this" works better than "so what do you think about X?"</div>
+        <div class="text-rule"><strong>Match or slightly underinvest</strong> relative to her. She sends two sentences → you send two or one. She sends a paragraph → you send two sentences.</div>
+        <div class="text-rule"><strong>Move toward a date within 3–5 exchanges.</strong> More texting usually just dilutes urgency to meet. Get in, be briefly interesting, close toward a plan.</div>
+        <div class="text-rule"><strong>Don't double-text.</strong> A follow-up after no response makes the original problem worse. Send it. Let it sit.</div>
+        <div class="text-rule"><strong>Tease over compliment.</strong> Compliments signal you're already sold. Teasing creates tension and implies you're evaluating her.</div>
+        <div class="text-rule"><strong>Don't match her energy down.</strong> If replies have gone flat, match her brevity or go quiet. Don't flood the thread to re-engage.</div>
+        <div style="margin-top:10px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">Date Close Template</div>
+        <div class="text-template">
+          "I know a good spot in [area] — Thursday or Saturday work better for you?"<br><br>
+          Strong: specific venue + binary timing choice. Presupposes she's coming.<br>
+          Weak: "What are you up to this week?" / "We should hang out sometime"<br><br>
+          If she's busy: propose one alternative, once. If that doesn't work — leave it. You've shown interest. Ball is hers.
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-predate">
+      <div class="ref-hd" onclick="toggleRef('r-predate')">
+        <div class="ref-ico">✅</div>
+        <div class="ref-ttl">Pre-Date Checklist — Run before Date 2+</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        ${preDateH}
+        <div class="predate-reset" onclick="resetPreDate()">↩ Reset checklist</div>
+      </div>
+    </div>
+
+    <div class="footer-hint">Apollo · Social &amp; Romantic · Level ${S.levels?.presence || 1}<br>
+      Field sessions + approaches logged in weekly review</div>
+  </div>`;
+}
+
+function togglePreDate(id) {
+  if (!S.preDate) S.preDate = {};
+  S.preDate[id] = !S.preDate[id];
+  save();
+  const box = document.getElementById('pd-' + id);
+  if (box) { box.className = 'predate-box' + (S.preDate[id] ? ' checked' : ''); box.textContent = S.preDate[id] ? '✓' : ''; }
+}
+
+function resetPreDate() {
+  S.preDate = {};
+  save();
+  rPresence();
+}
+
 // ── Scaffold ───────────────────────────────────────────────
 const SCAFFOLD_INFO = {
   presence: {
@@ -2226,6 +2565,20 @@ function rSettings() {
         <input type="number" class="set-inp" style="width:72px;text-align:right" min="0" max="100"
                value="${S.cfg.sleepCon ?? ''}" placeholder="auto"
                onchange="setCfg('sleepCon', this.value !== '' ? parseInt(this.value) : null); rHome()">
+      </div>
+    </div>
+
+    <div class="set-sec">
+      <div class="set-sec-ttl">Apollo</div>
+      <div style="padding:4px 0 10px;font-size:12px;color:var(--t3);line-height:1.5">
+        Paste your Notion pipeline page URL here. The "Open Social CRM" button in Apollo will link directly to it.
+      </div>
+      <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="set-row-lbl">Notion Pipeline URL</div>
+        <input type="url" class="set-inp" style="width:100%;font-size:12px"
+               placeholder="https://notion.so/..."
+               value="${S.cfg.pipelineUrl || ''}"
+               onchange="setCfg('pipelineUrl', this.value.trim())">
       </div>
     </div>
 
