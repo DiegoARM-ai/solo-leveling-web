@@ -1887,7 +1887,7 @@ function rHome() {
     { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', active:true },
     { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡', active:true },
     { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', active:true  },
-    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:false },
+    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:true  },
   ];
 
   const bn      = getBottleneck();
@@ -1906,6 +1906,8 @@ function rHome() {
             ? P.presence.daily
             : c.s === 'craft'
             ? P.craft.daily
+            : c.s === 'purpose'
+            ? P.purpose.daily
             : [...P.vitality.am, ...P.vitality.pm];
           return tasks.filter(t => !done(t.id)).length;
         })()
