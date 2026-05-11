@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'sl-v29';
+const CACHE_VERSION = 'sl-v30';
 const ASSETS = [
   '/solo-leveling-web/',
   '/solo-leveling-web/index.html',
