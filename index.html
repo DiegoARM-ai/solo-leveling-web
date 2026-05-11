@@ -301,6 +301,7 @@ body::before {
   transition: background .15s;
 }
 .tod-checked { background: var(--tc, #fff); color: #0a0a14; }
+.tod-arrow { border-color: var(--tc, #fff); color: var(--tc, #fff); font-size: 18px; font-weight: 300; line-height: 1; }
 
 .tod-info { flex: 1; min-width: 0; }
 .tod-name { font-size: 14px; font-weight: 600; color: var(--t1); line-height: 1.3; }
@@ -1317,7 +1318,7 @@ const P = {
       { id:'sn1', xp:15, tod:'morning',  mod:'purpose',  name:'Morning ignition',             note:'Read last night\'s commitment (the one thing + start time). Write the one obstacle and your if/then response. Then start at the time you wrote. 5 min — activation, not planning.' },
       { id:'sn2', xp:25, tod:'morning',  mod:'purpose',  name:'Coherence + Meditation — 10 min', note:'5 min coherence breathing (5s in / 5s out, nose only) → without opening eyes → 5 min focused attention on breath. Do this immediately after morning ignition. The coherence breathing pre-loads the calm; the meditation builds equanimity. Whoop HRV will confirm it\'s working within weeks.' },
       { id:'sn3', xp:15, tod:'anytime',  mod:'purpose',  name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
-      { id:'sn4', xp:20, tod:'evening',  mod:'purpose',  name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
+      { id:'sn4', xp:20, tod:'evening',  mod:'purpose',  requiresInput:true, name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
     ],
     weekly: [
       { id:'sn5', xp:40, tod:'anytime',  mod:'purpose',  name:'Weekly strategic review',      note:'5 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? What have I been avoiding thinking about? (Last one is contemplation — no tactical answer needed. Just sit with it.) 30 min.' },
@@ -1325,8 +1326,8 @@ const P = {
   },
   craft: {
     daily: [
-      { id:'cr1', xp:0,  tod:'morning',  mod:'craft',    name:'Deep work block',             note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
-      { id:'cr2', xp:15, tod:'anytime',  mod:'craft',    name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
+      { id:'cr1', xp:0,  tod:'morning',  mod:'craft',    requiresInput:true, name:'Deep work block',             note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
+      { id:'cr2', xp:15, tod:'anytime',  mod:'craft',    requiresInput:true, name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
     ],
     weekly: [
       { id:'cr4', xp:20, tod:'anytime',  mod:'craft',    name:'Pillar review',               note:'Which pillar got the most sessions this week? Which is falling behind? Adjust next week\'s focus. Answered by your session log — not from memory.' },
@@ -1500,8 +1501,9 @@ let S = (function(){
 })();
 
 // ── Task → module + XP lookup (built from P) ──────────────
-const TASK_MOD = {};
-const TASK_XP  = {};
+const TASK_MOD   = {};
+const TASK_XP    = {};
+const TASK_INPUT = {}; // tasks that require detail-page input before checking off
 (function buildLookup() {
   const blocks = {
     physique: ['am','aft','pm','wk'],
@@ -1513,8 +1515,9 @@ const TASK_XP  = {};
   Object.entries(blocks).forEach(([mod, bls]) => {
     bls.forEach(bl => {
       (P[mod][bl] || []).forEach(t => {
-        TASK_MOD[t.id] = mod;
-        TASK_XP[t.id]  = t.xp || 0;
+        TASK_MOD[t.id]   = mod;
+        TASK_XP[t.id]    = t.xp || 0;
+        if (t.requiresInput) TASK_INPUT[t.id] = true;
       });
     });
   });
@@ -2064,19 +2067,22 @@ function rHome() {
     const blTotal = bl.tasks.length;
     const blActive = bl.key === b || (b === 'night' && bl.key === 'evening');
     const rowsH = bl.tasks.map(t => {
-      const isDone = done(t.id);
-      const col    = COLS[t.mod] || '#fff';
-      const mm     = MOD_META[t.mod] || {};
+      const isDone    = done(t.id);
+      const needsForm = TASK_INPUT[t.id] && !isDone;
+      const col       = COLS[t.mod] || '#fff';
+      const mm        = MOD_META[t.mod] || {};
       return `
-      <div class="tod-row ${isDone ? 'tod-done' : ''}" onclick="todToggle('${t.id}')">
-        <div class="tod-check ${isDone ? 'tod-checked' : ''}" style="--tc:${col}">
-          ${isDone ? '✓' : ''}
+      <div class="tod-row ${isDone ? 'tod-done' : ''} ${needsForm ? 'tod-needs-input' : ''}" onclick="todToggle('${t.id}')">
+        <div class="tod-check ${isDone ? 'tod-checked' : needsForm ? 'tod-arrow' : ''}" style="--tc:${col}">
+          ${isDone ? '✓' : needsForm ? '›' : ''}
         </div>
         <div class="tod-info">
           <div class="tod-name">${t.name}</div>
           <div class="tod-meta">
             <span class="tod-mod-tag" style="color:${col}">${mm.ico || ''} ${mm.name || t.mod}</span>
-            <span class="tod-xp">${t.xp > 0 ? '+' + t.xp + ' XP' : ''}</span>
+            ${needsForm
+              ? `<span class="tod-input-hint">tap to log →</span>`
+              : `<span class="tod-xp">${t.xp > 0 ? '+' + t.xp + ' XP' : ''}</span>`}
           </div>
         </div>
       </div>`;
@@ -2138,6 +2144,10 @@ function rHome() {
 
 // Toggle from Today view — re-renders home
 function todToggle(id) {
+  if (TASK_INPUT[id] && !done(id)) {
+    go(TASK_MOD[id]);
+    return;
+  }
   toggle(id);
   rHome();
 }
