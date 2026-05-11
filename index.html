@@ -1231,7 +1231,7 @@ const P = {
   },
   craft: {
     daily: [
-      { id:'cr1', xp:30, name:'Deep work block — 60+ min',   note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
+      { id:'cr1', xp:0,  name:'Deep work block',             note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
       { id:'cr2', xp:15, name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
     ],
     weekly: [
@@ -2911,13 +2911,37 @@ function rCraft() {
 
   // Today's sessions
   const todaySess = sessions.filter(s => s.date === todayKey);
+  const todayDW   = todaySess.filter(s => s.type === 'dw');
   const deepDone  = done('cr1');
   const learnDone = done('cr2');
 
-  // Deep work session form
+  // Sprint context for next deep work session
+  const nextSprint    = todayDW.length + 1;
+  const nextXP        = nextSprint === 1 ? 30 : nextSprint === 2 ? 20 : 15;
+  const nextTarget    = nextSprint === 1 ? '90 min' : nextSprint === 2 ? '60 min' : '45 min';
+  const sprintLabel   = nextSprint === 1 ? 'Sprint 1' : nextSprint === 2 ? 'Sprint 2' : `Sprint ${nextSprint}`;
+  const sprintHint    = nextSprint === 1
+    ? 'Peak focus window — protect this block.'
+    : nextSprint === 2
+    ? 'Second wind. Quality over quantity now.'
+    : 'Shorter is fine. Ship something small.';
+
+  // Completed deep work badges (show all today's sessions when done)
+  const dwDoneBadges = todayDW.map((s, i) => {
+    const xpEarned = s.xp || (i === 0 ? 30 : i === 1 ? 20 : 15);
+    const pillarCol = { R:'var(--vitality)', A:'var(--craft)', B:'var(--presence)' }[s.pillar] || 'var(--t3)';
+    const pillarLbl = { R:'RevOps', A:'AI+Auto', B:'Builder' }[s.pillar] || '';
+    return `<div class="craft-sess-done-lbl">✓ Sprint ${s.sprint || i+1} (+${xpEarned} XP) — ${s.focus} ${pillarLbl ? `<span style="color:${pillarCol}">[${pillarLbl}]</span>` : ''}</div>`;
+  }).join('');
+
+  // Deep work session form — shows next sprint target
   const dwForm = `
     <div class="craft-sess-form" id="dw-form">
-      <div class="craft-sess-form-ttl">What are you working on?</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div class="craft-sess-form-ttl" style="margin-bottom:0">${sprintLabel} — aim for ${nextTarget}</div>
+        <div style="font-size:11px;font-weight:700;color:${col}">+${nextXP} XP</div>
+      </div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:8px">${sprintHint}</div>
       <input type="text" id="dw-focus" class="craft-log-input" placeholder="e.g. HubSpot deal stage automation with Zapier" maxlength="200">
       <div class="craft-pillar-pick">
         <div class="craft-pillar-opt" id="pp-R" onclick="selectPillar('R')">RevOps</div>
@@ -2955,13 +2979,16 @@ function rCraft() {
       <div class="proto-item ${deepDone ? 'done' : ''}" onclick="${deepDone ? '' : 'expandDW()'}">
         <div class="chk ${deepDone ? 'checked' : ''}" id="chk-cr1">${deepDone ? '✓' : ''}</div>
         <div class="proto-body">
-          <div class="proto-name">Deep work block — 60+ min</div>
-          <div class="proto-note">Before you start: log what you're working on + pillar below. Phone away, notifications off.</div>
-          ${deepDone
-            ? (todaySess.filter(s=>s.type==='dw').map(s=>`<div class="craft-sess-done-lbl">✓ ${s.focus}</div>`).join(''))
-            : dwForm}
+          <div class="proto-name">Deep work${todayDW.length > 0 ? ` — ${todayDW.length} sprint${todayDW.length > 1 ? 's' : ''} done` : ' block'}</div>
+          <div class="proto-note">Log before you start. ${nextSprint === 1 ? '90 min first sprint.' : nextSprint === 2 ? '60 min second sprint.' : '45 min sprint.'} Phone away, notifications off.</div>
+          ${dwDoneBadges}
+          ${dwForm}
         </div>
-        <div class="proto-xp">+30</div>
+        <div class="proto-xp" style="font-size:${todayDW.length > 0 ? '10px' : '13px'};color:${col}">
+          ${todayDW.length > 0
+            ? `+${nextXP} next`
+            : '+30'}
+        </div>
       </div>
 
       <div class="proto-item ${learnDone ? 'done' : ''}" onclick="${learnDone ? '' : 'expandLearn()'}">
@@ -3101,13 +3128,42 @@ function restorePillarUI() {
   if (_learnPillar) selectLearnPillar(_learnPillar);
 }
 
+function _dwSessionsToday() {
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem('sl_sessions') || '[]'); } catch(e) {}
+  return sessions.filter(s => s.date === dk() && s.type === 'dw');
+}
+
+function _dwSprintXP(sprintNum) {
+  // Sprint 1: 30 XP (90 min target)
+  // Sprint 2: 20 XP (60 min target)
+  // Sprint 3+: 15 XP (45 min target)
+  if (sprintNum === 1) return 30;
+  if (sprintNum === 2) return 20;
+  return 15;
+}
+
+function _dwSprintTarget(sprintNum) {
+  if (sprintNum === 1) return '90 min';
+  if (sprintNum === 2) return '60 min';
+  return '45 min';
+}
+
 function logDeepWork() {
   const focus = (document.getElementById('dw-focus')?.value || '').trim();
   if (!focus)       { alert('Add what you\'re working on first.'); return; }
   if (!_dwPillar)   { alert('Select a pillar first.'); return; }
-  _saveSession({ type:'dw', focus, pillar:_dwPillar });
+  const sprintNum = _dwSessionsToday().length + 1;
+  const xp = _dwSprintXP(sprintNum);
+  _saveSession({ type:'dw', focus, pillar:_dwPillar, xp, sprint: sprintNum });
+  addXP('craft', xp);
   _dwPillar = null;
-  if (!done('cr1')) toggle('cr1');
+  if (!done('cr1')) {
+    const l = dayLog();
+    l['cr1'] = true;
+    S.log[dk()] = l;
+    save();
+  }
   rCraft();
 }
 
