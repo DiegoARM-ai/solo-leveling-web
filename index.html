@@ -259,6 +259,55 @@ body::before {
   padding: 2px 8px; border-radius: 10px;
 }
 
+/* ===== TODAY LIST ===== */
+.tod-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+
+.tod-block {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  animation: slideUp .25s ease both;
+}
+.tod-active-block {
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 0 18px rgba(255,255,255,0.04);
+}
+.tod-block-hd {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px 8px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.tod-block-ico { font-size: 14px; }
+.tod-block-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--t2); flex: 1; }
+.tod-block-prog { font-size: 11px; font-weight: 700; color: var(--t3); font-variant-numeric: tabular-nums; font-family: var(--font-display); }
+
+.tod-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+  -webkit-user-select: none; user-select: none;
+}
+.tod-row:last-child { border-bottom: none; }
+.tod-row:active { background: var(--card-hi); }
+.tod-row.tod-done { opacity: .45; }
+
+.tod-check {
+  width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0;
+  border: 2px solid var(--tc, #fff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: var(--tc, #fff);
+  transition: background .15s;
+}
+.tod-checked { background: var(--tc, #fff); color: #0a0a14; }
+
+.tod-info { flex: 1; min-width: 0; }
+.tod-name { font-size: 14px; font-weight: 600; color: var(--t1); line-height: 1.3; }
+.tod-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+.tod-mod-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
+.tod-xp { font-size: 10px; font-weight: 700; color: var(--t3); letter-spacing: .5px; font-family: var(--font-display); }
+
 /* ===== MODULE HEADER ===== */
 .mod-header {
   padding: 18px 0 12px;
@@ -1132,22 +1181,17 @@ body::after {
 <div id="app"></div>
 
 <nav id="nav">
-  <div class="ni active" data-s="home"       onclick="go('home')">
+  <div class="ni active" data-s="home"     onclick="go('home')">
     <div class="ni-ico">⚔️</div>
     <div class="ni-pip"></div>
-    <div class="ni-lbl">Home</div>
+    <div class="ni-lbl">Today</div>
   </div>
-  <div class="ni" data-s="physique" onclick="go('physique')">
-    <div class="ni-ico" style="color:var(--physique)">💪</div>
+  <div class="ni" data-s="modules"         onclick="go('modules')">
+    <div class="ni-ico">◈</div>
     <div class="ni-pip"></div>
-    <div class="ni-lbl">Adonis</div>
+    <div class="ni-lbl">Modules</div>
   </div>
-  <div class="ni" data-s="vitality"  onclick="go('vitality')">
-    <div class="ni-ico" style="color:var(--vitality)">🌙</div>
-    <div class="ni-pip"></div>
-    <div class="ni-lbl">Somnus</div>
-  </div>
-  <div class="ni" data-s="settings"  onclick="go('settings')">
+  <div class="ni" data-s="settings"        onclick="go('settings')">
     <div class="ni-ico">⚙️</div>
     <div class="ni-pip"></div>
     <div class="ni-lbl">Settings</div>
@@ -1169,75 +1213,75 @@ const COLS  = { physique:'#00C896', vitality:'#FFB347', presence:'#A855F7', craf
 const P = {
   physique: {
     am: [
-      { id:'a1', xp:2,  name:'Apply minoxidil to beard',   note:'Before or during morning sunlight — dries in ~5 min' },
-      { id:'a2', xp:3,  name:'Morning sunlight',            note:'10+ min outside. Minoxidil absorbs during this. Cortisol spike anchors your clock.' },
-      { id:'a3', xp:2,  name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
-      { id:'a4', xp:2,  name:'Niacinamide serum',          note:'The Ordinary 10% + Zinc' },
-      { id:'a5', xp:1,  name:'Moisturizer',                note:'CeraVe Moisturizing Cream' },
-      { id:'a6', xp:3,  name:'SPF — never skip',           note:'EltaMD UV Clear or La Roche-Posay Anthelios. Final step, every single day.' },
-      { id:'a8', xp:3,  name:'Supplements (morning)',      note:'Vitamin D3 5000 IU + K2-MK7 100mcg · Boron 10mg · Creatine 5g — take with breakfast (fat aids D3 absorption)' },
+      { id:'a1', xp:2,  tod:'morning',   mod:'physique', name:'Apply minoxidil to beard',   note:'Before or during morning sunlight — dries in ~5 min' },
+      { id:'a2', xp:3,  tod:'morning',   mod:'physique', name:'Morning sunlight',            note:'10+ min outside. Minoxidil absorbs during this. Cortisol spike anchors your clock.' },
+      { id:'a3', xp:2,  tod:'morning',   mod:'physique', name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
+      { id:'a4', xp:2,  tod:'morning',   mod:'physique', name:'Niacinamide serum',          note:'The Ordinary 10% + Zinc' },
+      { id:'a5', xp:1,  tod:'morning',   mod:'physique', name:'Moisturizer',                note:'CeraVe Moisturizing Cream' },
+      { id:'a6', xp:3,  tod:'morning',   mod:'physique', name:'SPF — never skip',           note:'EltaMD UV Clear or La Roche-Posay Anthelios. Final step, every single day.' },
+      { id:'a8', xp:3,  tod:'morning',   mod:'physique', name:'Supplements (morning)',      note:'Vitamin D3 5000 IU + K2-MK7 100mcg · Boron 10mg · Creatine 5g — take with breakfast (fat aids D3 absorption)' },
     ],
     aft: [
-      { id:'f1', xp:5,  name:'Log today\'s weight',        note:'Daily trend matters more than any single reading' },
-      { id:'f2', xp:15, name:'Hit protein target',         note:'170g today — track in your app' },
-      { id:'f3', xp:30, name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
-      { id:'f4', xp:2,  name:'Supplements (dinner)',       note:'Zinc picolinate 25mg with food — not near workout (blocks absorption). Magnesium glycinate 400mg pre-bed.' },
+      { id:'f1', xp:5,  tod:'afternoon', mod:'physique', name:'Log today\'s weight',        note:'Daily trend matters more than any single reading' },
+      { id:'f2', xp:15, tod:'afternoon', mod:'physique', name:'Hit protein target',         note:'170g today — track in your app' },
+      { id:'f3', xp:30, tod:'afternoon', mod:'physique', name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
+      { id:'f4', xp:2,  tod:'afternoon', mod:'physique', name:'Supplements (dinner)',       note:'Zinc picolinate 25mg with food — not near workout (blocks absorption). Magnesium glycinate 400mg pre-bed.' },
     ],
     pm: [
-      { id:'p1', xp:2,  name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
-      { id:'p2', xp:1,  name:'Pat dry, brush teeth',       note:'~5 min. Face dries while you do other tasks.' },
-      { id:'p3', xp:4,  name:'Apply minoxidil to beard',   note:'Let dry ~5 min while doing other things' },
-      { id:'p4', xp:2,  name:'Moisturizer (buffer layer)', note:'Sandwich method — dramatically reduces tretinoin irritation' },
-      { id:'p5', xp:8,  name:'Tretinoin 0.025%',           note:'Pea-sized amount, whole face. Avoid eye area.' },
-      { id:'p6', xp:3,  name:'Moisturizer (sealing layer)',note:'Generous amount — lock in the tretinoin sandwich' },
+      { id:'p1', xp:2,  tod:'evening',   mod:'physique', name:'Cleanse face',               note:'CeraVe Foaming Cleanser' },
+      { id:'p2', xp:1,  tod:'evening',   mod:'physique', name:'Pat dry, brush teeth',       note:'~5 min. Face dries while you do other tasks.' },
+      { id:'p3', xp:4,  tod:'evening',   mod:'physique', name:'Apply minoxidil to beard',   note:'Let dry ~5 min while doing other things' },
+      { id:'p4', xp:2,  tod:'evening',   mod:'physique', name:'Moisturizer (buffer layer)', note:'Sandwich method — dramatically reduces tretinoin irritation' },
+      { id:'p5', xp:8,  tod:'evening',   mod:'physique', name:'Tretinoin 0.025%',           note:'Pea-sized amount, whole face. Avoid eye area.' },
+      { id:'p6', xp:3,  tod:'evening',   mod:'physique', name:'Moisturizer (sealing layer)',note:'Generous amount — lock in the tretinoin sandwich' },
     ],
     wk: [
-      { id:'w1', xp:10, name:'Derma roll beard area',      note:'0.5mm roller, full beard zone. Firm even pressure.' },
-      { id:'w2', xp:5,  name:'Wait 30–60 min',             note:'Let skin settle completely before next step' },
-      { id:'w3', xp:10, name:'Apply minoxidil post-roll',  note:'Enhanced absorption — this is why you roll' },
+      { id:'w1', xp:10, tod:'evening',   mod:'physique', name:'Derma roll beard area',      note:'0.5mm roller, full beard zone. Firm even pressure.' },
+      { id:'w2', xp:5,  tod:'evening',   mod:'physique', name:'Wait 30–60 min',             note:'Let skin settle completely before next step' },
+      { id:'w3', xp:10, tod:'evening',   mod:'physique', name:'Apply minoxidil post-roll',  note:'Enhanced absorption — this is why you roll' },
     ],
   },
   vitality: {
     am: [
-      { id:'v0', xp:20, name:'Wake at anchor time',            note:'Within 15 min of 9:00am. This is the single most important sleep behavior — it anchors your entire circadian clock.' },
-      { id:'v1', xp:10, name:'Morning sunlight — go outside',  note:'10+ min within 30–60 min of waking. This is Lever 1. Anchors your entire circadian clock.' },
+      { id:'v0', xp:20, tod:'morning',   mod:'vitality', name:'Wake at anchor time',            note:'Within 15 min of 9:00am. This is the single most important sleep behavior — it anchors your entire circadian clock.' },
+      { id:'v1', xp:10, tod:'morning',   mod:'vitality', name:'Morning sunlight — go outside',  note:'10+ min within 30–60 min of waking. This is Lever 1. Anchors your entire circadian clock.' },
     ],
     pm: [
-      { id:'v3', xp:5,  name:'Dim lights — warm light only',  note:'2.5 hrs before in-bed target. Below 100 lux = melatonin production begins. Hue automates this.' },
-      { id:'v4', xp:15, name:'Warm shower',                   note:'90 min before in-bed target. 40–42°C for 5–10 min. Core temp drop drives faster sleep onset.' },
-      { id:'v5', xp:5,  name:'Set room to 66°F',              note:'Sleep requires ~1.5°F core temp drop. Cool room makes this automatic every night.' },
-      { id:'v6', xp:15, name:'No screens before bed',         note:'60 min before in-bed target. Screen Time Downtime fires automatically — work with it.' },
-      { id:'v7', xp:20, name:'In bed by tonight\'s target',   note:'Your current ramp target is shown live in the Somnus card above.' },
+      { id:'v3', xp:5,  tod:'evening',   mod:'vitality', name:'Dim lights — warm light only',  note:'2.5 hrs before in-bed target. Below 100 lux = melatonin production begins. Hue automates this.' },
+      { id:'v4', xp:15, tod:'evening',   mod:'vitality', name:'Warm shower',                   note:'90 min before in-bed target. 40–42°C for 5–10 min. Core temp drop drives faster sleep onset.' },
+      { id:'v5', xp:5,  tod:'evening',   mod:'vitality', name:'Set room to 66°F',              note:'Sleep requires ~1.5°F core temp drop. Cool room makes this automatic every night.' },
+      { id:'v6', xp:15, tod:'evening',   mod:'vitality', name:'No screens before bed',         note:'60 min before in-bed target. Screen Time Downtime fires automatically — work with it.' },
+      { id:'v7', xp:20, tod:'evening',   mod:'vitality', name:'In bed by tonight\'s target',   note:'Your current ramp target is shown live in the Somnus card above.' },
     ],
   },
   presence: {
     daily: [
-      { id:'pr1', xp:5,  name:'Swipe session',                note:'Quality over volume — engage with profiles you\'re actually interested in' },
-      { id:'pr2', xp:3,  name:'Respond to all matches',       note:'Within 24h — a dormant pipeline dies. Every unanswered match is a dead lead.' },
-      { id:'pr3', xp:4,  name:'Send openers to new matches',  note:'Hit your daily opener target. Lead with something specific — no "hey" or "what\'s up"' },
-      { id:'pr4', xp:3,  name:'Move conversations toward a date', note:'5–7 messages max — no pen pals. Propose within 3–5 exchanges. Specific venue + binary timing.' },
+      { id:'pr1', xp:5,  tod:'anytime',  mod:'presence', name:'Swipe session',                note:'Quality over volume — engage with profiles you\'re actually interested in' },
+      { id:'pr2', xp:3,  tod:'anytime',  mod:'presence', name:'Respond to all matches',       note:'Within 24h — a dormant pipeline dies. Every unanswered match is a dead lead.' },
+      { id:'pr3', xp:4,  tod:'anytime',  mod:'presence', name:'Send openers to new matches',  note:'Hit your daily opener target. Lead with something specific — no "hey" or "what\'s up"' },
+      { id:'pr4', xp:3,  tod:'anytime',  mod:'presence', name:'Move conversations toward a date', note:'5–7 messages max — no pen pals. Propose within 3–5 exchanges. Specific venue + binary timing.' },
     ],
   },
   purpose: {
     daily: [
-      { id:'sn1', xp:15, name:'Morning ignition',             note:'Read last night\'s commitment (the one thing + start time). Write the one obstacle and your if/then response. Then start at the time you wrote. 5 min — activation, not planning.' },
-      { id:'sn2', xp:25, name:'Coherence + Meditation — 10 min', note:'5 min coherence breathing (5s in / 5s out, nose only) → without opening eyes → 5 min focused attention on breath. Do this immediately after morning ignition. The coherence breathing pre-loads the calm; the meditation builds equanimity. Whoop HRV will confirm it\'s working within weeks.' },
-      { id:'sn3', xp:15, name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
-      { id:'sn4', xp:20, name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
+      { id:'sn1', xp:15, tod:'morning',  mod:'purpose',  name:'Morning ignition',             note:'Read last night\'s commitment (the one thing + start time). Write the one obstacle and your if/then response. Then start at the time you wrote. 5 min — activation, not planning.' },
+      { id:'sn2', xp:25, tod:'morning',  mod:'purpose',  name:'Coherence + Meditation — 10 min', note:'5 min coherence breathing (5s in / 5s out, nose only) → without opening eyes → 5 min focused attention on breath. Do this immediately after morning ignition. The coherence breathing pre-loads the calm; the meditation builds equanimity. Whoop HRV will confirm it\'s working within weeks.' },
+      { id:'sn3', xp:15, tod:'anytime',  mod:'purpose',  name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
+      { id:'sn4', xp:20, tod:'evening',  mod:'purpose',  name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
     ],
     weekly: [
-      { id:'sn5', xp:40, name:'Weekly strategic review',      note:'5 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? What have I been avoiding thinking about? (Last one is contemplation — no tactical answer needed. Just sit with it.) 30 min.' },
+      { id:'sn5', xp:40, tod:'anytime',  mod:'purpose',  name:'Weekly strategic review',      note:'5 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? What have I been avoiding thinking about? (Last one is contemplation — no tactical answer needed. Just sit with it.) 30 min.' },
     ],
   },
   craft: {
     daily: [
-      { id:'cr1', xp:0,  name:'Deep work block',             note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
-      { id:'cr2', xp:15, name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
+      { id:'cr1', xp:0,  tod:'morning',  mod:'craft',    name:'Deep work block',             note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
+      { id:'cr2', xp:15, tod:'anytime',  mod:'craft',    name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
     ],
     weekly: [
-      { id:'cr4', xp:20, name:'Pillar review',               note:'Which pillar got the most sessions this week? Which is falling behind? Adjust next week\'s focus. Answered by your session log — not from memory.' },
-      { id:'cr5', xp:25, name:'Portfolio touch',             note:'Work on something outside your job: personal app, automation template, case study, GitHub commit. The consultancy is built on proof — this is the proof layer.' },
-      { id:'cr6', xp:5,  name:'Investments confirmed',       note:'$700 to index funds this paycheck. 30 seconds — just confirm it processed.' },
+      { id:'cr4', xp:20, tod:'anytime',  mod:'craft',    name:'Pillar review',               note:'Which pillar got the most sessions this week? Which is falling behind? Adjust next week\'s focus. Answered by your session log — not from memory.' },
+      { id:'cr5', xp:25, tod:'anytime',  mod:'craft',    name:'Portfolio touch',             note:'Work on something outside your job: personal app, automation template, case study, GitHub commit. The consultancy is built on proof — this is the proof layer.' },
+      { id:'cr6', xp:5,  tod:'anytime',  mod:'craft',    name:'Investments confirmed',       note:'$700 to index funds this paycheck. 30 seconds — just confirm it processed.' },
     ],
   },
 };
@@ -1805,12 +1849,18 @@ function toggle(id) {
 
 function allTasksToday() {
   const wk = isWkDay();
+  const isSun = new Date().getDay() === 0;
   const tasks = [
     ...P.physique.am,
     ...P.physique.aft,
     ...(wk ? P.physique.wk : P.physique.pm),
     ...P.vitality.am,
     ...P.vitality.pm,
+    ...P.presence.daily,
+    ...P.purpose.daily,
+    ...(isSun ? P.purpose.weekly : []),
+    ...P.craft.daily,
+    ...(isSun ? P.craft.weekly : []),
   ];
   return tasks;
 }
@@ -1835,15 +1885,30 @@ function modPct(mod) {
   return m[mod] ? pct(m[mod]) : 0;
 }
 
+// Returns all tasks for a given time-of-day block across all modules
+function todayTasks(todFilter) {
+  const wk = isWkDay();
+  const isSun = new Date().getDay() === 0;
+  const all = [
+    ...P.physique.am,
+    ...P.physique.aft,
+    ...(wk ? P.physique.wk : P.physique.pm),
+    ...P.vitality.am,
+    ...P.vitality.pm,
+    ...P.presence.daily,
+    ...P.purpose.daily,
+    ...(isSun ? P.purpose.weekly : []),
+    ...P.craft.daily,
+    ...(isSun ? P.craft.weekly : []),
+  ];
+  if (!todFilter) return all;
+  return all.filter(t => t.tod === todFilter);
+}
+
 function pendingNow() {
   const b = block();
-  const wk = isWkDay();
-  let tasks = [];
-  if (b === 'morning')   tasks = [...P.physique.am, ...P.vitality.am];
-  if (b === 'afternoon') tasks = P.physique.aft;
-  if (b === 'evening')   tasks = [...P.vitality.pm, ...(wk ? P.physique.wk : [])];
-  if (b === 'night')     tasks = [...(wk ? P.physique.wk : P.physique.pm), ...P.vitality.pm];
-  return tasks.filter(t => !done(t.id)).length;
+  const todMap = { morning:'morning', afternoon:'afternoon', evening:'evening', night:'evening' };
+  return todayTasks(todMap[b]).filter(t => !done(t.id)).length;
 }
 
 // ── Streak ─────────────────────────────────────────────────
@@ -1897,78 +1962,71 @@ function go(s) {
 function render(s) {
   switch(s) {
     case 'home':     rHome();     break;
+    case 'modules':  rModules();  break;
     case 'physique': rPhysique(); break;
     case 'vitality': rVitality(); break;
     case 'presence': rPresence(); break;
-    case 'craft':    rCraft();            break;
-    case 'purpose':  rPurpose();          break;
+    case 'craft':    rCraft();    break;
+    case 'purpose':  rPurpose();  break;
     case 'settings': rSettings(); break;
   }
 }
 
-// ── Home ───────────────────────────────────────────────────
+// ── Module colour/icon/name lookup ─────────────────────────
+const MOD_META = {
+  physique: { ico:'💪', name:'Adonis',     stat:'Physique' },
+  vitality: { ico:'🌙', name:'Somnus',     stat:'Vitality' },
+  presence: { ico:'⚡', name:'Apollo',     stat:'Presence' },
+  craft:    { ico:'🔥', name:'Prometheus', stat:'Craft'    },
+  purpose:  { ico:'🎯', name:'Seneca',     stat:'Purpose'  },
+};
+
+// ── Today (home) ───────────────────────────────────────────
 function rHome() {
   const now    = new Date();
   const b      = block();
   const oPct   = overallPct();
-  const pend   = pendingNow();
   const streak = S.streaks.overall.n;
 
-  const blockMeta = {
-    morning:   { ico:'🌅', lbl:'Morning Block',   mod:'physique' },
-    afternoon: { ico:'☀️', lbl:'Afternoon Block',  mod:'physique' },
-    evening:   { ico:'🌆', lbl:'Evening Block',    mod:'vitality' },
-    night:     { ico:'🌙', lbl:'Night Block',      mod:'vitality' },
-  }[b];
-
-  const stats = [
-    { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪', active:true },
-    { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', active:true },
-    { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡', active:true },
-    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', active:true  },
-    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:true  },
+  // Build time-grouped task rows
+  const BLOCKS = [
+    { key:'morning',   ico:'🌅', lbl:'Morning',   tasks: todayTasks('morning')   },
+    { key:'afternoon', ico:'☀️',  lbl:'Afternoon', tasks: todayTasks('afternoon') },
+    { key:'evening',   ico:'🌆', lbl:'Evening',   tasks: todayTasks('evening')   },
+    { key:'anytime',   ico:'📋', lbl:'Anytime',   tasks: todayTasks('anytime')   },
   ];
 
-  const bn      = getBottleneck();
-  const bnMods  = new Set(bn?.mods || []);
-
-  const cardsH = stats.map(c => {
-    const col    = COLS[c.s];
-    const cp     = c.active ? modPct(c.s) : 0;
-    const wk     = isWkDay();
-    const isBn   = bnMods.has(c.s);
-    const pending = c.active
-      ? (() => {
-          const tasks = c.s === 'physique'
-            ? [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)]
-            : c.s === 'presence'
-            ? P.presence.daily
-            : c.s === 'craft'
-            ? P.craft.daily
-            : c.s === 'purpose'
-            ? P.purpose.daily
-            : [...P.vitality.am, ...P.vitality.pm];
-          return tasks.filter(t => !done(t.id)).length;
-        })()
-      : null;
-    const lv = S.levels?.[c.s] || 1;
-    return `
-    <div class="sc ${isBn ? 'bn-stat' : ''}" style="--sc-color:${col}" onclick="go('${c.s}')">
-      <div class="sc-info">
-        <div class="sc-stat">${c.name}</div>
-        <div class="sc-mod">${c.mod}</div>
-        ${c.active
-          ? (pending > 0
-              ? `<div class="sc-due">▲ ${pending} OBJECTIVE${pending!==1?'S':''} REMAINING</div>`
-              : `<div class="sc-done">✓ COMPLETE</div>`)
-          : `<div class="cs-badge">[ LOCKED ]</div>`}
-        <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
-          <div class="lv-sc-badge" style="--sc-color:${col}">${lvStr(lv)}</div>
-          ${isBn ? `<div class="bn-crit-badge">[ CRITICAL PATH ]</div>` : ''}
+  const todBlocksH = BLOCKS.filter(bl => bl.tasks.length > 0).map(bl => {
+    const blDone  = bl.tasks.filter(t => done(t.id)).length;
+    const blTotal = bl.tasks.length;
+    const blActive = bl.key === b || (b === 'night' && bl.key === 'evening');
+    const rowsH = bl.tasks.map(t => {
+      const isDone = done(t.id);
+      const col    = COLS[t.mod] || '#fff';
+      const mm     = MOD_META[t.mod] || {};
+      return `
+      <div class="tod-row ${isDone ? 'tod-done' : ''}" onclick="todToggle('${t.id}')">
+        <div class="tod-check ${isDone ? 'tod-checked' : ''}" style="--tc:${col}">
+          ${isDone ? '✓' : ''}
         </div>
+        <div class="tod-info">
+          <div class="tod-name">${t.name}</div>
+          <div class="tod-meta">
+            <span class="tod-mod-tag" style="color:${col}">${mm.ico || ''} ${mm.name || t.mod}</span>
+            <span class="tod-xp">${t.xp > 0 ? '+' + t.xp + ' XP' : ''}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    return `
+    <div class="tod-block ${blActive ? 'tod-active-block' : ''}">
+      <div class="tod-block-hd">
+        <span class="tod-block-ico">${bl.ico}</span>
+        <span class="tod-block-lbl">${bl.lbl}</span>
+        <span class="tod-block-prog">${blDone}/${blTotal}</span>
       </div>
-      <div>${ring(cp, 48, 3.5, col)}</div>
-      <div class="sc-arrow">›</div>
+      ${rowsH}
     </div>`;
   }).join('');
 
@@ -2008,16 +2066,66 @@ function rHome() {
     ${sleepFocusBanner()}
     ${bottleneckBanner()}
 
-    <div class="now-banner ${pend > 0 ? 'urgent' : 'clear'}"
-         ${pend > 0 ? `onclick="go('${blockMeta.mod}')" style="cursor:pointer"` : ''}>
-      <div class="nb-ico">${pend > 0 ? blockMeta.ico : '✅'}</div>
-      <div style="flex:1">
-        <div class="nb-lbl">${blockMeta.lbl}</div>
-        <div class="nb-ttl">${pend > 0 ? `${pend} OBJECTIVE${pend!==1?'S':''} PENDING` : 'ALL OBJECTIVES COMPLETE'}</div>
-      </div>
-      ${pend > 0 ? `<div style="color:var(--t3);font-size:20px;flex-shrink:0;line-height:1">›</div>` : ''}
+    <div class="tod-list">
+      ${todBlocksH}
     </div>
+  </div>`;
+}
 
+// Toggle from Today view — re-renders home
+function todToggle(id) {
+  toggle(id);
+  rHome();
+}
+
+// ── Modules grid ───────────────────────────────────────────
+function rModules() {
+  const wk   = isWkDay();
+  const bn   = getBottleneck();
+  const bnMods = new Set(bn?.mods || []);
+
+  const stats = [
+    { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪' },
+    { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙' },
+    { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡' },
+    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥' },
+    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯' },
+  ];
+
+  const cardsH = stats.map(c => {
+    const col     = COLS[c.s];
+    const cp      = modPct(c.s);
+    const isBn    = bnMods.has(c.s);
+    const pending = modPct(c.s) < 100
+      ? todayTasks().filter(t => t.mod === c.s && !done(t.id)).length
+      : 0;
+    const lv = S.levels?.[c.s] || 1;
+    return `
+    <div class="sc ${isBn ? 'bn-stat' : ''}" style="--sc-color:${col}" onclick="go('${c.s}')">
+      <div class="sc-info">
+        <div class="sc-stat">${c.name}</div>
+        <div class="sc-mod">${c.mod}</div>
+        ${pending > 0
+          ? `<div class="sc-due">▲ ${pending} REMAINING</div>`
+          : `<div class="sc-done">✓ COMPLETE</div>`}
+        <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
+          <div class="lv-sc-badge" style="--sc-color:${col}">${lvStr(lv)}</div>
+          ${isBn ? `<div class="bn-crit-badge">[ CRITICAL PATH ]</div>` : ''}
+        </div>
+      </div>
+      <div>${ring(cp, 48, 3.5, col)}</div>
+      <div class="sc-arrow">›</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('s-modules').innerHTML = `
+  <div class="wrap">
+    <div class="h-header" style="padding-bottom:12px">
+      <div>
+        <div class="h-system">◈ [ MODULES ]</div>
+        <div class="h-greeting">All Stats</div>
+      </div>
+    </div>
     <div class="stat-cards">${cardsH}</div>
   </div>`;
 }
@@ -2870,7 +2978,7 @@ function rCraft() {
     { phase:'Terminal', label:'Operate', desc:'Consultancy is live, location-independent. Deep work shifts toward client delivery and product development. Consider productizing: templates, courses, SaaS built on domain expertise.', active: false },
   ];
 
-  const phasesH = phases.map(p => `
+  const phasesH = PHASES.map(p => `
     <div class="craft-phase ${p.active ? 'active' : ''}">
       <div class="craft-phase-header">
         <span class="craft-phase-tag" style="${p.active ? `color:${col}` : ''}">${p.phase}</span>
@@ -3399,10 +3507,13 @@ function uncompleteSection(ids) {
   recalcStreak();
   save();
   // Re-render current tab
-  if (cur === 'physique') rPhysique();
+  if      (cur === 'physique') rPhysique();
   else if (cur === 'vitality') rVitality();
-  else if (cur === 'purpose') rPurpose();
-  else if (cur === 'home') rHome();
+  else if (cur === 'presence') rPresence();
+  else if (cur === 'craft')    rCraft();
+  else if (cur === 'purpose')  rPurpose();
+  else if (cur === 'home')     rHome();
+  else if (cur === 'modules')  rModules();
 }
 
 function tapTask(id) {
@@ -3423,8 +3534,9 @@ function tapTask(id) {
   // Live-refresh level bar on the module page
   const mod = TASK_MOD[id];
   if (mod && cur === mod) refreshLvBar(mod);
-  // Update rings on home if visible
-  if (cur === 'home') rHome();
+  // Update rings on home/modules if visible
+  if (cur === 'home')    rHome();
+  if (cur === 'modules') rModules();
 }
 
 function toggleRef(id) {
@@ -3577,7 +3689,7 @@ function tickClock() {
 // ── Init ───────────────────────────────────────────────────
 (function init() {
   const app = document.getElementById('app');
-  ['home','physique','vitality','presence','craft','purpose','settings'].forEach(id => {
+  ['home','modules','physique','vitality','presence','craft','purpose','settings'].forEach(id => {
     const d = document.createElement('div');
     d.id = 's-' + id;
     d.className = 'screen' + (id === 'home' ? ' active' : '');
