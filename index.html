@@ -804,21 +804,60 @@ select.set-inp { width: auto; }
 .craft-phase-desc {
   font-size: 12px; color: var(--t3); line-height: 1.5;
 }
-.craft-finance-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
+.craft-sess-form {
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
 }
-.craft-fin-item {
-  background: var(--bg); border-radius: 8px; padding: 10px 12px;
+.craft-sess-form-ttl {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .8px; color: var(--t3); margin-bottom: 8px;
 }
-.craft-fin-lbl {
+.craft-pillar-pick {
+  display: flex; gap: 6px; margin-top: 8px;
+}
+.craft-pillar-opt {
+  flex: 1; text-align: center; padding: 7px 4px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 11px; font-weight: 700; color: var(--t3);
+  cursor: pointer; transition: all .15s; -webkit-user-select: none; user-select: none;
+}
+.craft-pillar-opt.selected {
+  border-color: var(--craft); color: var(--craft);
+  background: color-mix(in srgb, var(--craft) 12%, transparent);
+}
+.craft-pillar-opt:active { opacity: .7; }
+.craft-sess-done-lbl {
+  margin-top: 6px; font-size: 12px; color: var(--craft); font-weight: 600;
+}
+.craft-sess-pill {
+  font-size: 10px; font-weight: 800; padding: 2px 6px;
+  border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+}
+.craft-pillar-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 12px 14px; margin-bottom: 12px;
+}
+.craft-pillar-ttl {
   font-size: 10px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: .6px; color: var(--t3); margin-bottom: 3px;
+  letter-spacing: .8px; color: var(--t3); margin-bottom: 10px;
 }
-.craft-fin-val {
-  font-size: 16px; font-weight: 800; color: var(--t1); margin-bottom: 2px;
+.craft-pillar-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 7px;
 }
-.craft-fin-sub {
-  font-size: 10px; color: var(--t3); line-height: 1.3;
+.craft-pillar-row:last-child { margin-bottom: 0; }
+.craft-pillar-lbl {
+  font-size: 11px; font-weight: 700; color: var(--t2);
+  width: 60px; flex-shrink: 0;
+}
+.craft-pillar-track {
+  flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+}
+.craft-pillar-fill {
+  height: 100%; border-radius: 3px; transition: width .4s ease;
+  min-width: 2px;
+}
+.craft-pillar-pct {
+  font-size: 11px; font-weight: 700; color: var(--t3);
+  width: 24px; text-align: right; flex-shrink: 0;
 }
 
 /* ===== SCAFFOLD ===== */
@@ -1192,13 +1231,13 @@ const P = {
   },
   craft: {
     daily: [
-      { id:'cr1', xp:30, name:'Deep work block — 60+ min',   note:'Distraction-free focused build time. Phone away, notifications off. Must be active building: RevOps architecture, automation, coding, AI workflows. Job work counts if it\'s building, not coordinating.' },
-      { id:'cr2', xp:15, name:'Learning input — 20+ min',    note:'Targeted skill content: technical docs, courses, case studies. Must connect to one of the three pillars: RevOps mastery, AI+automation, or builder mindset. No passive content — engage actively.' },
-      { id:'cr3', xp:10, name:'Build log entry',             note:'One sentence: what did you build or learn today? Takes 5 min. Creates a longitudinal record of compounding skill. Write it in the notes field below.' },
+      { id:'cr1', xp:30, name:'Deep work block — 60+ min',   note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
+      { id:'cr2', xp:15, name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
     ],
     weekly: [
-      { id:'cr4', xp:20, name:'Pillar review',               note:'15 min every Sunday: which pillar got the most work this week — RevOps, AI+automation, or Builder? Which is falling behind? Recalibrate focus for next week.' },
+      { id:'cr4', xp:20, name:'Pillar review',               note:'Which pillar got the most sessions this week? Which is falling behind? Adjust next week\'s focus. Answered by your session log — not from memory.' },
       { id:'cr5', xp:25, name:'Portfolio touch',             note:'Work on something outside your job: personal app, automation template, case study, GitHub commit. The consultancy is built on proof — this is the proof layer.' },
+      { id:'cr6', xp:5,  name:'Investments confirmed',       note:'$700 to index funds this paycheck. 30 seconds — just confirm it processed.' },
     ],
   },
 };
@@ -2788,15 +2827,15 @@ function rCraft() {
       n:'P1', name:'RevOps Mastery',
       tag:'The domain credibility layer',
       desc:'Deep expertise in GTM architecture, data flows, and revenue systems. HubSpot, Salesforce, NetSuite, Zapier — plus the business-layer understanding of how revenue teams actually work. This is what makes you hireable, believable, and referable. Clients don\'t hire "AI consultants" — they hire people who understand their business AND can build with AI.',
-      why:'Domain expertise is what justifies $200-300/hr. Without it, you\'re a generalist. With it, you\'re the expert.',
-      compound:'Deep specialization in a category (e.g. HubSpot architecture for $5-50M SaaS companies). Becomes the foundation that makes all other pillars mean something.',
+      why:'Domain expertise is what justifies $200–300/hr. Without it, you\'re a generalist. With it, you\'re the expert.',
+      compound:'Deep specialization (e.g. HubSpot architecture for $5–50M SaaS companies). The foundation that makes all other pillars mean something.',
     },
     {
       n:'P2', name:'AI + Automation',
       tag:'The differentiation layer',
       desc:'Building agents, AI workflows, LLM-integrated automations, and intelligent systems on top of the RevOps stack. The intersection of business domain expertise + AI build capability is genuinely rare — most AI-capable people are engineers who don\'t understand the business layer; most RevOps people can\'t build with AI.',
       why:'This is the differentiation. The market for AI-native RevOps consulting will grow faster than supply of people who can do it well.',
-      compound:'AI-native RevOps consulting at $300-400/hr. Your coding skills plug directly into this layer.',
+      compound:'AI-native RevOps consulting at $300–400/hr. Your coding skills plug directly into this layer.',
     },
     {
       n:'P3', name:'Builder Mindset',
@@ -2821,31 +2860,138 @@ function rCraft() {
   const PHASES = [
     { phase:'Now (2026)', label:'Build & Compound', desc:'Deepen RevOps expertise + aggressively build AI/automation capability. Job is the training ground — maximize what you extract from Catapult. Begin accumulating portfolio pieces even if small. No pressure to consult yet.', active: true },
     { phase:'~2027–2028', label:'Prove & Transition', desc:'Begin taking small consulting engagements on the side. Build pipeline before leaving employment. Portfolio layer becomes critical — proof has to exist before you go full-time.', active: false },
-    { phase:'Terminal', label:'Operate', desc:'Consultancy is live, location-independent. Deep work protocol stays but focus shifts toward client delivery and product development. Consider productizing: templates, courses, SaaS built on your domain expertise.', active: false },
+    { phase:'Terminal', label:'Operate', desc:'Consultancy is live, location-independent. Deep work shifts toward client delivery and product development. Consider productizing: templates, courses, SaaS built on domain expertise.', active: false },
   ];
 
-  const phasesH = phases => phases.map(p => `
+  const phasesH = phases.map(p => `
     <div class="craft-phase ${p.active ? 'active' : ''}">
       <div class="craft-phase-header">
-        <span class="craft-phase-tag" style="${p.active ? 'color:var(--craft)' : ''}">${p.phase}</span>
+        <span class="craft-phase-tag" style="${p.active ? `color:${col}` : ''}">${p.phase}</span>
         <span class="craft-phase-name">${p.label}</span>
-        ${p.active ? '<span class="craft-phase-now">● NOW</span>' : ''}
+        ${p.active ? `<span class="craft-phase-now">● NOW</span>` : ''}
       </div>
       <div class="craft-phase-desc">${p.desc}</div>
     </div>`).join('');
 
-  // Build log from localStorage
-  const logKey = 'sl_buildlog';
-  let buildLog = [];
-  try { buildLog = JSON.parse(localStorage.getItem(logKey) || '[]'); } catch(e) {}
+  // Session log
+  const sessKey = 'sl_sessions';
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem(sessKey) || '[]'); } catch(e) {}
   const todayKey = dk();
-  const todayEntry = buildLog.find(e => e.date === todayKey);
 
-  const logH = buildLog.slice(-7).reverse().map(e => `
+  // Week sessions (last 7 days for pillar breakdown)
+  const weekAgo = new Date(Date.now() - 6*86400000);
+  const weekSess = sessions.filter(s => s.date >= dk(weekAgo));
+  const pillarCounts = { R:0, A:0, B:0 };
+  weekSess.forEach(s => { if (s.pillar && pillarCounts[s.pillar] !== undefined) pillarCounts[s.pillar]++; });
+  const totalSess = pillarCounts.R + pillarCounts.A + pillarCounts.B;
+  const pillarBar = (key, label, color) => {
+    const pct = totalSess ? Math.round(pillarCounts[key]/totalSess*100) : 0;
+    return `
+    <div class="craft-pillar-row">
+      <div class="craft-pillar-lbl">${label}</div>
+      <div class="craft-pillar-track">
+        <div class="craft-pillar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+      <div class="craft-pillar-pct">${pillarCounts[key]}x</div>
+    </div>`;
+  };
+
+  // Recent session log (last 7)
+  const recentH = sessions.slice(-7).reverse().map(s => {
+    const pillarLabel = { R:'RevOps', A:'AI+Auto', B:'Builder' }[s.pillar] || '';
+    const pillarCol   = { R:'var(--vitality)', A:'var(--craft)', B:'var(--presence)' }[s.pillar] || 'var(--t3)';
+    return `
     <div class="craft-log-entry">
-      <span class="craft-log-date">${e.date}</span>
-      <span class="craft-log-text">${e.text}</span>
-    </div>`).join('') || '<div style="color:var(--t3);font-size:12px;padding:8px 0">No entries yet — log your first build below.</div>';
+      <span class="craft-log-date">${s.date}</span>
+      ${pillarLabel ? `<span class="craft-sess-pill" style="background:color-mix(in srgb,${pillarCol} 18%,transparent);color:${pillarCol}">${pillarLabel}</span>` : ''}
+      <span class="craft-log-text">${s.focus || ''}</span>
+    </div>`;
+  }).join('') || '<div style="color:var(--t3);font-size:12px;padding:6px 0">No sessions yet — log your first block below.</div>';
+
+  // Today's sessions
+  const todaySess = sessions.filter(s => s.date === todayKey);
+  const deepDone  = done('cr1');
+  const learnDone = done('cr2');
+
+  // Deep work session form
+  const dwForm = `
+    <div class="craft-sess-form" id="dw-form">
+      <div class="craft-sess-form-ttl">What are you working on?</div>
+      <input type="text" id="dw-focus" class="craft-log-input" placeholder="e.g. HubSpot deal stage automation with Zapier" maxlength="200">
+      <div class="craft-pillar-pick">
+        <div class="craft-pillar-opt" id="pp-R" onclick="selectPillar('R')">RevOps</div>
+        <div class="craft-pillar-opt" id="pp-A" onclick="selectPillar('A')">AI + Auto</div>
+        <div class="craft-pillar-opt" id="pp-B" onclick="selectPillar('B')">Builder</div>
+      </div>
+      <button class="craft-log-btn" onclick="logDeepWork()" style="background:${col};width:100%;margin-top:8px">
+        Log Session ✓
+      </button>
+    </div>`;
+
+  // Learning capture form
+  const learnForm = `
+    <div class="craft-sess-form" id="learn-form">
+      <div class="craft-sess-form-ttl">What did you learn?</div>
+      <input type="text" id="learn-cap" class="craft-log-input" placeholder="e.g. HubSpot's association labels API enables multi-object deal tracking" maxlength="200">
+      <div class="craft-pillar-pick">
+        <div class="craft-pillar-opt" id="lp-R" onclick="selectLearnPillar('R')">RevOps</div>
+        <div class="craft-pillar-opt" id="lp-A" onclick="selectLearnPillar('A')">AI + Auto</div>
+        <div class="craft-pillar-opt" id="lp-B" onclick="selectLearnPillar('B')">Builder</div>
+      </div>
+      <button class="craft-log-btn" onclick="logLearning()" style="background:${col};width:100%;margin-top:8px">
+        Log Learning ✓
+      </button>
+    </div>`;
+
+  // Custom protocol render for craft (with inline forms)
+  const craftProtoH = `
+    <div class="proto-card">
+      <div class="proto-hd">
+        <div class="proto-ico">🔥</div>
+        <div class="proto-ttl">Daily Protocol</div>
+      </div>
+
+      <div class="proto-item ${deepDone ? 'done' : ''}" onclick="${deepDone ? '' : 'expandDW()'}">
+        <div class="chk ${deepDone ? 'checked' : ''}" id="chk-cr1">${deepDone ? '✓' : ''}</div>
+        <div class="proto-body">
+          <div class="proto-name">Deep work block — 60+ min</div>
+          <div class="proto-note">Before you start: log what you're working on + pillar below. Phone away, notifications off.</div>
+          ${deepDone
+            ? (todaySess.filter(s=>s.type==='dw').map(s=>`<div class="craft-sess-done-lbl">✓ ${s.focus}</div>`).join(''))
+            : dwForm}
+        </div>
+        <div class="proto-xp">+30</div>
+      </div>
+
+      <div class="proto-item ${learnDone ? 'done' : ''}" onclick="${learnDone ? '' : 'expandLearn()'}">
+        <div class="chk ${learnDone ? 'checked' : ''}" id="chk-cr2">${learnDone ? '✓' : ''}</div>
+        <div class="proto-body">
+          <div class="proto-name">Learning input — 20+ min</div>
+          <div class="proto-note">Docs, courses, case studies — pillar-connected only. Log what you learned when done.</div>
+          ${learnDone
+            ? (todaySess.filter(s=>s.type==='learn').map(s=>`<div class="craft-sess-done-lbl">✓ ${s.focus}</div>`).join(''))
+            : learnForm}
+        </div>
+        <div class="proto-xp">+15</div>
+      </div>
+    </div>`;
+
+  // Weekly section
+  const weeklyH = isSun ? proto('📅', 'Weekly Actions', P.craft.weekly, col, false) : `
+    <div style="padding:6px 0 2px;font-size:11px;color:var(--t3);text-align:center;letter-spacing:.3px">
+      Weekly actions unlock on Sunday
+    </div>`;
+
+  // This week's pillar breakdown
+  const pillarBreakdownH = `
+    <div class="craft-pillar-section">
+      <div class="craft-pillar-ttl">This week's sessions by pillar</div>
+      ${pillarBar('R','RevOps','var(--vitality)')}
+      ${pillarBar('A','AI + Auto','var(--craft)')}
+      ${pillarBar('B','Builder','var(--presence)')}
+      ${totalSess === 0 ? '<div style="font-size:11px;color:var(--t3);padding:4px 0">No sessions logged yet this week.</div>' : ''}
+    </div>`;
 
   document.getElementById('s-craft').innerHTML = `
   <div class="wrap" style="--sc-color:${col}">
@@ -2859,25 +3005,13 @@ function rCraft() {
     </div>
     ${lvBar('craft', col)}
 
-    ${proto('🔥', 'Daily Protocol', P.craft.daily, col, false)}
-    ${isSun ? proto('📅', 'Weekly Actions', P.craft.weekly, col, false) : `
-    <div style="padding:10px 0 4px;font-size:11px;color:var(--t3);text-align:center">
-      Weekly actions unlock on Sunday
-    </div>`}
+    ${craftProtoH}
+    ${weeklyH}
+    ${pillarBreakdownH}
 
     <div class="craft-log-section">
-      <div class="craft-log-ttl">📓 Build Log</div>
-      <div class="craft-log-hint">One sentence: what did you build or learn today?</div>
-      <div class="craft-log-input-row">
-        <input type="text" id="craft-log-input" class="craft-log-input"
-          placeholder="${todayEntry ? 'Already logged today — update?' : 'e.g. Built HubSpot deal stage automation with Zapier'}"
-          value="${todayEntry ? todayEntry.text : ''}"
-          maxlength="200">
-        <button class="craft-log-btn" onclick="saveBuildLog()" style="background:${col}">Log</button>
-      </div>
-      <div class="craft-log-history">
-        ${logH}
-      </div>
+      <div class="craft-log-ttl">📓 Session Log</div>
+      <div class="craft-log-history">${recentH}</div>
     </div>
 
     <div class="apollo-ref-sep">
@@ -2902,20 +3036,20 @@ function rCraft() {
         <div class="ref-toggle">⌄</div>
       </div>
       <div class="ref-body">
-        <div class="craft-rule"><strong style="color:var(--craft)">✓ Counts as deep work:</strong></div>
+        <div class="craft-rule"><strong style="color:${col}">✓ Counts:</strong></div>
         <div class="craft-rule">Building a complex automation or integration (HubSpot, Salesforce, Zapier, AI tools)</div>
         <div class="craft-rule">Coding a personal project or tool</div>
         <div class="craft-rule">Designing GTM architecture or data models</div>
         <div class="craft-rule">Building an AI agent or workflow</div>
         <div class="craft-rule">Writing a technical case study or process doc</div>
-        <div style="height:10px"></div>
-        <div class="craft-rule"><strong style="color:var(--t3)">✗ Does NOT count:</strong></div>
+        <div style="height:8px"></div>
+        <div class="craft-rule"><strong style="color:var(--t3)">✗ Does not count:</strong></div>
         <div class="craft-rule" style="color:var(--t3)">Meetings (even productive ones)</div>
         <div class="craft-rule" style="color:var(--t3)">Email and Slack triage</div>
-        <div class="craft-rule" style="color:var(--t3)">Reading without application — use Learning Input for that</div>
+        <div class="craft-rule" style="color:var(--t3)">Reading without application</div>
         <div class="craft-rule" style="color:var(--t3)">Passive content consumption</div>
         <div class="craft-insight">
-          <strong>Newport's principle:</strong> The ability to focus without distraction on a cognitively demanding task is becoming rare exactly as it's becoming more valuable. The deep work block is not optional — it's the mechanism.
+          <strong>Newport:</strong> The ability to focus without distraction on a cognitively demanding task is becoming rare exactly as it's becoming more valuable.
         </div>
       </div>
     </div>
@@ -2927,44 +3061,9 @@ function rCraft() {
         <div class="ref-toggle">⌄</div>
       </div>
       <div class="ref-body">
-        ${phasesH(PHASES)}
+        ${phasesH}
         <div class="craft-insight" style="margin-top:12px">
-          <strong>The transition gate:</strong> When consulting begins, shift from W-2 to self-employment tax planning — quarterly estimated taxes, business entity, deductions. Flag this at Prometheus Level 7 so it's handled before it's urgent.
-        </div>
-      </div>
-    </div>
-
-    <div class="ref-card" id="r-finance">
-      <div class="ref-hd" onclick="toggleRef('r-finance')">
-        <div class="ref-ico">💰</div>
-        <div class="ref-ttl">Financial Sub-Module — Current State</div>
-        <div class="ref-toggle">⌄</div>
-      </div>
-      <div class="ref-body">
-        <div class="craft-finance-grid">
-          <div class="craft-fin-item">
-            <div class="craft-fin-lbl">S&P Index Investing</div>
-            <div class="craft-fin-val" style="color:var(--craft)">$1,400/mo ✓</div>
-            <div class="craft-fin-sub">$700 per paycheck, automated</div>
-          </div>
-          <div class="craft-fin-item">
-            <div class="craft-fin-lbl">Savings Rate</div>
-            <div class="craft-fin-val" style="color:var(--craft)">$2,300/mo ✓</div>
-            <div class="craft-fin-sub">$1,150 per paycheck</div>
-          </div>
-          <div class="craft-fin-item">
-            <div class="craft-fin-lbl">Roth IRA</div>
-            <div class="craft-fin-val" style="color:var(--craft)">Maxed ✓</div>
-            <div class="craft-fin-sub">$7,000/year limit hit</div>
-          </div>
-          <div class="craft-fin-item">
-            <div class="craft-fin-lbl">Next Unlock</div>
-            <div class="craft-fin-val">Level 7</div>
-            <div class="craft-fin-sub">Self-employment tax planning</div>
-          </div>
-        </div>
-        <div class="craft-insight">
-          You're executing correctly. Financial hygiene is on autopilot — no protocol action needed until the consultancy transition. The only weekly action: confirm investments processed (30 seconds).
+          <strong>Transition gate:</strong> At Level 7 — shift from W-2 to self-employment tax planning. Quarterly estimated taxes, business entity, deductions. Handle it before it's urgent.
         </div>
       </div>
     </div>
@@ -2972,23 +3071,63 @@ function rCraft() {
     <div class="footer-hint">Prometheus · Craft &amp; Mastery · Level ${S.levels?.craft || 1}<br>
       North star: location-independent RevOps + AI consultancy</div>
   </div>`;
+
+  // Restore pillar selection state if any
+  restorePillarUI();
 }
 
-function saveBuildLog() {
-  const inp = document.getElementById('craft-log-input');
-  if (!inp || !inp.value.trim()) return;
-  const logKey = 'sl_buildlog';
-  let log = [];
-  try { log = JSON.parse(localStorage.getItem(logKey) || '[]'); } catch(e) {}
-  const todayKey = dk();
-  const idx = log.findIndex(e => e.date === todayKey);
-  if (idx >= 0) log[idx].text = inp.value.trim();
-  else log.push({ date: todayKey, text: inp.value.trim() });
-  if (log.length > 90) log = log.slice(-90);
-  localStorage.setItem(logKey, JSON.stringify(log));
-  // Also mark cr3 (build log task) as done
-  if (!done('cr3')) { toggle('cr3'); }
+// ── Craft session state ─────────────────────────────────────
+let _dwPillar    = null;
+let _learnPillar = null;
+
+function selectPillar(p) {
+  _dwPillar = p;
+  ['R','A','B'].forEach(k => {
+    const el = document.getElementById('pp-' + k);
+    if (el) el.classList.toggle('selected', k === p);
+  });
+}
+
+function selectLearnPillar(p) {
+  _learnPillar = p;
+  ['R','A','B'].forEach(k => {
+    const el = document.getElementById('lp-' + k);
+    if (el) el.classList.toggle('selected', k === p);
+  });
+}
+
+function restorePillarUI() {
+  if (_dwPillar)    selectPillar(_dwPillar);
+  if (_learnPillar) selectLearnPillar(_learnPillar);
+}
+
+function logDeepWork() {
+  const focus = (document.getElementById('dw-focus')?.value || '').trim();
+  if (!focus)       { alert('Add what you\'re working on first.'); return; }
+  if (!_dwPillar)   { alert('Select a pillar first.'); return; }
+  _saveSession({ type:'dw', focus, pillar:_dwPillar });
+  _dwPillar = null;
+  if (!done('cr1')) toggle('cr1');
   rCraft();
+}
+
+function logLearning() {
+  const focus = (document.getElementById('learn-cap')?.value || '').trim();
+  if (!focus)         { alert('Add what you learned first.'); return; }
+  if (!_learnPillar)  { alert('Select a pillar first.'); return; }
+  _saveSession({ type:'learn', focus, pillar:_learnPillar });
+  _learnPillar = null;
+  if (!done('cr2')) toggle('cr2');
+  rCraft();
+}
+
+function _saveSession(data) {
+  const sessKey = 'sl_sessions';
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem(sessKey) || '[]'); } catch(e) {}
+  sessions.push({ date: dk(), ...data });
+  if (sessions.length > 200) sessions = sessions.slice(-200);
+  localStorage.setItem(sessKey, JSON.stringify(sessions));
 }
 
 // ── Scaffold ───────────────────────────────────────────────
