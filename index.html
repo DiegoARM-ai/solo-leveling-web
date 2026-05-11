@@ -1508,6 +1508,7 @@ const TASK_XP  = {};
     vitality: ['am','pm'],
     presence: ['daily'],
     purpose:  ['daily','weekly'],
+    craft:    ['daily','weekly'],
   };
   Object.entries(blocks).forEach(([mod, bls]) => {
     bls.forEach(bl => {
@@ -2773,6 +2774,39 @@ function resetPreDate() {
   S.preDate = {};
   save();
   rPresence();
+}
+
+// ── Commitment helpers ─────────────────────────────────────
+const COMMIT_KEY = 'sl_commitments';
+
+function getCommitments() {
+  try { return JSON.parse(localStorage.getItem(COMMIT_KEY) || '[]'); } catch(e) { return []; }
+}
+
+function saveCommitment(task, time) {
+  const commits = getCommitments();
+  const tom = dk(new Date(Date.now() + 86400000));
+  const filtered = commits.filter(function(c) { return c.forDate !== tom; });
+  filtered.push({ forDate: tom, task: task, time: time, savedOn: dk() });
+  if (filtered.length > 90) filtered.splice(0, filtered.length - 90);
+  localStorage.setItem(COMMIT_KEY, JSON.stringify(filtered));
+}
+
+function getTodayCommitment() {
+  const commits = getCommitments();
+  for (var i = 0; i < commits.length; i++) {
+    if (commits[i].forDate === dk()) return commits[i];
+  }
+  return null;
+}
+
+function logCommitment() {
+  const task = (document.getElementById('commit-task') ? document.getElementById('commit-task').value : '').trim();
+  const time = (document.getElementById('commit-time') ? document.getElementById('commit-time').value : '').trim();
+  if (!task) { alert('Write the one thing first.'); return; }
+  saveCommitment(task, time);
+  if (!done('sn4')) toggle('sn4');
+  rPurpose();
 }
 
 // ── Commitment cards (capture + log) — used in rPurpose ────
