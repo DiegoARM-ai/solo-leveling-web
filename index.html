@@ -1089,6 +1089,17 @@ const P = {
       { id:'pr4', xp:3,  name:'Move conversations toward a date', note:'5–7 messages max — no pen pals. Propose within 3–5 exchanges. Specific venue + binary timing.' },
     ],
   },
+  purpose: {
+    daily: [
+      { id:'sn1', xp:15, name:'Morning priming',              note:'3 questions: (1) Most important thing today? (2) Most likely obstacle? (3) If it appears, I will ___. Write it down — 5 min.' },
+      { id:'sn2', xp:25, name:'Mindfulness — 10 min',         note:'Focused attention on breath. When mind wanders, notice and return. That return IS the rep. Use a timer.' },
+      { id:'sn3', xp:15, name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
+      { id:'sn4', xp:20, name:'Evening Stoic review',         note:'3 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? 5 min.' },
+    ],
+    weekly: [
+      { id:'sn5', xp:40, name:'Weekly strategic review',      note:'4 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? 30 min.' },
+    ],
+  },
 };
 
 const HAIR = [
@@ -1261,6 +1272,8 @@ const TASK_XP  = {};
   const blocks = {
     physique: ['am','aft','pm','wk'],
     vitality: ['am','pm'],
+    presence: ['daily'],
+    purpose:  ['daily','weekly'],
   };
   Object.entries(blocks).forEach(([mod, bls]) => {
     bls.forEach(bl => {
@@ -1302,7 +1315,7 @@ const XP_TARGETS = {
   vitality: { 1:380, 2:420, 3:490, 4:490, 5:530, 6:550, 7:570, 8:590, 9:610, 10:630 },
   presence: { 1:105, 2:200, 3:230, 4:230, 5:260, 6:280, 7:280, 8:300, 9:320, 10:350 },
   craft:    { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
-  purpose:  { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
+  purpose:  { 1:375, 2:415, 3:450, 4:450, 5:490, 6:490, 7:525, 8:525, 9:565, 10:565 },
 };
 
 // ── Rank calculation ───────────────────────────────────────
@@ -1671,10 +1684,12 @@ function overallPct() { return pct(allTasksToday()); }
 
 function modPct(mod) {
   const wk = isWkDay();
+  const isSun = new Date().getDay() === 0;
   const m = {
     physique: [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)],
     vitality: [...P.vitality.am, ...P.vitality.pm],
     presence: P.presence.daily,
+    purpose:  [...P.purpose.daily, ...(isSun ? P.purpose.weekly : [])],
   };
   return m[mod] ? pct(m[mod]) : 0;
 }
@@ -1744,8 +1759,8 @@ function render(s) {
     case 'physique': rPhysique(); break;
     case 'vitality': rVitality(); break;
     case 'presence': rPresence(); break;
-    case 'craft':    rScaffold('craft');    break;
-    case 'purpose':  rScaffold('purpose'); break;
+    case 'craft':    rScaffold('craft');  break;
+    case 'purpose':  rPurpose();          break;
     case 'settings': rSettings(); break;
   }
 }
@@ -2444,6 +2459,186 @@ function resetPreDate() {
   rPresence();
 }
 
+// ── Seneca / Purpose ───────────────────────────────────────
+function rPurpose() {
+  const col   = COLS.purpose;
+  const cp    = modPct('purpose');
+  const isSun = new Date().getDay() === 0;
+
+  const MORNING_PROMPTS = [
+    { q:'Most important thing today?', note:'One item only. Forces prioritization before the day makes decisions for you.' },
+    { q:'Most likely obstacle?',       note:'Name it before it appears — internal or external. Pre-mortems work because they surface what you already know.' },
+    { q:'If it appears, I will…',      note:'The implementation intention. Specific if/then response pre-committed. Gollwitzer (1999): doubles goal follow-through vs. intention alone.' },
+  ];
+
+  const EVENING_PROMPTS = [
+    { q:'What went well today?',           note:'One specific thing. Emmons & McCullough: noticing positive events shifts mood valence even when events are identical.' },
+    { q:'What didn\'t go as planned?',     note:'Factual, not self-flagellating. Just: what happened.' },
+    { q:'What would I do differently?',    note:'Forward-facing only. This is where the feedback loop closes — without this question, you notice mistakes but don\'t update.' },
+  ];
+
+  const WEEKLY_PROMPTS = [
+    { q:'What did I actually move forward this week?', note:'Concrete and specific. Not intentions — what happened.' },
+    { q:'What am I building toward in 90 days?',       note:'Reference your current quarterly priority. If you can\'t answer this, that\'s the problem.' },
+    { q:'Is this week\'s effort aligned with that?',   note:'Yes / No / Partially. If not fully: what needs to change next week?' },
+    { q:'What is the single most important focus next week?', note:'One item. Same logic as morning priming.' },
+  ];
+
+  const promptCard = (id, ico, title, prompts, accentCol) => `
+    <div class="ref-card" id="${id}">
+      <div class="ref-hd" onclick="toggleRef('${id}')">
+        <div class="ref-ico">${ico}</div>
+        <div class="ref-ttl" style="color:${accentCol}">${title}</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        ${prompts.map((p, i) => `
+          <div class="ref-step">
+            <div class="ref-sn" style="background:color-mix(in srgb,${accentCol} 15%,transparent);color:${accentCol};border:1px solid color-mix(in srgb,${accentCol} 30%,transparent)">${i+1}</div>
+            <div class="ref-st"><strong style="color:var(--t1)">${p.q}</strong><br>${p.note}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  const READING_LIST = [
+    { n:'Letters from a Stoic',        a:'Seneca',             note:'Letters I–XLI to start. The original daily alignment practice.' },
+    { n:'On the Shortness of Life',    a:'Seneca',             note:'A goal hierarchy manifesto. 2,000 years old and not improved upon.' },
+    { n:'Deep Work',                   a:'Cal Newport',        note:'The attention architecture that makes everything else compound.' },
+    { n:'The Obstacle Is the Way',     a:'Ryan Holiday',       note:'Stoic framework, modern language. Practical.' },
+    { n:'Man\'s Search for Meaning',   a:'Viktor Frankl',      note:'Meaning as a buffer against adversity. Logotherapy at the extreme end of evidence.' },
+    { n:'Four Thousand Weeks',         a:'Oliver Burkeman',    note:'Time management as a philosophical problem. Forces the priority question.' },
+    { n:'The Courage to Be Disliked',  a:'Kishimi & Koga',     note:'Adlerian psychology on freedom, purpose, and others\' opinions.' },
+  ];
+
+  const readingH = READING_LIST.map(b => `
+    <div class="ref-step">
+      <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+      <div class="ref-st"><strong style="color:var(--t1)">${b.n}</strong> — ${b.a}<br>${b.note}</div>
+    </div>`).join('');
+
+  document.getElementById('s-purpose').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${col}">Purpose</div>
+        <div class="mod-name">Seneca</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+    ${lvBar('purpose', col)}
+
+    ${proto('🌅', 'Daily Practice', P.purpose.daily, col, false)}
+
+    ${isSun ? proto('📋', 'Weekly Strategic Review', P.purpose.weekly, col, false) : `
+    <div class="ref-card" id="r-weekly-preview">
+      <div class="ref-hd" onclick="toggleRef('r-weekly-preview')">
+        <div class="ref-ico">📋</div>
+        <div class="ref-ttl">Weekly Review — Sundays · 30 min</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div style="font-size:12px;color:var(--t2);margin-bottom:10px;line-height:1.5">
+          Every Sunday. 30 minutes. Closes the loop between your 90-day goal and what you did this week. Without this, the quarterly vision becomes a ceremony.
+        </div>
+        ${WEEKLY_PROMPTS.map((p, i) => `
+          <div class="ref-step">
+            <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">${i+1}</div>
+            <div class="ref-st"><strong style="color:var(--t1)">${p.q}</strong><br>${p.note}</div>
+          </div>`).join('')}
+      </div>
+    </div>`}
+
+    <div class="apollo-ref-sep">
+      <div class="apollo-ref-sep-line"></div>
+      <div class="apollo-ref-sep-lbl">Reference</div>
+      <div class="apollo-ref-sep-line"></div>
+    </div>
+
+    ${promptCard('r-morning', '🌄', 'Morning Priming — 5 min', MORNING_PROMPTS, col)}
+    ${promptCard('r-evening', '🌙', 'Evening Stoic Review — 5 min', EVENING_PROMPTS, col)}
+
+    <div class="ref-card" id="r-mindfulness">
+      <div class="ref-hd" onclick="toggleRef('r-mindfulness')">
+        <div class="ref-ico">🧘</div>
+        <div class="ref-ttl">Mindfulness — Focused Attention Protocol</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:12px">
+          <strong style="color:var(--t1)">This is not relaxation.</strong> Focused attention meditation builds a specific capacity: noticing that your mind has wandered, and choosing to return. That return is a rep — the same way a curl is a rep. 10 minutes/day. Hölzel et al. (2011): 8 weeks produces measurable increases in PFC gray matter and reduced amygdala reactivity. Equanimity is trained, not adopted.
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">1</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Set a 10-minute timer</strong><br>Use the same time each day — immediately after morning priming has the highest compliance rate.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">2</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Pick one anchor and hold it</strong><br>The physical sensation of breath at the nostrils, or the rise/fall of your chest. One anchor, consistent every session. Eyes closed or soft downward gaze.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">3</div>
+          <div class="ref-st"><strong style="color:var(--t1)">When you notice wandering — return</strong><br>No judgment on how many times it wanders. The wandering is not the failure. Not noticing is. Noticing + returning is the entire practice.</div>
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:color-mix(in srgb,${col} 7%,transparent);border:1px solid color-mix(in srgb,${col} 20%,transparent);border-radius:8px;font-size:12px;color:var(--t2);line-height:1.5">
+          <strong style="color:${col}">Why the discomfort is the signal:</strong> The restlessness you feel in the first weeks is the default-mode network (rumination circuitry) resisting interruption. That discomfort means the practice is working on exactly what it's supposed to work on. The XP premium exists because this is the highest-avoidance action in the protocol.
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-reading">
+      <div class="ref-hd" onclick="toggleRef('r-reading')">
+        <div class="ref-ico">📚</div>
+        <div class="ref-ttl">Reading List — Seneca Domain</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px">
+          One book at a time. No skimming. 20 min/day = ~14 books/year. This slot is the input channel for the model of the world you're running decisions through.
+        </div>
+        ${readingH}
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-science">
+      <div class="ref-hd" onclick="toggleRef('r-science')">
+        <div class="ref-ico">🔬</div>
+        <div class="ref-ttl">Why This Works — Evidence Base</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🎯</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Goal Setting Theory — Locke & Latham (1990)</strong><br>Most replicated finding in applied psychology. Specific + challenging goals with regular review outperform vague intentions by 16–250%. Weekly review is applied Goal Setting Theory.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">⚡</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Implementation Intentions — Gollwitzer (1999)</strong><br>"When X, I will Y" format doubles goal achievement rates vs. pure intention. Morning priming Q3 is this exact format.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🧠</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Brain Structure Changes — Hölzel et al. (2011)</strong><br>8 weeks of daily mindfulness: measurable gray matter increase in PFC (decision quality, attention) + reduced right amygdala reactivity (stress response). Peer-reviewed, replicated.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">✍️</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Expressive Writing — Pennebaker (1997)</strong><br>Structured reflection on events improves psychological and physical health outcomes. Structure matters — free-form journaling has weaker evidence than the 3-question format used here.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🙏</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Gratitude — Emmons & McCullough (2003)</strong><br>Noticing one positive event daily increases wellbeing and reduces depressive symptoms. Evening review Q1 captures this without adding a separate practice.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🌀</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Seneca as the Force Multiplier</strong><br>The strategic direction layer determines where effort in all 5 modules gets allocated. A clear 90-day goal makes every rep in Adonis, Somnus, Apollo, and Prometheus more intentional. The inner state practice makes you more resilient when any of those modules is hard.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-hint">Seneca · Philosophy &amp; Direction · Level ${S.levels?.purpose || 1}<br>
+      Weekly review + quarterly audit logged separately</div>
+  </div>`;
+}
+
 // ── Scaffold ───────────────────────────────────────────────
 const SCAFFOLD_INFO = {
   presence: {
@@ -2461,14 +2656,6 @@ const SCAFFOLD_INFO = {
          Newport "Deep Work" — distraction-free work produces disproportionate value<br>
          Csikszentmihalyi — flow states during cognitively demanding work<br>
          Killingsworth et al. (2021) — happiness continues rising with income for most people`,
-  },
-  purpose: {
-    ico:'🎯', ttl:'Purpose', mod:'Seneca',
-    body:'Philosophy & direction · vision · goal hierarchy · equanimity · meaning. Protocol in development.',
-    sci:`Locke & Latham — Goal Setting Theory (most replicated in psychology)<br>
-         Hölzel et al. (2011) — mindfulness produces measurable brain structure changes<br>
-         Emmons & McCullough (2003) — gratitude practices increase wellbeing<br>
-         Seligman PERMA — Meaning as distinct from Accomplishment`,
   },
 };
 
@@ -2660,6 +2847,7 @@ function uncompleteSection(ids) {
   // Re-render current tab
   if (cur === 'physique') rPhysique();
   else if (cur === 'vitality') rVitality();
+  else if (cur === 'purpose') rPurpose();
   else if (cur === 'home') rHome();
 }
 
