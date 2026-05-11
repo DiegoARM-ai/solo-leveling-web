@@ -731,6 +731,96 @@ select.set-inp { width: auto; }
 }
 .predate-reset:active { color: var(--t2); }
 
+/* ===== PROMETHEUS MODULE ===== */
+.craft-log-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 14px 14px 12px; margin-bottom: 12px;
+}
+.craft-log-ttl {
+  font-size: 13px; font-weight: 800; color: var(--t1); margin-bottom: 3px;
+}
+.craft-log-hint {
+  font-size: 11px; color: var(--t3); margin-bottom: 10px;
+}
+.craft-log-input-row {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.craft-log-input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 12px; font-size: 13px;
+  color: var(--t1); font-family: inherit; outline: none;
+}
+.craft-log-input:focus { border-color: var(--craft); }
+.craft-log-btn {
+  border: none; border-radius: 8px; padding: 9px 16px;
+  font-size: 12px; font-weight: 800; color: #000; cursor: pointer;
+  letter-spacing: .5px; white-space: nowrap; flex-shrink: 0;
+}
+.craft-log-history {
+  border-top: 1px solid var(--border); padding-top: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.craft-log-entry {
+  display: flex; gap: 10px; align-items: baseline;
+}
+.craft-log-date {
+  font-size: 10px; font-weight: 800; color: var(--t3);
+  text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; flex-shrink: 0;
+}
+.craft-log-text {
+  font-size: 12px; color: var(--t2); line-height: 1.4;
+}
+.craft-rule {
+  font-size: 13px; color: var(--t2); line-height: 1.5;
+  padding: 3px 0; border-bottom: 1px solid var(--border);
+}
+.craft-rule:last-of-type { border-bottom: none; }
+.craft-insight {
+  margin-top: 12px; background: var(--bg); border-left: 3px solid var(--craft);
+  padding: 10px 12px; border-radius: 0 8px 8px 0;
+  font-size: 12px; color: var(--t2); line-height: 1.5;
+}
+.craft-phase {
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.craft-phase:last-child { border-bottom: none; }
+.craft-phase-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap;
+}
+.craft-phase-tag {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .8px; color: var(--t3);
+}
+.craft-phase-name {
+  font-size: 13px; font-weight: 700; color: var(--t1);
+}
+.craft-phase-now {
+  font-size: 10px; font-weight: 800; color: var(--craft);
+  letter-spacing: .5px; animation: glowPulse 2s infinite;
+}
+.craft-phase.active .craft-phase-desc {
+  color: var(--t2);
+}
+.craft-phase-desc {
+  font-size: 12px; color: var(--t3); line-height: 1.5;
+}
+.craft-finance-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
+}
+.craft-fin-item {
+  background: var(--bg); border-radius: 8px; padding: 10px 12px;
+}
+.craft-fin-lbl {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--t3); margin-bottom: 3px;
+}
+.craft-fin-val {
+  font-size: 16px; font-weight: 800; color: var(--t1); margin-bottom: 2px;
+}
+.craft-fin-sub {
+  font-size: 10px; color: var(--t3); line-height: 1.3;
+}
+
 /* ===== SCAFFOLD ===== */
 .scaffold { padding: 40px 16px; text-align: center; }
 .scaffold-ico { font-size: 52px; display: block; margin-bottom: 16px; opacity: .2; }
@@ -1091,13 +1181,24 @@ const P = {
   },
   purpose: {
     daily: [
-      { id:'sn1', xp:15, name:'Morning priming',              note:'3 questions: (1) Most important thing today? (2) Most likely obstacle? (3) If it appears, I will ___. Write it down — 5 min.' },
+      { id:'sn1', xp:15, name:'Morning ignition',             note:'Read last night\'s commitment (the one thing + start time). Write the one obstacle and your if/then response. Then start at the time you wrote. 5 min — activation, not planning.' },
       { id:'sn2', xp:25, name:'Mindfulness — 10 min',         note:'Focused attention on breath. When mind wanders, notice and return. That return IS the rep. Use a timer.' },
       { id:'sn3', xp:15, name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
-      { id:'sn4', xp:20, name:'Evening Stoic review',         note:'3 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? 5 min.' },
+      { id:'sn4', xp:20, name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
     ],
     weekly: [
       { id:'sn5', xp:40, name:'Weekly strategic review',      note:'4 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? 30 min.' },
+    ],
+  },
+  craft: {
+    daily: [
+      { id:'cr1', xp:30, name:'Deep work block — 60+ min',   note:'Distraction-free focused build time. Phone away, notifications off. Must be active building: RevOps architecture, automation, coding, AI workflows. Job work counts if it\'s building, not coordinating.' },
+      { id:'cr2', xp:15, name:'Learning input — 20+ min',    note:'Targeted skill content: technical docs, courses, case studies. Must connect to one of the three pillars: RevOps mastery, AI+automation, or builder mindset. No passive content — engage actively.' },
+      { id:'cr3', xp:10, name:'Build log entry',             note:'One sentence: what did you build or learn today? Takes 5 min. Creates a longitudinal record of compounding skill. Write it in the notes field below.' },
+    ],
+    weekly: [
+      { id:'cr4', xp:20, name:'Pillar review',               note:'15 min every Sunday: which pillar got the most work this week — RevOps, AI+automation, or Builder? Which is falling behind? Recalibrate focus for next week.' },
+      { id:'cr5', xp:25, name:'Portfolio touch',             note:'Work on something outside your job: personal app, automation template, case study, GitHub commit. The consultancy is built on proof — this is the proof layer.' },
     ],
   },
 };
@@ -1689,6 +1790,7 @@ function modPct(mod) {
     physique: [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)],
     vitality: [...P.vitality.am, ...P.vitality.pm],
     presence: P.presence.daily,
+    craft:    [...P.craft.daily, ...(isSun ? P.craft.weekly : [])],
     purpose:  [...P.purpose.daily, ...(isSun ? P.purpose.weekly : [])],
   };
   return m[mod] ? pct(m[mod]) : 0;
@@ -1759,7 +1861,7 @@ function render(s) {
     case 'physique': rPhysique(); break;
     case 'vitality': rVitality(); break;
     case 'presence': rPresence(); break;
-    case 'craft':    rScaffold('craft');  break;
+    case 'craft':    rCraft();            break;
     case 'purpose':  rPurpose();          break;
     case 'settings': rSettings(); break;
   }
@@ -1784,7 +1886,7 @@ function rHome() {
     { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪', active:true },
     { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', active:true },
     { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡', active:true },
-    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', active:false },
+    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', active:true  },
     { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', active:false },
   ];
 
@@ -1802,6 +1904,8 @@ function rHome() {
             ? [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)]
             : c.s === 'presence'
             ? P.presence.daily
+            : c.s === 'craft'
+            ? P.craft.daily
             : [...P.vitality.am, ...P.vitality.pm];
           return tasks.filter(t => !done(t.id)).length;
         })()
@@ -2466,15 +2570,16 @@ function rPurpose() {
   const isSun = new Date().getDay() === 0;
 
   const MORNING_PROMPTS = [
-    { q:'Most important thing today?', note:'One item only. Forces prioritization before the day makes decisions for you.' },
-    { q:'Most likely obstacle?',       note:'Name it before it appears — internal or external. Pre-mortems work because they surface what you already know.' },
-    { q:'If it appears, I will…',      note:'The implementation intention. Specific if/then response pre-committed. Gollwitzer (1999): doubles goal follow-through vs. intention alone.' },
+    { q:'Read last night\'s commitment',   note:'Open your evening close. Read the one thing you committed to + the start time. Already decided — no deliberation required.' },
+    { q:'What\'s the most likely obstacle to the first work block?', note:'One sentence. Internal or external. Name it before it appears.' },
+    { q:'If it appears, I will…',          note:'Specific if/then response. Gollwitzer (1999): written implementation intentions double follow-through vs. intention alone. Then close the notebook — and start at the time you wrote last night.' },
   ];
 
   const EVENING_PROMPTS = [
-    { q:'What went well today?',           note:'One specific thing. Emmons & McCullough: noticing positive events shifts mood valence even when events are identical.' },
+    { q:'What went well today?',           note:'One specific thing. Emmons & McCullough: noticing positive events shifts mood valence regardless of what else happened.' },
     { q:'What didn\'t go as planned?',     note:'Factual, not self-flagellating. Just: what happened.' },
-    { q:'What would I do differently?',    note:'Forward-facing only. This is where the feedback loop closes — without this question, you notice mistakes but don\'t update.' },
+    { q:'What would I do differently?',    note:'Forward-facing only. This is where the behavioral feedback loop closes.' },
+    { q:'What\'s the ONE most important thing I\'ll do first tomorrow — and what time am I starting?', note:'Write both. Specific task + specific time. "Finish the RevOps automation doc at 9:15am" — not vague. This is the answer you read back in the morning. The fuel comes from this being real and connected to your 90-day goal.' },
   ];
 
   const WEEKLY_PROMPTS = [
@@ -2555,8 +2660,8 @@ function rPurpose() {
       <div class="apollo-ref-sep-line"></div>
     </div>
 
-    ${promptCard('r-morning', '🌄', 'Morning Priming — 5 min', MORNING_PROMPTS, col)}
-    ${promptCard('r-evening', '🌙', 'Evening Stoic Review — 5 min', EVENING_PROMPTS, col)}
+    ${promptCard('r-morning', '🌄', 'Morning Ignition — 5 min (activation, not planning)', MORNING_PROMPTS, col)}
+    ${promptCard('r-evening', '🌙', 'Evening Close — 5–7 min (closes today + pre-loads tomorrow)', EVENING_PROMPTS, col)}
 
     <div class="ref-card" id="r-mindfulness">
       <div class="ref-hd" onclick="toggleRef('r-mindfulness')">
@@ -2637,6 +2742,220 @@ function rPurpose() {
     <div class="footer-hint">Seneca · Philosophy &amp; Direction · Level ${S.levels?.purpose || 1}<br>
       Weekly review + quarterly audit logged separately</div>
   </div>`;
+}
+
+// ── Prometheus / Craft ─────────────────────────────────────
+function rCraft() {
+  const col   = COLS.craft;
+  const cp    = modPct('craft');
+  const isSun = new Date().getDay() === 0;
+
+  const PILLARS = [
+    {
+      n:'P1', name:'RevOps Mastery',
+      tag:'The domain credibility layer',
+      desc:'Deep expertise in GTM architecture, data flows, and revenue systems. HubSpot, Salesforce, NetSuite, Zapier — plus the business-layer understanding of how revenue teams actually work. This is what makes you hireable, believable, and referable. Clients don\'t hire "AI consultants" — they hire people who understand their business AND can build with AI.',
+      why:'Domain expertise is what justifies $200-300/hr. Without it, you\'re a generalist. With it, you\'re the expert.',
+      compound:'Deep specialization in a category (e.g. HubSpot architecture for $5-50M SaaS companies). Becomes the foundation that makes all other pillars mean something.',
+    },
+    {
+      n:'P2', name:'AI + Automation',
+      tag:'The differentiation layer',
+      desc:'Building agents, AI workflows, LLM-integrated automations, and intelligent systems on top of the RevOps stack. The intersection of business domain expertise + AI build capability is genuinely rare — most AI-capable people are engineers who don\'t understand the business layer; most RevOps people can\'t build with AI.',
+      why:'This is the differentiation. The market for AI-native RevOps consulting will grow faster than supply of people who can do it well.',
+      compound:'AI-native RevOps consulting at $300-400/hr. Your coding skills plug directly into this layer.',
+    },
+    {
+      n:'P3', name:'Builder Mindset',
+      tag:'The portfolio and proof layer',
+      desc:'Shipping real things beyond your job: automations, templates, tools, case studies, personal apps. The consultancy is built on proof. Your Solo Leveling app and other personal projects are already this — they demonstrate you can spec, build, and ship end-to-end.',
+      why:'Consulting without proof is cold outreach. Consulting with a portfolio of shipped things is inbound. The portfolio travels without you.',
+      compound:'A body of work that generates trust before the first call. Eventually: productized services or SaaS with recurring revenue that decouples income from hours.',
+    },
+  ];
+
+  const pillarsH = PILLARS.map(p => `
+    <div class="princ-item">
+      <div class="princ-num">${p.n}</div>
+      <div class="princ-body">
+        <div class="princ-name">${p.name} <span style="font-weight:400;color:var(--t3);font-size:11px">— ${p.tag}</span></div>
+        <div class="princ-desc">${p.desc}</div>
+        <div class="princ-op">${p.why}</div>
+        <div class="princ-op" style="color:var(--craft)">⟳ Compounds into: ${p.compound}</div>
+      </div>
+    </div>`).join('');
+
+  const PHASES = [
+    { phase:'Now (2026)', label:'Build & Compound', desc:'Deepen RevOps expertise + aggressively build AI/automation capability. Job is the training ground — maximize what you extract from Catapult. Begin accumulating portfolio pieces even if small. No pressure to consult yet.', active: true },
+    { phase:'~2027–2028', label:'Prove & Transition', desc:'Begin taking small consulting engagements on the side. Build pipeline before leaving employment. Portfolio layer becomes critical — proof has to exist before you go full-time.', active: false },
+    { phase:'Terminal', label:'Operate', desc:'Consultancy is live, location-independent. Deep work protocol stays but focus shifts toward client delivery and product development. Consider productizing: templates, courses, SaaS built on your domain expertise.', active: false },
+  ];
+
+  const phasesH = phases => phases.map(p => `
+    <div class="craft-phase ${p.active ? 'active' : ''}">
+      <div class="craft-phase-header">
+        <span class="craft-phase-tag" style="${p.active ? 'color:var(--craft)' : ''}">${p.phase}</span>
+        <span class="craft-phase-name">${p.label}</span>
+        ${p.active ? '<span class="craft-phase-now">● NOW</span>' : ''}
+      </div>
+      <div class="craft-phase-desc">${p.desc}</div>
+    </div>`).join('');
+
+  // Build log from localStorage
+  const logKey = 'sl_buildlog';
+  let buildLog = [];
+  try { buildLog = JSON.parse(localStorage.getItem(logKey) || '[]'); } catch(e) {}
+  const todayKey = dk();
+  const todayEntry = buildLog.find(e => e.date === todayKey);
+
+  const logH = buildLog.slice(-7).reverse().map(e => `
+    <div class="craft-log-entry">
+      <span class="craft-log-date">${e.date}</span>
+      <span class="craft-log-text">${e.text}</span>
+    </div>`).join('') || '<div style="color:var(--t3);font-size:12px;padding:8px 0">No entries yet — log your first build below.</div>';
+
+  document.getElementById('s-craft').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${col}">Craft</div>
+        <div class="mod-name">Prometheus</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+    ${lvBar('craft', col)}
+
+    ${proto('🔥', 'Daily Protocol', P.craft.daily, col, false)}
+    ${isSun ? proto('📅', 'Weekly Actions', P.craft.weekly, col, false) : `
+    <div style="padding:10px 0 4px;font-size:11px;color:var(--t3);text-align:center">
+      Weekly actions unlock on Sunday
+    </div>`}
+
+    <div class="craft-log-section">
+      <div class="craft-log-ttl">📓 Build Log</div>
+      <div class="craft-log-hint">One sentence: what did you build or learn today?</div>
+      <div class="craft-log-input-row">
+        <input type="text" id="craft-log-input" class="craft-log-input"
+          placeholder="${todayEntry ? 'Already logged today — update?' : 'e.g. Built HubSpot deal stage automation with Zapier'}"
+          value="${todayEntry ? todayEntry.text : ''}"
+          maxlength="200">
+        <button class="craft-log-btn" onclick="saveBuildLog()" style="background:${col}">Log</button>
+      </div>
+      <div class="craft-log-history">
+        ${logH}
+      </div>
+    </div>
+
+    <div class="apollo-ref-sep">
+      <div class="apollo-ref-sep-line"></div>
+      <div class="apollo-ref-sep-lbl">Reference</div>
+      <div class="apollo-ref-sep-line"></div>
+    </div>
+
+    <div class="ref-card" id="r-pillars">
+      <div class="ref-hd" onclick="toggleRef('r-pillars')">
+        <div class="ref-ico">🏗</div>
+        <div class="ref-ttl" style="color:${col}">The 3 Pillars — Skill Architecture</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">${pillarsH}</div>
+    </div>
+
+    <div class="ref-card" id="r-deepwork">
+      <div class="ref-hd" onclick="toggleRef('r-deepwork')">
+        <div class="ref-ico">🎯</div>
+        <div class="ref-ttl">Deep Work — What Counts</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div class="craft-rule"><strong style="color:var(--craft)">✓ Counts as deep work:</strong></div>
+        <div class="craft-rule">Building a complex automation or integration (HubSpot, Salesforce, Zapier, AI tools)</div>
+        <div class="craft-rule">Coding a personal project or tool</div>
+        <div class="craft-rule">Designing GTM architecture or data models</div>
+        <div class="craft-rule">Building an AI agent or workflow</div>
+        <div class="craft-rule">Writing a technical case study or process doc</div>
+        <div style="height:10px"></div>
+        <div class="craft-rule"><strong style="color:var(--t3)">✗ Does NOT count:</strong></div>
+        <div class="craft-rule" style="color:var(--t3)">Meetings (even productive ones)</div>
+        <div class="craft-rule" style="color:var(--t3)">Email and Slack triage</div>
+        <div class="craft-rule" style="color:var(--t3)">Reading without application — use Learning Input for that</div>
+        <div class="craft-rule" style="color:var(--t3)">Passive content consumption</div>
+        <div class="craft-insight">
+          <strong>Newport's principle:</strong> The ability to focus without distraction on a cognitively demanding task is becoming rare exactly as it's becoming more valuable. The deep work block is not optional — it's the mechanism.
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-roadmap">
+      <div class="ref-hd" onclick="toggleRef('r-roadmap')">
+        <div class="ref-ico">🗺</div>
+        <div class="ref-ttl">Consultancy Roadmap — 3 Phases</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        ${phasesH(PHASES)}
+        <div class="craft-insight" style="margin-top:12px">
+          <strong>The transition gate:</strong> When consulting begins, shift from W-2 to self-employment tax planning — quarterly estimated taxes, business entity, deductions. Flag this at Prometheus Level 7 so it's handled before it's urgent.
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-finance">
+      <div class="ref-hd" onclick="toggleRef('r-finance')">
+        <div class="ref-ico">💰</div>
+        <div class="ref-ttl">Financial Sub-Module — Current State</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div class="craft-finance-grid">
+          <div class="craft-fin-item">
+            <div class="craft-fin-lbl">S&P Index Investing</div>
+            <div class="craft-fin-val" style="color:var(--craft)">$1,400/mo ✓</div>
+            <div class="craft-fin-sub">$700 per paycheck, automated</div>
+          </div>
+          <div class="craft-fin-item">
+            <div class="craft-fin-lbl">Savings Rate</div>
+            <div class="craft-fin-val" style="color:var(--craft)">$2,300/mo ✓</div>
+            <div class="craft-fin-sub">$1,150 per paycheck</div>
+          </div>
+          <div class="craft-fin-item">
+            <div class="craft-fin-lbl">Roth IRA</div>
+            <div class="craft-fin-val" style="color:var(--craft)">Maxed ✓</div>
+            <div class="craft-fin-sub">$7,000/year limit hit</div>
+          </div>
+          <div class="craft-fin-item">
+            <div class="craft-fin-lbl">Next Unlock</div>
+            <div class="craft-fin-val">Level 7</div>
+            <div class="craft-fin-sub">Self-employment tax planning</div>
+          </div>
+        </div>
+        <div class="craft-insight">
+          You're executing correctly. Financial hygiene is on autopilot — no protocol action needed until the consultancy transition. The only weekly action: confirm investments processed (30 seconds).
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-hint">Prometheus · Craft &amp; Mastery · Level ${S.levels?.craft || 1}<br>
+      North star: location-independent RevOps + AI consultancy</div>
+  </div>`;
+}
+
+function saveBuildLog() {
+  const inp = document.getElementById('craft-log-input');
+  if (!inp || !inp.value.trim()) return;
+  const logKey = 'sl_buildlog';
+  let log = [];
+  try { log = JSON.parse(localStorage.getItem(logKey) || '[]'); } catch(e) {}
+  const todayKey = dk();
+  const idx = log.findIndex(e => e.date === todayKey);
+  if (idx >= 0) log[idx].text = inp.value.trim();
+  else log.push({ date: todayKey, text: inp.value.trim() });
+  if (log.length > 90) log = log.slice(-90);
+  localStorage.setItem(logKey, JSON.stringify(log));
+  // Also mark cr3 (build log task) as done
+  if (!done('cr3')) { toggle('cr3'); }
+  rCraft();
 }
 
 // ── Scaffold ───────────────────────────────────────────────
