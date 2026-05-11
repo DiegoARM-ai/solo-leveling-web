@@ -1221,7 +1221,7 @@ const P = {
   purpose: {
     daily: [
       { id:'sn1', xp:15, name:'Morning ignition',             note:'Read last night\'s commitment (the one thing + start time). Write the one obstacle and your if/then response. Then start at the time you wrote. 5 min — activation, not planning.' },
-      { id:'sn2', xp:25, name:'Mindfulness — 10 min',         note:'Focused attention on breath. When mind wanders, notice and return. That return IS the rep. Use a timer.' },
+      { id:'sn2', xp:25, name:'Coherence + Meditation — 10 min', note:'5 min coherence breathing (5s in / 5s out, nose only) → without opening eyes → 5 min focused attention on breath. Do this immediately after morning ignition. The coherence breathing pre-loads the calm; the meditation builds equanimity. Whoop HRV will confirm it\'s working within weeks.' },
       { id:'sn3', xp:15, name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
       { id:'sn4', xp:20, name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
     ],
@@ -2742,27 +2742,27 @@ function rPurpose() {
     <div class="ref-card" id="r-mindfulness">
       <div class="ref-hd" onclick="toggleRef('r-mindfulness')">
         <div class="ref-ico">🧘</div>
-        <div class="ref-ttl">Mindfulness — Focused Attention Protocol</div>
+        <div class="ref-ttl">Coherence + Meditation — The Lifetime Practice</div>
         <div class="ref-toggle">⌄</div>
       </div>
       <div class="ref-body">
         <div style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:12px">
-          <strong style="color:var(--t1)">This is not relaxation.</strong> Focused attention meditation builds a specific capacity: noticing that your mind has wandered, and choosing to return. That return is a rep — the same way a curl is a rep. 10 minutes/day. Hölzel et al. (2011): 8 weeks produces measurable increases in PFC gray matter and reduced amygdala reactivity. Equanimity is trained, not adopted.
+          <strong style="color:var(--t1)">10 minutes. Two phases. Eyes closed throughout.</strong> Immediately after morning ignition — before the work block, every day. Coherence breathing raises HRV (measurable on Whoop within weeks). Focused attention builds equanimity (the capacity to notice a reactive state and choose your response). Together they address different systems and compound each other.
         </div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">1</div>
-          <div class="ref-st"><strong style="color:var(--t1)">Set a 10-minute timer</strong><br>Use the same time each day — immediately after morning priming has the highest compliance rate.</div>
+          <div class="ref-st"><strong style="color:var(--t1)">5 min — Coherence breathing</strong><br>5 seconds in through the nose, 5 seconds out through the nose. Consistent rhythm. Use a pacer app if helpful. You'll feel the physiological shift within 2 minutes — that's the parasympathetic activation. Stay with it.</div>
         </div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">2</div>
-          <div class="ref-st"><strong style="color:var(--t1)">Pick one anchor and hold it</strong><br>The physical sensation of breath at the nostrils, or the rise/fall of your chest. One anchor, consistent every session. Eyes closed or soft downward gaze.</div>
+          <div class="ref-st"><strong style="color:var(--t1)">5 min — Focused attention (don't open your eyes)</strong><br>Transition directly. Fix attention on the breath sensation at the nostrils or chest — one anchor, consistent. When attention wanders, notice and return. Returning is the rep. The coherence breathing pre-loaded the calm; you arrive at stillness instead of fighting toward it.</div>
         </div>
         <div class="ref-step">
-          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">3</div>
-          <div class="ref-st"><strong style="color:var(--t1)">When you notice wandering — return</strong><br>No judgment on how many times it wanders. The wandering is not the failure. Not noticing is. Noticing + returning is the entire practice.</div>
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📊</div>
+          <div class="ref-st"><strong style="color:var(--t1)">The feedback loop</strong><br>Within 2–3 weeks of consistent practice, Whoop HRV should trend up. That's the signal it's working. If HRV isn't moving after 4 weeks, check Somnus first — sleep debt is the primary suppressor of HRV gains.</div>
         </div>
         <div style="margin-top:12px;padding:10px 12px;background:color-mix(in srgb,${col} 7%,transparent);border:1px solid color-mix(in srgb,${col} 20%,transparent);border-radius:8px;font-size:12px;color:var(--t2);line-height:1.5">
-          <strong style="color:${col}">Why the discomfort is the signal:</strong> The restlessness you feel in the first weeks is the default-mode network (rumination circuitry) resisting interruption. That discomfort means the practice is working on exactly what it's supposed to work on. The XP premium exists because this is the highest-avoidance action in the protocol.
+          <strong style="color:${col}">This is the lifetime practice.</strong> Five minutes of genuine focused attention daily, sustained over a decade, builds the equanimity the protocol is designed for. The coherence breathing adds measurable HRV benefit on top. You are not compromising by doing both — you're getting more from the same 10 minutes.
         </div>
       </div>
     </div>
@@ -2798,7 +2798,10 @@ function rPurpose() {
         </div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🧠</div>
-          <div class="ref-st"><strong style="color:var(--t1)">Brain Structure Changes — Hölzel et al. (2011)</strong><br>8 weeks of daily mindfulness: measurable gray matter increase in PFC (decision quality, attention) + reduced right amygdala reactivity (stress response). Peer-reviewed, replicated.</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Coherence Breathing — McCraty / HRV research</strong><br>5s in / 5s out rhythm maximizes HRV by synchronizing respiratory and cardiovascular cycles. Immediate parasympathetic activation; HRV improvement measurable on Whoop within 2–3 weeks of consistent practice. Direct Somnus–Seneca positive feedback loop.</div></div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🧠</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Focused Attention Meditation — Hölzel et al. (2011)</strong><br>8 weeks of daily practice: measurable gray matter increase in PFC (attention, decision quality) + reduced amygdala reactivity (stress response). Equanimity is a trained capacity, not a mindset. Coherence breathing pre-loads the calm that makes focused attention more accessible.</div>
         </div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">✍️</div>
