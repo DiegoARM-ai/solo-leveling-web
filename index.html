@@ -1226,7 +1226,7 @@ const P = {
       { id:'sn4', xp:20, name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
     ],
     weekly: [
-      { id:'sn5', xp:40, name:'Weekly strategic review',      note:'4 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? 30 min.' },
+      { id:'sn5', xp:40, name:'Weekly strategic review',      note:'5 questions: What moved this week? What\'s the 90-day goal? Is this week aligned with that? What\'s the #1 focus next week? What have I been avoiding thinking about? (Last one is contemplation — no tactical answer needed. Just sit with it.) 30 min.' },
     ],
   },
   craft: {
@@ -2628,6 +2628,7 @@ function rPurpose() {
     { q:'What am I building toward in 90 days?',       note:'Reference your current quarterly priority. If you can\'t answer this, that\'s the problem.' },
     { q:'Is this week\'s effort aligned with that?',   note:'Yes / No / Partially. If not fully: what needs to change next week?' },
     { q:'What is the single most important focus next week?', note:'One item. Same logic as morning priming.' },
+    { q:'What have I been avoiding thinking about?',   note:'One question in a different register. No tactical answer required — just sit with it for 60 seconds. Brooks: learning, relationships, and contemplation are the three pillars. This is the contemplation rep.' },
   ];
 
   const promptCard = (id, ico, title, prompts, accentCol) => `
