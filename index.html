@@ -3091,29 +3091,24 @@ function rCraft() {
         <div class="proto-ttl">Daily Protocol</div>
       </div>
 
-      <div class="proto-item ${deepDone ? 'done' : ''}" onclick="${deepDone ? '' : 'expandDW()'}">
+      <div class="proto-item" onclick="expandDW()">
         <div class="chk ${deepDone ? 'checked' : ''}" id="chk-cr1">${deepDone ? '✓' : ''}</div>
         <div class="proto-body">
           <div class="proto-name">Deep work${todayDW.length > 0 ? ` — ${todayDW.length} sprint${todayDW.length > 1 ? 's' : ''} done` : ' block'}</div>
-          <div class="proto-note">Log before you start. ${nextSprint === 1 ? '90 min first sprint.' : nextSprint === 2 ? '60 min second sprint.' : '45 min sprint.'} Phone away, notifications off.</div>
+          <div class="proto-note">Tap to log. ${nextSprint === 1 ? '90 min first sprint.' : nextSprint === 2 ? '60 min second sprint.' : '45 min sprint.'} Phone away, notifications off.</div>
           ${dwDoneBadges}
-          ${dwForm}
+          <div id="dw-form-wrap" style="display:none">${dwForm}</div>
         </div>
-        <div class="proto-xp" style="font-size:${todayDW.length > 0 ? '10px' : '13px'};color:${col}">
-          ${todayDW.length > 0
-            ? `+${nextXP} next`
-            : '+30'}
-        </div>
+        <div class="proto-xp">${todayDW.length > 0 ? `+${nextXP}` : '+30'}</div>
       </div>
 
-      <div class="proto-item ${learnDone ? 'done' : ''}" onclick="${learnDone ? '' : 'expandLearn()'}">
+      <div class="proto-item ${learnDone ? 'done' : ''}" onclick="expandLearn()">
         <div class="chk ${learnDone ? 'checked' : ''}" id="chk-cr2">${learnDone ? '✓' : ''}</div>
         <div class="proto-body">
           <div class="proto-name">Learning input — 20+ min</div>
-          <div class="proto-note">Docs, courses, case studies — pillar-connected only. Log what you learned when done.</div>
-          ${learnDone
-            ? (todaySess.filter(s=>s.type==='learn').map(s=>`<div class="craft-sess-done-lbl">✓ ${s.focus}</div>`).join(''))
-            : learnForm}
+          <div class="proto-note">Tap to log. Docs, courses, case studies — pillar-connected only.</div>
+          ${learnDone ? (todaySess.filter(s=>s.type==='learn').map(s=>`<div class="craft-sess-done-lbl">✓ ${s.focus}</div>`).join('')) : ''}
+          <div id="learn-form-wrap" style="display:none">${learnForm}</div>
         </div>
         <div class="proto-xp">+15</div>
       </div>
@@ -3236,6 +3231,34 @@ function selectLearnPillar(p) {
     const el = document.getElementById('lp-' + k);
     if (el) el.classList.toggle('selected', k === p);
   });
+}
+
+function expandDW() {
+  const wrap = document.getElementById('dw-form-wrap');
+  if (!wrap) return;
+  const open = wrap.style.display !== 'none';
+  wrap.style.display = open ? 'none' : 'block';
+  if (!open) {
+    // close learn if open
+    const lw = document.getElementById('learn-form-wrap');
+    if (lw) lw.style.display = 'none';
+    setTimeout(() => { document.getElementById('dw-focus')?.focus(); }, 50);
+    restorePillarUI();
+  }
+}
+
+function expandLearn() {
+  const wrap = document.getElementById('learn-form-wrap');
+  if (!wrap) return;
+  const open = wrap.style.display !== 'none';
+  wrap.style.display = open ? 'none' : 'block';
+  if (!open) {
+    // close dw if open
+    const dw = document.getElementById('dw-form-wrap');
+    if (dw) dw.style.display = 'none';
+    setTimeout(() => { document.getElementById('learn-cap')?.focus(); }, 50);
+    restorePillarUI();
+  }
 }
 
 function restorePillarUI() {
