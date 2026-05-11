@@ -2633,6 +2633,37 @@ function rPurpose() {
     </div>
     ${lvBar('purpose', col)}
 
+    <div class="ref-card" id="r-ignition" style="border-color:color-mix(in srgb,${col} 35%,transparent);background:color-mix(in srgb,${col} 5%,var(--card))">
+      <div class="ref-hd" onclick="toggleRef('r-ignition')">
+        <div class="ref-ico">⚡</div>
+        <div class="ref-ttl" style="color:${col}">Morning Ignition — Read First</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div style="font-size:14px;color:var(--t1);line-height:1.8;font-style:italic;border-left:3px solid ${col};padding-left:12px;margin-bottom:14px">
+          My parents retire in 2029. In summer 2027 they walk through Málaga and Valencia and choose where they're going to live. I'm part of the reason that's possible — and I'm not done yet.<br><br>
+          By September I'm leaner and stronger than I've ever been. I'm going on dates. I'm sleeping. I'm getting paid more for the same freedom.<br><br>
+          The rest of my life — the Tokyo mornings, the neon walks, the slow lunches — gets built on what I do in the next 90 days.
+        </div>
+        <div style="font-size:13px;font-weight:800;color:${col};letter-spacing:.5px">This morning matters. What's the one thing?</div>
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:8px">Q3 Goals — May 11 → Aug 31</div>
+          ${[
+            { mod:'Adonis',     goal:'10–12% BF · WSR ≤ 0.63', col:'var(--physique)' },
+            { mod:'Somnus',     goal:'Oura consistency ≥ 85% · Whoop debt < 45 min for 3+ weeks', col:'var(--vitality)' },
+            { mod:'Apollo',     goal:'12+ first dates · 2–3 women worth pursuing beyond date 1', col:'var(--presence)' },
+            { mod:'Prometheus', goal:'Formal raise conversation done · clear outcome in hand', col:'var(--craft)' },
+            { mod:'Seneca',     goal:'Morning ignition + evening close automatic for 8 consecutive weeks', col:'var(--purpose)' },
+            { mod:'Parents',    goal:'Complete retirement model · confirmed 2027 trip dates', col:'var(--t2)' },
+          ].map(g => `
+            <div style="display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)">
+              <div style="font-size:11px;font-weight:800;color:${g.col};min-width:80px;flex-shrink:0">${g.mod}</div>
+              <div style="font-size:12px;color:var(--t2);line-height:1.4">${g.goal}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
     ${proto('🌅', 'Daily Practice', P.purpose.daily, col, false)}
 
     ${isSun ? proto('📋', 'Weekly Strategic Review', P.purpose.weekly, col, false) : `
