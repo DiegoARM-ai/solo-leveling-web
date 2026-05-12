@@ -391,6 +391,12 @@ body::before {
 .sn-commit-log-status { font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 2px; }
 .sn-commit-log-status.ok   { color: var(--success); }
 .sn-commit-log-status.miss { color: var(--border-b); }
+.sn-commit-log-del {
+  font-size: 14px; color: var(--t3); flex-shrink: 0;
+  padding: 2px 4px; margin-top: 0; cursor: pointer; opacity: .5;
+  -webkit-user-select: none; user-select: none;
+}
+.sn-commit-log-del:active { opacity: 1; color: var(--danger, #ff4d4d); }
 
 /* ===== MODULE HEADER ===== */
 .mod-header {
@@ -2864,6 +2870,12 @@ function saveCommitment(task, time) {
   localStorage.setItem(COMMIT_KEY, JSON.stringify(filtered));
 }
 
+function deleteCommitment(forDate) {
+  const commits = getCommitments().filter(function(c) { return c.forDate !== forDate; });
+  localStorage.setItem(COMMIT_KEY, JSON.stringify(commits));
+  rPurpose();
+}
+
 function getTodayCommitment() {
   const commits = getCommitments();
   for (var i = 0; i < commits.length; i++) {
@@ -2935,6 +2947,7 @@ function rCommitCards(col) {
         + (c.time ? '<div class="sn-commit-log-time">' + c.time + '</div>' : '')
         + '</div>'
         + '<div class="sn-commit-log-status ' + (followed ? 'ok' : 'miss') + '">' + (followed ? '✓' : '–') + '</div>'
+        + '<div class="sn-commit-log-del" onclick="deleteCommitment(\'' + c.forDate + '\')">✕</div>'
         + '</div>';
     }).join('');
   } else {
