@@ -567,6 +567,7 @@ body::before {
   font-size: 11px; font-weight: 700; color: var(--t2); flex-shrink: 0; margin-top: 1px;
 }
 .ref-st { font-size: 13px; color: var(--t2); line-height: 1.45; }
+.reading-phase-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; opacity: .7; padding: 10px 0 4px; }
 
 /* ===== FITNESS CARD ===== */
 .fit-card {
@@ -2933,23 +2934,30 @@ function rPurpose() {
     </div>`;
 
   const READING_LIST = [
-    { n:'Letters from a Stoic',        a:'Seneca',                  note:'Letters I–XLI to start. One letter per session. The original daily alignment practice.' },
-    { n:'On the Shortness of Life',    a:'Seneca',                  note:'A goal hierarchy manifesto. 2,000 years old and not improved upon. Argue back at it.' },
-    { n:'The Good Life',               a:'Waldinger & Schulz',      note:'The Harvard Study. 85 years of data on what actually produces late-life wellbeing. The primary evidence for the life you\'re building.' },
-    { n:'Thinking, Fast and Slow',     a:'Kahneman',                note:'Chapters 35–38 especially: experiencing vs. remembering self. The framework for designing a life that\'s both good to live and good to remember.' },
-    { n:'Man\'s Search for Meaning',   a:'Viktor Frankl',           note:'Meaning as a buffer against adversity at the extreme end of the evidence spectrum. Logotherapy in 160 pages.' },
-    { n:'Four Thousand Weeks',         a:'Oliver Burkeman',         note:'Time as a finite resource. Best antidote to the "I\'ll do the real life later" trap.' },
-    { n:'Flourish',                    a:'Seligman',                note:'PERMA. Your five modules each map to a component. Useful for seeing the system whole.' },
-    { n:'Drive',                       a:'Daniel Pink',             note:'Self-Determination Theory made operational — autonomy, mastery, purpose. The framework behind the consultancy plan.' },
-    { n:'Deep Work',                   a:'Cal Newport',             note:'Attention quality as the meta-skill. The mechanism by which most of the above gets built.' },
-    { n:'The Courage to Be Disliked',  a:'Kishimi & Koga',          note:'Adlerian psychology on freedom, purpose, and others\' approval. Read when the startup comparison pressure is high.' },
+    { n:'Letters from a Stoic',        a:'Seneca',             phase:'Parallel — start day one, run always', note:'One letter per session. Do not save this for last — it IS the daily reading practice.' },
+    { n:'On the Shortness of Life',    a:'Seneca',             phase:'Phase 1 — The temporal case',          note:'Read first. 50 pages. A goal hierarchy manifesto. Argue back at it.' },
+    { n:'Four Thousand Weeks',         a:'Burkeman',           phase:'Phase 1 — The temporal case',          note:'The modern extension of Seneca\'s argument. Best antidote to "I\'ll do the real life later."' },
+    { n:'The Good Life',               a:'Waldinger & Schulz', phase:'Phase 2 — The empirical case',         note:'The Harvard Study. 85 years of data on what actually produces late-life wellbeing.' },
+    { n:'Thinking, Fast and Slow',     a:'Kahneman',           phase:'Phase 2 — The empirical case',         note:'Chapters 35–38: experiencing vs. remembering self. Read this before the money books.' },
+    { n:'Your Money or Your Life',     a:'Vicki Robin',        phase:'Phase 3 — The money/time trade',       note:'Every dollar is life converted to cash. The conceptual foundation behind the consultancy transition.' },
+    { n:'Time Smart',                  a:'Ashley Whillans',    phase:'Phase 3 — The money/time trade',       note:'The research program on prioritizing time over money. Fluency in the argument, not just the citations.' },
+    { n:'Die With Zero',               a:'Bill Perkins',       phase:'Phase 3 — The money/time trade',       note:'Time bucketing and the memory dividend. Some experiences have expiration dates. Read for the framework.' },
+    { n:'Drive',                       a:'Daniel Pink',        phase:'Phase 4 — System and execution',       note:'Self-Determination Theory made operational. The framework behind why the consultancy structure works.' },
+    { n:'Flourish',                    a:'Seligman',           phase:'Phase 4 — System and execution',       note:'PERMA. Your five modules each map to a component. Most useful after living the system for a while.' },
+    { n:'Deep Work',                   a:'Cal Newport',        phase:'Phase 4 — System and execution',       note:'Attention quality as the meta-skill. The mechanism by which most of the above gets built.' },
   ];
 
-  const readingH = READING_LIST.map(b => `
+  let lastPhase = '';
+  const readingH = READING_LIST.map(b => {
+    const phaseHeader = b.phase !== lastPhase
+      ? (lastPhase = b.phase, `<div class="reading-phase-lbl" style="color:${col}">${b.phase}</div>`)
+      : '';
+    return phaseHeader + `
     <div class="ref-step">
       <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
       <div class="ref-st"><strong style="color:var(--t1)">${b.n}</strong> — ${b.a}<br>${b.note}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   document.getElementById('s-purpose').innerHTML = `
   <div class="wrap" style="--sc-color:${col}">
