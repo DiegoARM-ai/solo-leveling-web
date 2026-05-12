@@ -327,6 +327,20 @@ body::before {
   0%   { opacity: 1; transform: translateX(-50%) translateY(0);     }
   100% { opacity: 0; transform: translateX(-50%) translateY(-36px); }
 }
+.save-toast {
+  position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
+  background: #00D4A0; color: #0a0a14;
+  font-size: 13px; font-weight: 800; letter-spacing: .3px;
+  padding: 10px 22px; border-radius: 20px;
+  pointer-events: none; z-index: 9999; white-space: nowrap;
+  animation: save-toast-anim 1.8s ease-out forwards;
+}
+@keyframes save-toast-anim {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px);  }
+  12%  { opacity: 1; transform: translateX(-50%) translateY(0);    }
+  75%  { opacity: 1; transform: translateX(-50%) translateY(0);    }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+}
 
 /* Today commitment callout */
 .tod-commit-callout {
@@ -1335,7 +1349,7 @@ const P = {
   },
   purpose: {
     daily: [
-      { id:'sn1', xp:15, tod:'morning',  mod:'purpose',  name:'Morning ignition',             note:'Read last night\'s commitment (the one thing + start time). Write the one obstacle and your if/then response. Then start at the time you wrote. 5 min — activation, not planning.' },
+      { id:'sn1', xp:15, tod:'morning',  mod:'purpose',  name:'Morning ignition',             note:'Read last night\'s commitment. Write one obstacle + if/then. Start at the time you wrote. 5 min.' },
       { id:'sn2', xp:25, tod:'morning',  mod:'purpose',  name:'Coherence + Meditation — 10 min', note:'5 min coherence breathing (5s in / 5s out, nose only) → without opening eyes → 5 min focused attention on breath. Do this immediately after morning ignition. The coherence breathing pre-loads the calm; the meditation builds equanimity. Whoop HRV will confirm it\'s working within weeks.' },
       { id:'sn3', xp:15, tod:'anytime',  mod:'purpose',  name:'Intentional reading — 20 min', note:'One book at a time. No skimming. Non-fiction only for this slot. Slow enough to think.' },
       { id:'sn4', xp:20, tod:'evening',  mod:'purpose',  requiresInput:true, name:'Evening close',                note:'4 questions: (1) What went well? (2) What didn\'t go as planned? (3) What would I do differently? (4) What\'s the ONE most important thing tomorrow — and what time am I starting it? That answer is your morning ignition fuel.' },
@@ -2855,13 +2869,25 @@ function getTodayCommitment() {
   return null;
 }
 
+function showSaveToast(msg) {
+  var t = document.createElement('div');
+  t.className = 'save-toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 1900);
+}
+
 function logCommitment() {
   const task = (document.getElementById('commit-task') ? document.getElementById('commit-task').value : '').trim();
   const time = (document.getElementById('commit-time') ? document.getElementById('commit-time').value : '').trim();
   if (!task) { alert('Write the one thing first.'); return; }
+  const scr = document.getElementById('s-purpose');
+  const scrollY = scr ? scr.scrollTop : 0;
   saveCommitment(task, time);
   if (!done('sn4')) toggle('sn4');
+  showSaveToast('Commitment saved ✓');
   rPurpose();
+  if (scr) setTimeout(function() { scr.scrollTop = scrollY; }, 0);
 }
 
 // ── Commitment cards (capture + log) — used in rPurpose ────
