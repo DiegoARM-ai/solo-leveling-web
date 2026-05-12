@@ -2854,9 +2854,12 @@ function getCommitments() {
 
 function saveCommitment(task, time) {
   const commits = getCommitments();
-  const tom = dk(new Date(Date.now() + 86400000));
-  const filtered = commits.filter(function(c) { return c.forDate !== tom; });
-  filtered.push({ forDate: tom, task: task, time: time, savedOn: dk() });
+  // Before 4am counts as "still tonight" — save for today, not tomorrow
+  const forDate = new Date().getHours() < 4
+    ? dk()
+    : dk(new Date(Date.now() + 86400000));
+  const filtered = commits.filter(function(c) { return c.forDate !== forDate; });
+  filtered.push({ forDate: forDate, task: task, time: time, savedOn: dk() });
   if (filtered.length > 90) filtered.splice(0, filtered.length - 90);
   localStorage.setItem(COMMIT_KEY, JSON.stringify(filtered));
 }
