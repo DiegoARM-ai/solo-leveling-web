@@ -1368,6 +1368,7 @@ const P = {
     daily: [
       { id:'cr1', xp:0,  tod:'morning',  mod:'craft',    requiresInput:true, name:'Deep work block',             note:'Before you start: write what you\'re working on + which pillar. Phone away, notifications off. Job work counts if it\'s building — not coordinating.' },
       { id:'cr2', xp:15, tod:'anytime',  mod:'craft',    requiresInput:true, name:'Learning input — 20+ min',    note:'Targeted skill content: docs, courses, case studies. No passive consumption. Before closing: one sentence on what you actually learned.' },
+      { id:'cr3', xp:10, tod:'evening',  mod:'craft',    requiresInput:true, name:'Build log — 5 min',           note:'End of day: one sentence on what you built or learned. Forces reflection. Creates a longitudinal record of your compounding.' },
     ],
     weekly: [
       { id:'cr4', xp:20, tod:'anytime',  mod:'craft',    name:'Pillar review',               note:'Which pillar got the most sessions this week? Which is falling behind? Adjust next week\'s focus. Answered by your session log — not from memory.' },
@@ -3302,6 +3303,13 @@ function rCraft() {
   const todayDW   = todaySess.filter(s => s.type === 'dw');
   const deepDone  = done('cr1');
   const learnDone = done('cr2');
+  const buildDone = done('cr3');
+
+  // Afternoon nudge: sprint 1 not done and it's past noon
+  const hourNow = new Date().getHours();
+  const afternoonNudge = (!deepDone && hourNow >= 12)
+    ? `<div style="font-size:11px;color:var(--warning);background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:6px 10px;margin-bottom:8px">⚠ Sprint 1 lands hardest before noon — front-load it tomorrow.</div>`
+    : '';
 
   // Sprint context for next deep work session
   const nextSprint    = todayDW.length + 1;
@@ -3314,7 +3322,7 @@ function rCraft() {
     ? 'Second wind. Quality over quantity now.'
     : 'Shorter is fine. Ship something small.';
 
-  // Completed deep work badges (show all today's sessions when done)
+  // Completed deep work badges
   const dwDoneBadges = todayDW.map((s, i) => {
     const xpEarned = s.xp || (i === 0 ? 30 : i === 1 ? 20 : 15);
     const pillarCol = { R:'var(--vitality)', A:'var(--craft)', B:'var(--presence)' }[s.pillar] || 'var(--t3)';
@@ -3322,7 +3330,7 @@ function rCraft() {
     return `<div class="craft-sess-done-lbl">✓ Sprint ${s.sprint || i+1} (+${xpEarned} XP) — ${s.focus} ${pillarLbl ? `<span style="color:${pillarCol}">[${pillarLbl}]</span>` : ''}</div>`;
   }).join('');
 
-  // Deep work session form — shows next sprint target
+  // Deep work form — pre-commitment: what will you finish?
   const dwForm = `
     <div class="craft-sess-form" id="dw-form">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
@@ -3330,18 +3338,18 @@ function rCraft() {
         <div style="font-size:11px;font-weight:700;color:${col}">+${nextXP} XP</div>
       </div>
       <div style="font-size:11px;color:var(--t3);margin-bottom:8px">${sprintHint}</div>
-      <input type="text" id="dw-focus" class="craft-log-input" placeholder="e.g. HubSpot deal stage automation with Zapier" maxlength="200">
+      <input type="text" id="dw-focus" class="craft-log-input" placeholder="What will be done when this timer hits zero?" maxlength="200">
       <div class="craft-pillar-pick">
         <div class="craft-pillar-opt" id="pp-R" onclick="selectPillar('R')">RevOps</div>
         <div class="craft-pillar-opt" id="pp-A" onclick="selectPillar('A')">AI + Auto</div>
         <div class="craft-pillar-opt" id="pp-B" onclick="selectPillar('B')">Builder</div>
       </div>
       <button class="craft-log-btn" onclick="logDeepWork()" style="background:${col};width:100%;margin-top:8px">
-        Log Session ✓
+        Start Sprint ›
       </button>
     </div>`;
 
-  // Learning capture form
+  // Learning form
   const learnForm = `
     <div class="craft-sess-form" id="learn-form">
       <div class="craft-sess-form-ttl">What did you learn?</div>
@@ -3356,6 +3364,18 @@ function rCraft() {
       </button>
     </div>`;
 
+  // Build log form (cr3) — end of day reflection
+  const buildLogDoneEntry = todaySess.filter(s=>s.type==='buildlog').map(s=>`<div class="craft-sess-done-lbl">✓ ${s.focus}</div>`).join('');
+  const buildForm = `
+    <div class="craft-sess-form" id="build-form">
+      <div class="craft-sess-form-ttl">What did you build or learn today?</div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:8px">One sentence. Forces encoding. Creates your longitudinal record.</div>
+      <input type="text" id="build-log-inp" class="craft-log-input" placeholder="e.g. Shipped HubSpot deal stage automation end-to-end, deployed to prod" maxlength="300">
+      <button class="craft-log-btn" onclick="logBuildLog()" style="background:${col};width:100%;margin-top:8px">
+        Log It ✓
+      </button>
+    </div>`;
+
   // Custom protocol render for craft (with inline forms)
   const craftProtoH = `
   <div class="proto-sec">
@@ -3363,13 +3383,14 @@ function rCraft() {
       <span class="sec-ico">🔥</span>
       <span class="sec-ttl">Daily Protocol</span>
     </div>
+    ${afternoonNudge}
     <div class="ck-list">
 
       <div class="ti ${deepDone ? 'done' : ''}" id="ti-cr1" onclick="expandDW()" style="--sc-color:${col}">
         <div class="ti-box"><span class="ti-chk">✓</span></div>
         <div class="ti-cnt">
           <div class="ti-name">Deep work${todayDW.length > 0 ? ` — ${todayDW.length} sprint${todayDW.length > 1 ? 's' : ''} done` : ' block'}</div>
-          <div class="ti-note">Tap to log. ${nextSprint === 1 ? '90 min first sprint.' : nextSprint === 2 ? '60 min second sprint.' : '45 min sprint.'} Phone away, notifications off.</div>
+          <div class="ti-note">${nextSprint === 1 ? '90 min first sprint.' : nextSprint === 2 ? '60 min second sprint.' : '45 min sprint.'} Tap to pre-commit and start.</div>
           ${dwDoneBadges}
           <div id="dw-form-wrap" style="display:none" onclick="event.stopPropagation()">${dwForm}</div>
         </div>
@@ -3385,6 +3406,17 @@ function rCraft() {
           <div id="learn-form-wrap" style="display:none" onclick="event.stopPropagation()">${learnForm}</div>
         </div>
         <div class="ti-xp">+15</div>
+      </div>
+
+      <div class="ti ${buildDone ? 'done' : ''}" id="ti-cr3" onclick="expandBuildLog()" style="--sc-color:${col}">
+        <div class="ti-box"><span class="ti-chk">✓</span></div>
+        <div class="ti-cnt">
+          <div class="ti-name">Build log — 5 min</div>
+          <div class="ti-note">End of day. What did you build or learn? One sentence.</div>
+          ${buildDone ? buildLogDoneEntry : ''}
+          <div id="build-form-wrap" style="display:none" onclick="event.stopPropagation()">${buildForm}</div>
+        </div>
+        <div class="ti-xp">+10</div>
       </div>
 
     </div>
@@ -3509,15 +3541,20 @@ function selectLearnPillar(p) {
   });
 }
 
+function _closeAllCraftForms() {
+  ['dw-form-wrap','learn-form-wrap','build-form-wrap'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
 function expandDW() {
   const wrap = document.getElementById('dw-form-wrap');
   if (!wrap) return;
   const open = wrap.style.display !== 'none';
-  wrap.style.display = open ? 'none' : 'block';
+  _closeAllCraftForms();
   if (!open) {
-    // close learn if open
-    const lw = document.getElementById('learn-form-wrap');
-    if (lw) lw.style.display = 'none';
+    wrap.style.display = 'block';
     setTimeout(() => { document.getElementById('dw-focus')?.focus(); }, 50);
     restorePillarUI();
   }
@@ -3527,13 +3564,22 @@ function expandLearn() {
   const wrap = document.getElementById('learn-form-wrap');
   if (!wrap) return;
   const open = wrap.style.display !== 'none';
-  wrap.style.display = open ? 'none' : 'block';
+  _closeAllCraftForms();
   if (!open) {
-    // close dw if open
-    const dw = document.getElementById('dw-form-wrap');
-    if (dw) dw.style.display = 'none';
+    wrap.style.display = 'block';
     setTimeout(() => { document.getElementById('learn-cap')?.focus(); }, 50);
     restorePillarUI();
+  }
+}
+
+function expandBuildLog() {
+  const wrap = document.getElementById('build-form-wrap');
+  if (!wrap) return;
+  const open = wrap.style.display !== 'none';
+  _closeAllCraftForms();
+  if (!open) {
+    wrap.style.display = 'block';
+    setTimeout(() => { document.getElementById('build-log-inp')?.focus(); }, 50);
   }
 }
 
@@ -3588,6 +3634,14 @@ function logLearning() {
   _saveSession({ type:'learn', focus, pillar:_learnPillar });
   _learnPillar = null;
   if (!done('cr2')) toggle('cr2');
+  rCraft();
+}
+
+function logBuildLog() {
+  const focus = (document.getElementById('build-log-inp')?.value || '').trim();
+  if (!focus) { alert('Add one sentence first.'); return; }
+  _saveSession({ type:'buildlog', focus });
+  if (!done('cr3')) toggle('cr3');
   rCraft();
 }
 
