@@ -2101,7 +2101,7 @@ function rHome() {
     <div style="flex:1;min-width:0">
       <div class="tod-commit-lbl">TODAY'S COMMITMENT</div>
       <div class="tod-commit-task">${todayCommit.task}</div>
-      ${todayCommit.time ? `<div class="tod-commit-time">Starting at ${todayCommit.time}</div>` : ''}
+      ${todayCommit.time ? `<div class="tod-commit-time">Starting at ${fmtTimeDisplay(todayCommit.time)}</div>` : ''}
     </div>
     <div class="tod-commit-edit" onclick="goEditCommitment()">EDIT</div>
   </div>` : '';
@@ -2862,12 +2862,39 @@ function getCommitments() {
   try { return JSON.parse(localStorage.getItem(COMMIT_KEY) || '[]'); } catch(e) { return []; }
 }
 
-function saveCommitment(task, time) {
+// Convert HH:MM → "9:15 AM" for display; pass through legacy strings as-is
+function fmtTimeDisplay(t) {
+  if (!t) return '';
+  if (/^\d{2}:\d{2}$/.test(t)) {
+    var parts = t.split(':'); var h = parseInt(parts[0]); var m = parseInt(parts[1]);
+    var ap = h >= 12 ? 'PM' : 'AM'; var h12 = h % 12 || 12;
+    return m === 0 ? h12 + ' ' + ap : h12 + ':' + String(m).padStart(2,'0') + ' ' + ap;
+  }
+  return t;
+}
+// Parse legacy "9am" / "9:15am" strings → "HH:MM" for time input value
+function toTimeInput(t) {
+  if (!t) return '';
+  if (/^\d{2}:\d{2}$/.test(t)) return t;
+  var m = t.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
+  if (m) {
+    var h = parseInt(m[1]); var mn = m[2] ? parseInt(m[2]) : 0;
+    var ap = m[3] ? m[3].toLowerCase() : '';
+    if (ap === 'pm' && h < 12) h += 12;
+    if (ap === 'am' && h === 12) h = 0;
+    return String(h).padStart(2,'0') + ':' + String(mn).padStart(2,'0');
+  }
+  return '';
+}
+
+function saveCommitment(task, time, forDate) {
+  if (!forDate) {
+    // Before 4am counts as "still tonight" — save for today, not tomorrow
+    forDate = new Date().getHours() < 4
+      ? dk()
+      : dk(new Date(Date.now() + 86400000));
+  }
   const commits = getCommitments();
-  // Before 4am counts as "still tonight" — save for today, not tomorrow
-  const forDate = new Date().getHours() < 4
-    ? dk()
-    : dk(new Date(Date.now() + 86400000));
   const filtered = commits.filter(function(c) { return c.forDate !== forDate; });
   filtered.push({ forDate: forDate, task: task, time: time, savedOn: dk() });
   if (filtered.length > 90) filtered.splice(0, filtered.length - 90);
@@ -2915,7 +2942,10 @@ function logCommitment() {
   if (!task) { alert('Write the one thing first.'); return; }
   const scr = document.getElementById('s-purpose');
   const scrollY = scr ? scr.scrollTop : 0;
-  saveCommitment(task, time);
+  // If editing an existing commitment, preserve its forDate — don't recompute
+  const existing = getTodayCommitment();
+  const forDate = existing ? existing.forDate : undefined;
+  saveCommitment(task, time, forDate);
   if (!done('sn4')) toggle('sn4');
   showSaveToast('Commitment saved ✓');
   rPurpose();
@@ -2933,7 +2963,7 @@ function rCommitCards(col) {
     captureH  = '<div class="sn-commit-saved">'
               + '<div class="sn-commit-saved-lbl">Tonight you committed to:</div>'
               + '<div class="sn-commit-task">' + todayCommit.task + '</div>'
-              + (todayCommit.time ? '<div class="sn-commit-time">Starting at ' + todayCommit.time + '</div>' : '')
+              + (todayCommit.time ? '<div class="sn-commit-time">Starting at ' + fmtTimeDisplay(todayCommit.time) + '</div>' : '')
               + '<div style="font-size:10px;color:var(--t3);margin-top:6px">Tap to update</div>'
               + '</div>'
               + '<div id="sn-commit-form" style="display:none">'
@@ -2961,7 +2991,7 @@ function rCommitCards(col) {
         + '<div style="flex:1;min-width:0">'
         + '<div class="sn-commit-log-date">' + c.forDate + '</div>'
         + '<div class="sn-commit-log-task">' + c.task + '</div>'
-        + (c.time ? '<div class="sn-commit-log-time">' + c.time + '</div>' : '')
+        + (c.time ? '<div class="sn-commit-log-time">' + fmtTimeDisplay(c.time) + '</div>' : '')
         + '</div>'
         + '<div class="sn-commit-log-status ' + (followed ? 'ok' : 'miss') + '">' + (followed ? '✓' : '–') + '</div>'
         + '<div class="sn-commit-log-del" onclick="deleteCommitment(\'' + c.forDate + '\')">✕</div>'
@@ -2988,8 +3018,8 @@ function _commitFormInner(col, existing) {
   return '<div style="font-size:11px;color:var(--t3);margin-bottom:8px;line-height:1.5">The most important thing you\'ll do first tomorrow — and the time you\'re starting. Morning ignition reads this back.</div>'
     + '<input type="text" id="commit-task" class="craft-log-input" placeholder="e.g. Finish RevOps automation doc" maxlength="120"'
     + (existing ? ' value="' + existing.task.replace(/"/g, '&quot;') + '"' : '') + '>'
-    + '<input type="text" id="commit-time" class="craft-log-input" placeholder="Start time e.g. 9:15am" maxlength="20" style="margin-top:6px"'
-    + (existing ? ' value="' + (existing.time || '').replace(/"/g, '&quot;') + '"' : '') + '>'
+    + '<input type="time" id="commit-time" class="craft-log-input" style="margin-top:6px"'
+    + (existing && existing.time ? ' value="' + toTimeInput(existing.time) + '"' : '') + '>'
     + '<button class="craft-log-btn" onclick="logCommitment()" style="background:' + col + ';width:100%;margin-top:8px">Save commitment ✓</button>';
 }
 
