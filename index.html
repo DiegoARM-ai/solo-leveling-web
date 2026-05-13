@@ -3529,13 +3529,13 @@ function rCraft() {
     ${afternoonNudge}
     <div class="ck-list">
 
-      <div class="ti ${deepDone ? 'done' : ''}" id="ti-cr1" onclick="expandDW()" style="--sc-color:${col}">
+      <div class="ti ${todayDW.length >= 2 ? 'done' : ''}" id="ti-cr1" onclick="${todayDW.length === 0 ? 'expandDW()' : ''}" style="--sc-color:${col};${todayDW.length >= 1 && todayDW.length < 2 ? 'cursor:default' : ''}">
         <div class="ti-box"><span class="ti-chk">✓</span></div>
         <div class="ti-cnt">
           <div class="ti-name">Deep work${todayDW.length > 0 ? ` — ${todayDW.length} sprint${todayDW.length > 1 ? 's' : ''} done` : ' block'}</div>
-          <div class="ti-note">${nextSprint === 1 ? '90 min first sprint.' : nextSprint === 2 ? '90 min second sprint.' : '45 min bonus sprint.'} ${todayDW.length === 0 ? 'Tap to pre-commit and start.' : ''}</div>
+          <div class="ti-note">${todayDW.length === 0 ? '90 min first sprint. Tap to pre-commit and start.' : todayDW.length === 1 ? 'Sprint 1 done. Log Sprint 2 to hit the daily target.' : 'Daily target hit. Bonus sprint available if you\'re locked in.'}</div>
           ${dwDoneBadges}
-          ${todayDW.length > 0 ? `<button class="craft-log-btn" onclick="event.stopPropagation();expandDW()" style="background:transparent;border:1px solid ${col};color:${col};width:100%;margin-top:6px;font-size:12px">+ Log ${nextSprint === 2 ? 'Sprint 2 — 90 min' : nextSprint === 3 ? 'Sprint 3 — bonus 45 min' : 'another sprint'} ›</button>` : ''}
+          ${todayDW.length > 0 && todayDW.length < 3 ? `<button class="craft-log-btn" onclick="event.stopPropagation();expandDW()" style="background:${todayDW.length < 2 ? col : 'transparent'};border:1px solid ${col};color:${todayDW.length < 2 ? '#fff' : col};width:100%;margin-top:8px;font-size:12px">${todayDW.length === 1 ? '+ Log Sprint 2 — 90 min ›' : '+ Log Sprint 3 — bonus 45 min ›'}</button>` : ''}
           <div id="dw-form-wrap" style="display:none" onclick="event.stopPropagation()">${dwForm}</div>
         </div>
         <div class="ti-xp">${todayDW.length > 0 ? `+${nextXP}` : '+30'}</div>
