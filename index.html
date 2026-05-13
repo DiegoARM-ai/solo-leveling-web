@@ -353,6 +353,8 @@ body::before {
 .tod-commit-lbl  { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purpose); margin-bottom: 3px; }
 .tod-commit-task { font-size: 14px; font-weight: 700; color: var(--t1); line-height: 1.3; }
 .tod-commit-time { font-size: 11px; font-weight: 700; color: var(--purpose); margin-top: 3px; letter-spacing: .3px; }
+.tod-commit-edit { font-size: 10px; font-weight: 800; color: var(--purpose); opacity: .6; flex-shrink: 0; padding: 2px 0; cursor: pointer; letter-spacing: .5px; -webkit-user-select:none; user-select:none; }
+.tod-commit-edit:active { opacity: 1; }
 
 /* Seneca commitment capture card */
 .sn-commit-card {
@@ -2101,6 +2103,7 @@ function rHome() {
       <div class="tod-commit-task">${todayCommit.task}</div>
       ${todayCommit.time ? `<div class="tod-commit-time">Starting at ${todayCommit.time}</div>` : ''}
     </div>
+    <div class="tod-commit-edit" onclick="goEditCommitment()">EDIT</div>
   </div>` : '';
 
   const todBlocksH = BLOCKS.filter(bl => bl.tasks.length > 0).map(bl => {
@@ -2869,6 +2872,19 @@ function saveCommitment(task, time) {
   filtered.push({ forDate: forDate, task: task, time: time, savedOn: dk() });
   if (filtered.length > 90) filtered.splice(0, filtered.length - 90);
   localStorage.setItem(COMMIT_KEY, JSON.stringify(filtered));
+}
+
+function goEditCommitment() {
+  go('purpose');
+  setTimeout(function() {
+    var el = document.getElementById('sn-commit-wrap');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Auto-open the edit form
+    var form = document.getElementById('sn-commit-form');
+    var btn  = document.querySelector('.sn-commit-edit-btn');
+    if (form) form.style.display = 'block';
+    if (btn)  btn.style.display  = 'none';
+  }, 120);
 }
 
 function deleteCommitment(forDate) {
