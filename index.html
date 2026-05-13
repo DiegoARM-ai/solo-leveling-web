@@ -194,6 +194,41 @@ body::before {
 .streak-n { font-size: 16px; font-weight: 700; color: var(--t1); font-variant-numeric: tabular-nums; font-family: var(--font-display); letter-spacing: .5px; }
 .streak-w { font-size: 12px; color: var(--t2); font-weight: 600; }
 
+/* Deep work daily bar */
+.dw-bar-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 11px 14px;
+  margin-bottom: 12px; transition: border-color .3s, box-shadow .3s;
+}
+.dw-bar-wrap.dw-floor  { border-color: rgba(245,158,11,.35); }
+.dw-bar-wrap.dw-target { border-color: rgba(0,200,150,.35); }
+.dw-bar-wrap.dw-elite  {
+  border-color: rgba(61,158,255,.5);
+  box-shadow: 0 0 18px rgba(61,158,255,.12);
+}
+.dw-bar-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.dw-bar-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--t3); }
+.dw-bar-status { font-size: 11px; font-weight: 700; }
+.dw-bar-track {
+  height: 5px; background: var(--border-b); border-radius: 3px;
+  overflow: hidden; margin-bottom: 7px;
+}
+.dw-bar-fill { height: 100%; border-radius: 3px; transition: width .5s ease; }
+.dw-bar-pips { display: flex; gap: 6px; }
+.dw-bar-pip {
+  flex: 1; text-align: center; font-size: 10px; font-weight: 600;
+  color: var(--t3); padding: 3px 0;
+  border-radius: 5px; background: var(--border-b);
+  transition: background .3s, color .3s;
+}
+.dw-bar-pip.done { color: var(--t1); }
+.dw-bar-pip.pip-floor  { background: rgba(245,158,11,.15); color: var(--warning); }
+.dw-bar-pip.pip-target { background: rgba(0,200,150,.15); color: var(--success); }
+.dw-bar-pip.pip-elite  { background: rgba(61,158,255,.15); color: var(--info); }
+
 /* Now banner */
 .now-banner {
   background: var(--card); border: 1px solid var(--border);
@@ -1920,6 +1955,52 @@ function greeting() {
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
 }
 
+function dwBarHTML() {
+  // Count today's logged deep work sessions
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem('sl_sessions') || '[]'); } catch(e) {}
+  const todayDW = sessions.filter(s => s.date === dk() && s.type === 'dw');
+  const n = todayDW.length;
+
+  // Tier thresholds: 0=none, 1=floor, 2=target, 3+=elite
+  const wrapClass = n === 0 ? '' : n === 1 ? 'dw-floor' : n === 2 ? 'dw-target' : 'dw-elite';
+  const statusText = n === 0
+    ? '<span style="color:var(--t3)">No sprints yet today</span>'
+    : n === 1
+    ? '<span style="color:var(--warning)">Floor met — 1 sprint</span>'
+    : n === 2
+    ? '<span style="color:var(--success)">Target hit — 2 sprints ✓</span>'
+    : '<span style="color:var(--info)">Elite — ' + n + ' sprints</span>';
+
+  // Progress bar: fills to 33% / 66% / 100% for 1/2/3 sessions (caps at 3)
+  const fillPct = Math.min(n, 3) / 3 * 100;
+  const fillCol = n === 0 ? 'var(--border-b)' : n === 1 ? 'var(--warning)' : n === 2 ? 'var(--success)' : 'var(--info)';
+
+  // Pips for each sprint
+  const pipData = [
+    { label: 'S1  90min  +30', tier: 'floor'  },
+    { label: 'S2  90min  +25', tier: 'target' },
+    { label: 'S3  45min  +15', tier: 'elite'  },
+  ];
+  const pipsH = pipData.map((p, i) => {
+    const done = n > i;
+    const cls = done ? 'dw-bar-pip done pip-' + p.tier : 'dw-bar-pip';
+    return `<div class="${cls}">${p.label}</div>`;
+  }).join('');
+
+  return `
+  <div class="dw-bar-wrap ${wrapClass}" onclick="go('craft')" style="cursor:pointer">
+    <div class="dw-bar-hd">
+      <div class="dw-bar-lbl">⚡ Deep work today</div>
+      <div class="dw-bar-status">${statusText}</div>
+    </div>
+    <div class="dw-bar-track">
+      <div class="dw-bar-fill" style="width:${fillPct}%;background:${fillCol}"></div>
+    </div>
+    <div class="dw-bar-pips">${pipsH}</div>
+  </div>`;
+}
+
 // Zero-padded level string — SL system style
 function lvStr(n) { return 'LV.' + String(n).padStart(2, '0'); }
 
@@ -2183,6 +2264,7 @@ function rHome() {
 
     ${sleepFocusBanner()}
     ${bottleneckBanner()}
+    ${dwBarHTML()}
 
     <div class="tod-list">
       ${todBlocksH}
