@@ -2102,6 +2102,7 @@ function rHome() {
       <div class="tod-commit-lbl">TODAY'S COMMITMENT</div>
       <div class="tod-commit-task">${todayCommit.task}</div>
       ${todayCommit.time ? `<div class="tod-commit-time">Starting at ${fmtTimeDisplay(todayCommit.time)}</div>` : ''}
+      ${todayCommit.hardStop ? `<div class="tod-commit-time" style="opacity:.7">Hard stop at ${fmtTimeDisplay(todayCommit.hardStop)}</div>` : ''}
     </div>
     <div class="tod-commit-edit" onclick="goEditCommitment()">EDIT</div>
   </div>` : '';
@@ -2887,16 +2888,17 @@ function toTimeInput(t) {
   return '';
 }
 
-function saveCommitment(task, time, forDate) {
+function saveCommitment(task, time, forDate, hardStop) {
   if (!forDate) {
-    // Before 4am counts as "still tonight" — save for today, not tomorrow
     forDate = new Date().getHours() < 4
       ? dk()
       : dk(new Date(Date.now() + 86400000));
   }
   const commits = getCommitments();
   const filtered = commits.filter(function(c) { return c.forDate !== forDate; });
-  filtered.push({ forDate: forDate, task: task, time: time, savedOn: dk() });
+  const entry = { forDate: forDate, task: task, time: time, savedOn: dk() };
+  if (hardStop) entry.hardStop = hardStop;
+  filtered.push(entry);
   if (filtered.length > 90) filtered.splice(0, filtered.length - 90);
   localStorage.setItem(COMMIT_KEY, JSON.stringify(filtered));
 }
@@ -2937,17 +2939,18 @@ function showSaveToast(msg) {
 }
 
 function logCommitment() {
-  const task = (document.getElementById('commit-task') ? document.getElementById('commit-task').value : '').trim();
-  const time = (document.getElementById('commit-time') ? document.getElementById('commit-time').value : '').trim();
-  if (!task) { alert('Write the one thing first.'); return; }
+  const task     = (document.getElementById('commit-task')     ? document.getElementById('commit-task').value     : '').trim();
+  const time     = (document.getElementById('commit-time')     ? document.getElementById('commit-time').value     : '').trim();
+  const hardStop = (document.getElementById('commit-hardstop') ? document.getElementById('commit-hardstop').value : '').trim();
+  if (!task) { alert('Write what will be finished first.'); return; }
+  if (!time) { alert('Add a start time — be specific.'); return; }
   const scr = document.getElementById('s-purpose');
   const scrollY = scr ? scr.scrollTop : 0;
-  // If editing an existing commitment, preserve its forDate — don't recompute
   const existing = getTodayCommitment();
   const forDate = existing ? existing.forDate : undefined;
-  saveCommitment(task, time, forDate);
+  saveCommitment(task, time, forDate, hardStop);
   if (!done('sn4')) toggle('sn4');
-  showSaveToast('Commitment saved ✓');
+  showSaveToast('Locked in ✓');
   rPurpose();
   if (scr) setTimeout(function() { scr.scrollTop = scrollY; }, 0);
 }
@@ -2964,6 +2967,7 @@ function rCommitCards(col) {
               + '<div class="sn-commit-saved-lbl">Tonight you committed to:</div>'
               + '<div class="sn-commit-task">' + todayCommit.task + '</div>'
               + (todayCommit.time ? '<div class="sn-commit-time">Starting at ' + fmtTimeDisplay(todayCommit.time) + '</div>' : '')
+              + (todayCommit.hardStop ? '<div class="sn-commit-time" style="opacity:.7">Hard stop at ' + fmtTimeDisplay(todayCommit.hardStop) + '</div>' : '')
               + '<div style="font-size:10px;color:var(--t3);margin-top:6px">Tap to update</div>'
               + '</div>'
               + '<div id="sn-commit-form" style="display:none">'
@@ -3015,12 +3019,27 @@ function rCommitCards(col) {
 }
 
 function _commitFormInner(col, existing) {
-  return '<div style="font-size:11px;color:var(--t3);margin-bottom:8px;line-height:1.5">The most important thing you\'ll do first tomorrow — and the time you\'re starting. Morning ignition reads this back.</div>'
-    + '<input type="text" id="commit-task" class="craft-log-input" placeholder="e.g. Finish RevOps automation doc" maxlength="120"'
+  // Show hard stop field on weekends (Sat=6, Sun=0) or if tomorrow is a non-workday
+  const tomorrowDay = new Date(Date.now() + 86400000).getDay();
+  const isUnstructured = tomorrowDay === 0 || tomorrowDay === 6;
+  const hardStopField = isUnstructured
+    ? '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin:10px 0 4px">Hard stop (unstructured day)</div>'
+      + '<div style="font-size:11px;color:var(--t3);margin-bottom:6px;line-height:1.4">Set a real anchor — a time when you physically transition. Not a preference, a trigger.</div>'
+      + '<input type="time" id="commit-hardstop" class="craft-log-input"'
+      + (existing && existing.hardStop ? ' value="' + existing.hardStop + '"' : '') + '>'
+    : '';
+
+  return '<div style="font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.5">'
+    + 'What will be <strong style="color:var(--t1)">finished</strong> in your first sprint — not what you\'ll work on, what you\'ll complete. And the exact time you\'re starting.'
+    + '</div>'
+    + '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:4px">What will be done ›</div>'
+    + '<input type="text" id="commit-task" class="craft-log-input" placeholder="e.g. RevOps automation doc — drafted, reviewed, sent to team" maxlength="120"'
     + (existing ? ' value="' + existing.task.replace(/"/g, '&quot;') + '"' : '') + '>'
-    + '<input type="time" id="commit-time" class="craft-log-input" style="margin-top:6px"'
+    + '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin:10px 0 4px">Starting at ›</div>'
+    + '<input type="time" id="commit-time" class="craft-log-input"'
     + (existing && existing.time ? ' value="' + toTimeInput(existing.time) + '"' : '') + '>'
-    + '<button class="craft-log-btn" onclick="logCommitment()" style="background:' + col + ';width:100%;margin-top:8px">Save commitment ✓</button>';
+    + hardStopField
+    + '<button class="craft-log-btn" onclick="logCommitment()" style="background:' + col + ';width:100%;margin-top:10px">Lock it in ›</button>';
 }
 
 // ── Seneca / Purpose ───────────────────────────────────────
