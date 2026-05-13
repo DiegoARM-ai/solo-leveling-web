@@ -3374,14 +3374,14 @@ function rCraft() {
 
   // Sprint context for next deep work session
   const nextSprint    = todayDW.length + 1;
-  const nextXP        = nextSprint === 1 ? 30 : nextSprint === 2 ? 20 : 15;
-  const nextTarget    = nextSprint === 1 ? '90 min' : nextSprint === 2 ? '60 min' : '45 min';
+  const nextXP        = nextSprint === 1 ? 30 : nextSprint === 2 ? 25 : 15;
+  const nextTarget    = nextSprint === 1 ? '90 min' : nextSprint === 2 ? '90 min' : '45 min';
   const sprintLabel   = nextSprint === 1 ? 'Sprint 1' : nextSprint === 2 ? 'Sprint 2' : `Sprint ${nextSprint}`;
   const sprintHint    = nextSprint === 1
-    ? 'Peak focus window — protect this block.'
+    ? 'Peak focus window. Full ultradian cycle. Protect this block.'
     : nextSprint === 2
-    ? 'Second wind. Quality over quantity now.'
-    : 'Shorter is fine. Ship something small.';
+    ? 'Full second cycle. Recover properly first — then lock in.'
+    : 'Bonus territory. 45 min, ship something small.';
 
   // Completed deep work badges
   const dwDoneBadges = todayDW.map((s, i) => {
@@ -3656,17 +3656,17 @@ function _dwSessionsToday() {
 }
 
 function _dwSprintXP(sprintNum) {
-  // Sprint 1: 30 XP (90 min target)
-  // Sprint 2: 20 XP (60 min target)
-  // Sprint 3+: 15 XP (45 min target)
+  // Sprint 1: 30 XP (90 min — floor, non-negotiable)
+  // Sprint 2: 25 XP (90 min — target, full second ultradian cycle)
+  // Sprint 3+: 15 XP (45 min — excellence/bonus territory)
   if (sprintNum === 1) return 30;
-  if (sprintNum === 2) return 20;
+  if (sprintNum === 2) return 25;
   return 15;
 }
 
 function _dwSprintTarget(sprintNum) {
   if (sprintNum === 1) return '90 min';
-  if (sprintNum === 2) return '60 min';
+  if (sprintNum === 2) return '90 min';
   return '45 min';
 }
 
