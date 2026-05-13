@@ -2102,7 +2102,7 @@ function rHome() {
       <div class="tod-commit-lbl">TODAY'S COMMITMENT</div>
       <div class="tod-commit-task">${todayCommit.task}</div>
       ${todayCommit.time ? `<div class="tod-commit-time">Starting at ${fmtTimeDisplay(todayCommit.time)}</div>` : ''}
-      ${todayCommit.hardStop ? `<div class="tod-commit-time" style="opacity:.7">Hard stop at ${fmtTimeDisplay(todayCommit.hardStop)}</div>` : ''}
+      ${todayCommit.hardStop ? `<div class="tod-commit-time" style="opacity:.7">↓ Hard stop ${fmtTimeDisplay(todayCommit.hardStop)}</div>` : ''}
     </div>
     <div class="tod-commit-edit" onclick="goEditCommitment()">EDIT</div>
   </div>` : '';
@@ -3019,15 +3019,11 @@ function rCommitCards(col) {
 }
 
 function _commitFormInner(col, existing) {
-  // Show hard stop field on weekends (Sat=6, Sun=0) or if tomorrow is a non-workday
-  const tomorrowDay = new Date(Date.now() + 86400000).getDay();
-  const isUnstructured = tomorrowDay === 0 || tomorrowDay === 6;
-  const hardStopField = isUnstructured
-    ? '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin:10px 0 4px">Hard stop (unstructured day)</div>'
-      + '<div style="font-size:11px;color:var(--t3);margin-bottom:6px;line-height:1.4">Set a real anchor — a time when you physically transition. Not a preference, a trigger.</div>'
-      + '<input type="time" id="commit-hardstop" class="craft-log-input"'
-      + (existing && existing.hardStop ? ' value="' + existing.hardStop + '"' : '') + '>'
-    : '';
+  // Hard stop field — always shown (WFH = no external structure any day)
+  const hardStopField = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin:10px 0 4px">Hard stop ›</div>'
+    + '<div style="font-size:11px;color:var(--t3);margin-bottom:6px;line-height:1.4">When do you physically transition away from work? Not a preference — a trigger you\'ll honor.</div>'
+    + '<input type="time" id="commit-hardstop" class="craft-log-input"'
+    + (existing && existing.hardStop ? ' value="' + existing.hardStop + '"' : '') + '>';
 
   return '<div style="font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.5">'
     + 'What will be <strong style="color:var(--t1)">finished</strong> in your first sprint — not what you\'ll work on, what you\'ll complete. And the exact time you\'re starting.'
