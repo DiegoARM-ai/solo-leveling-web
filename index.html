@@ -3659,9 +3659,9 @@ function rCraft() {
         <div class="ti-box"><span class="ti-chk">✓</span></div>
         <div class="ti-cnt">
           <div class="ti-name">Deep work${todayDW.length > 0 ? ` — ${todayDW.length} sprint${todayDW.length > 1 ? 's' : ''} done` : ' block'}</div>
-          <div class="ti-note">${todayDW.length === 0 ? '90 min first sprint. Tap to pre-commit and start.' : todayDW.length === 1 ? 'Sprint 1 done. Log Sprint 2 to hit the daily target.' : 'Daily target hit. Bonus sprint available if you\'re locked in.'}</div>
+          <div class="ti-note">${todayDW.length === 0 ? '90 min first sprint. Tap to pre-commit and start.' : todayDW.length === 1 ? 'Sprint 1 done. Log Sprint 2 to hit the daily target.' : todayDW.length === 2 ? 'Daily target hit. Log more if you\'re in flow.' : `${todayDW.length} sprints today — in the zone.`}</div>
           ${dwDoneBadges}
-          ${todayDW.length > 0 && todayDW.length < 3 ? `<button class="craft-log-btn dw-bonus-btn" onclick="event.stopPropagation();expandDW()" style="background:${todayDW.length < 2 ? col : 'transparent'};border:1px solid ${col};color:${todayDW.length < 2 ? '#fff' : col};width:100%;margin-top:8px;font-size:12px">${todayDW.length === 1 ? '+ Log Sprint 2 — 90 min ›' : '+ Log Sprint 3 — bonus 45 min ›'}</button>` : ''}
+          ${todayDW.length > 0 ? `<button class="craft-log-btn dw-bonus-btn" onclick="event.stopPropagation();expandDW()" style="background:${todayDW.length < 2 ? col : 'transparent'};border:1px solid ${col};color:${todayDW.length < 2 ? '#fff' : col};width:100%;margin-top:8px;font-size:12px">${todayDW.length === 1 ? '+ Log Sprint 2 — 90 min ›' : todayDW.length === 2 ? '+ Log Sprint 3 — bonus ›' : '+ Log another sprint ›'}</button>` : ''}
           <div id="dw-form-wrap" style="display:none" onclick="event.stopPropagation()">${dwForm}</div>
         </div>
         <div class="ti-xp">${todayDW.length > 0 ? `+${nextXP}` : '+30'}</div>
@@ -3779,6 +3779,60 @@ function rCraft() {
         ${phasesH}
         <div class="craft-insight" style="margin-top:12px">
           <strong>Transition gate:</strong> At Level 7 — shift from W-2 to self-employment tax planning. Quarterly estimated taxes, business entity, deductions. Handle it before it's urgent.
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card" id="r-craft-reading">
+      <div class="ref-hd" onclick="toggleRef('r-craft-reading')">
+        <div class="ref-ico">📚</div>
+        <div class="ref-ttl">Reading List — Prometheus Domain</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:12px">Every book must answer: does this make me more effective or valuable at the consultancy goal? AI resources are listed over books — the field moves faster than publication cycles.</div>
+
+        <div class="reading-phase-lbl" style="color:${col}">Pillar 1 — RevOps &amp; Systems Thinking</div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Thinking in Systems</strong> — Donella Meadows<br>How systems fail and how to design ones that don't. GTM architecture is systems design. Most RevOps practitioners think tactically — systems fluency is a differentiator. Read early.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+          <div class="ref-st"><strong style="color:var(--t1)">The Goal</strong> — Eliyahu Goldratt<br>Theory of constraints as a novel. Find the one bottleneck and subordinate everything else to it. Maps directly to how good RevOps triage works.</div>
+        </div>
+
+        <div class="reading-phase-lbl" style="color:${col}">Pillar 2 — AI + Automation</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:8px;font-style:italic">Books are the wrong medium here — resources over reads.</div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🌐</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Anthropic / OpenAI docs</strong> — primary source, always current. Read before you build anything.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🌐</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Simon Willison's blog</strong> — simonwillison.net. Best practitioner writing on LLM integration. Subscribe.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🎙</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Latent Space podcast</strong> — engineering-level AI conversations. Use commute/travel time.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Building ML Powered Applications</strong> — Emmanuel Ameisen<br>The closest durable guide for integrating AI into real workflows. Read when actively building agents.</div>
+        </div>
+
+        <div class="reading-phase-lbl" style="color:${col}">Pillar 3 — Builder + Consultancy Path</div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Company of One</strong> — Paul Jarvis<br>The solo operator model. Anti-growth-for-growth's-sake — aligns with the autonomy goal. Read during Phase 2 (Prove &amp; Transition).</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+          <div class="ref-st"><strong style="color:var(--t1)">The Mom Test</strong> — Rob Fitzpatrick<br>How to validate consulting ideas without fooling yourself. Short, tactical, essential before client conversations. Read at Level 6–7.</div>
+        </div>
+        <div class="ref-step">
+          <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">📖</div>
+          <div class="ref-st"><strong style="color:var(--t1)">$100M Offers</strong> — Alex Hormozi<br>How to price and position expertise. Packaging, framing, value-based pricing. Read at Level 7 when structuring consulting offers.</div>
         </div>
       </div>
     </div>
