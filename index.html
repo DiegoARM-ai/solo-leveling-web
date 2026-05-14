@@ -1638,6 +1638,114 @@ html.awaken-arise .ni.active .ni-pip {
 }
 .arise-sub { font-size: 12px; color: var(--t2); margin-top: 4px; line-height: 1.5; }
 
+/* ── Hestia module styles ───────────────────────────────── */
+.ht-section {
+  margin-top: 18px; padding: 16px; border-radius: var(--r-lg);
+  background: var(--card); border: 1px solid var(--border);
+}
+.ht-sec-hd {
+  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--t1); margin-bottom: 4px;
+  font-family: var(--font-display);
+}
+.ht-sec-sub {
+  font-size: 12px; color: var(--t2); line-height: 1.4; margin-bottom: 2px;
+}
+/* Embodied hours bar */
+.ht-eh-bar-wrap { margin-top: 12px; }
+.ht-eh-bar {
+  position: relative; height: 8px; border-radius: 999px;
+  background: var(--border); overflow: visible;
+}
+.ht-eh-fill {
+  height: 100%; border-radius: 999px;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+}
+.ht-eh-marker {
+  position: absolute; top: -4px; bottom: -4px; width: 2px;
+  background: var(--warning); border-radius: 999px; opacity: .8;
+}
+.ht-eh-labels {
+  display: flex; justify-content: space-between;
+  font-size: 12px; font-weight: 700; margin-top: 6px;
+  letter-spacing: .3px;
+}
+.ht-eh-btns {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;
+}
+.ht-eh-btn {
+  padding: 8px 14px; border-radius: 20px; cursor: pointer;
+  font-size: 12px; font-weight: 700; letter-spacing: .5px;
+  background: rgba(52,211,153,.12); border: 1.5px solid rgba(52,211,153,.35);
+  color: var(--t1); -webkit-user-select: none; user-select: none;
+  transition: opacity .15s;
+}
+.ht-eh-btn:active { opacity: .6; }
+.ht-eh-btn.ht-eh-undo {
+  background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.3); color: var(--danger);
+}
+/* Input */
+.ht-input {
+  padding: 10px 12px; border-radius: var(--r-sm);
+  background: var(--surface); border: 1.5px solid var(--border-b);
+  color: var(--t1); font-size: 13px; font-family: var(--font);
+  outline: none; -webkit-appearance: none;
+}
+.ht-input:focus { border-color: #34D399; }
+.ht-input::placeholder { color: var(--t3); }
+/* Log + action buttons */
+.ht-log-btn {
+  padding: 10px 16px; border-radius: var(--r-sm); cursor: pointer;
+  font-size: 12px; font-weight: 700; letter-spacing: .5px; white-space: nowrap;
+  background: rgba(52,211,153,.15); border: 1.5px solid rgba(52,211,153,.4);
+  color: #34D399; -webkit-user-select: none; user-select: none;
+  transition: opacity .15s;
+}
+.ht-log-btn:active { opacity: .6; }
+/* Maintenance move done */
+.ht-mm-done {
+  margin-top: 10px; padding: 10px 14px; border-radius: var(--r-sm);
+  background: rgba(52,211,153,.12); border: 1.5px solid rgba(52,211,153,.3);
+  color: #34D399; font-size: 13px; font-weight: 600;
+}
+/* Friends list */
+.ht-friends-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.ht-friend-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border-radius: var(--r-sm);
+  background: var(--surface); border: 1px solid var(--border);
+}
+.ht-friend-name { font-size: 13px; font-weight: 700; color: var(--t1); }
+.ht-friend-meta { font-size: 11px; font-weight: 600; letter-spacing: .3px; margin-top: 2px; }
+.ht-contact-btn {
+  padding: 6px 12px; border-radius: 20px; cursor: pointer;
+  font-size: 11px; font-weight: 700; letter-spacing: .3px;
+  background: rgba(52,211,153,.12); border: 1.5px solid rgba(52,211,153,.3);
+  color: #34D399; -webkit-user-select: none; user-select: none;
+}
+.ht-contact-btn:active { opacity: .6; }
+.ht-remove-btn {
+  padding: 6px 10px; border-radius: 20px; cursor: pointer;
+  font-size: 11px; font-weight: 700; color: var(--t3);
+  border: 1px solid var(--border); background: transparent;
+  -webkit-user-select: none; user-select: none;
+}
+.ht-remove-btn:active { opacity: .6; }
+/* Log entries */
+.ht-log-entry {
+  display: flex; gap: 8px; align-items: flex-start;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 12px; flex-wrap: wrap;
+}
+.ht-log-entry:last-child { border-bottom: none; }
+.ht-log-date {
+  color: var(--t3); font-weight: 600; letter-spacing: .3px; flex-shrink: 0; min-width: 80px;
+}
+.ht-log-who {
+  font-weight: 700; color: #34D399; flex-shrink: 0;
+}
+.ht-log-what { color: var(--t2); line-height: 1.4; }
+
 /* Purple particle shimmer on ring when 100% */
 @keyframes ariseRingPulse {
   0%, 100% { filter: drop-shadow(0 0 6px rgba(168,85,247,0.5)); }
@@ -1662,6 +1770,11 @@ html.awaken-arise .ni.active .ni-pip {
     <div class="ni-pip"></div>
     <div class="ni-lbl">Stats</div>
   </div>
+  <div class="ni" data-s="hestia"          onclick="go('hestia')">
+    <div class="ni-ico">🔥</div>
+    <div class="ni-pip"></div>
+    <div class="ni-lbl">Hestia</div>
+  </div>
   <div class="ni" data-s="settings"        onclick="go('settings')">
     <div class="ni-ico">⚙️</div>
     <div class="ni-pip"></div>
@@ -1678,7 +1791,7 @@ html.awaken-arise .ni.active .ni-pip {
 const KEY   = 'sl_v1';
 const DAYS  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const COLS  = { physique:'#00C896', vitality:'#FFB347', presence:'#C084FC', craft:'#FF6060', purpose:'#A855F7' };
+const COLS  = { physique:'#00C896', vitality:'#FFB347', presence:'#C084FC', apollo:'#C084FC', hestia:'#34D399', craft:'#FF6060', purpose:'#A855F7' };
 
 // ── Protocols ──────────────────────────────────────────────
 const P = {
@@ -1725,12 +1838,18 @@ const P = {
       { id:'v7', xp:20, tod:'evening',   mod:'vitality', name:'In bed by __INBED_TIME__',       note:'Tonight\'s ramp target from Somnus. This is the single most important lever.' },
     ],
   },
-  presence: {
+  apollo: {
     daily: [
-      { id:'pr1', xp:5,  tod:'anytime',  mod:'presence', name:'Swipe session',                note:'Quality over volume — engage with profiles you\'re actually interested in' },
-      { id:'pr2', xp:3,  tod:'anytime',  mod:'presence', name:'Respond to all matches',       note:'Within 24h — a dormant pipeline dies. Every unanswered match is a dead lead.' },
-      { id:'pr3', xp:4,  tod:'anytime',  mod:'presence', name:'Send openers to new matches',  note:'Only if Lead + Following Up in your pipeline is < 5. Mid-funnel first, top-of-funnel second. Lead with something specific — no "hey".' },
-      { id:'pr4', xp:5,  tod:'anytime',  mod:'presence', name:'Pipeline check — no My Move card overdue', note:'Open Notion → My Move filter → take action on anything due. 5 min max. Mid-funnel before apps.' },
+      { id:'pr1', xp:5,  tod:'anytime',  mod:'apollo', name:'Swipe session',                note:'Quality over volume — engage with profiles you\'re actually interested in. Target type: type-B affect, type-A capability.' },
+      { id:'pr2', xp:3,  tod:'anytime',  mod:'apollo', name:'Respond to all matches',       note:'Within 24h — a dormant pipeline dies. Every unanswered match is a dead lead.' },
+      { id:'pr3', xp:4,  tod:'anytime',  mod:'apollo', name:'Send openers to new matches',  note:'Only if Lead + Following Up in your Notion pipeline is < 5. Mid-funnel first, top-of-funnel second. Lead with something specific — no "hey".' },
+      { id:'pr4', xp:5,  tod:'anytime',  mod:'apollo', name:'Pipeline check — no My Move card overdue', note:'Open Notion → My Move filter → take action on anything due. 5 min max. Mid-funnel before apps.' },
+    ],
+  },
+  hestia: {
+    daily: [
+      { id:'ht1', xp:0,  tod:'anytime',  mod:'hestia', name:'Log embodied social hours',     note:'Tap to add hours spent with people today — not dates, not work. Toward the 4hr/week minimum.' },
+      { id:'ht2', xp:15, tod:'anytime',  mod:'hestia', name:'Weekly maintenance move',       note:'One deliberate move toward a friendship: text someone you haven\'t reached in 3+ months, schedule a hangout, send something specific.' },
     ],
   },
   purpose: {
@@ -1848,6 +1967,7 @@ const TRAINING = {
 // ── State ──────────────────────────────────────────────────
 function defaultState() {
   return {
+    schemaVersion: 2,           // bump when shape changes requiring migration
     v: 3,
     cfg: {
       wake:         '09:00',
@@ -1862,6 +1982,8 @@ function defaultState() {
       sleepEff:     null,   // 7-day avg efficiency % (from Oura) — update weekly
       sleepCon:     null,   // 7-day consistency % (from Oura) — update weekly
       pipelineUrl:  '',     // Apollo: Notion pipeline page URL
+      hestiaGraceUntil: null, // dateKey — Hestia excluded from Connection bottleneck until this date
+      levelConfirmed: false,   // one-time migration prompt shown
     },
     streaks: {
       overall: { n: 0, last: null },
@@ -1882,17 +2004,31 @@ function defaultState() {
       numbers:      0,
       dates:        0,
     },
+    hestia: {
+      friends:               [],   // [{id, name, lastContact}]
+      embodiedHoursLog:      [],   // [{weekKey, hours}]
+      maintenanceMoves:      [],   // [{date, note}]
+      deepeningLog:          [],   // [{date, who, what, shifted}]
+      unoptimizedRelationship: '',
+    },
+    senecaCapacity: {
+      hardConversations: [],   // [{date, who, shifted}]
+      therapySessions:   [],   // [{date, format, surfaced}]
+      selectionReviews:  [],   // [{date, synthesis}]
+    },
     xp: {
       physique: { weekly: 0, weekKey: '' },
       vitality: { weekly: 0, weekKey: '' },
-      presence: { weekly: 0, weekKey: '' },
+      apollo:   { weekly: 0, weekKey: '' },
+      hestia:   { weekly: 0, weekKey: '' },
       craft:    { weekly: 0, weekKey: '' },
       purpose:  { weekly: 0, weekKey: '' },
     },
     levels: {
       physique: 1,
       vitality: 1,
-      presence: 1,
+      apollo:   1,
+      hestia:   1,
       craft:    1,
       purpose:  1,
     },
@@ -1900,25 +2036,60 @@ function defaultState() {
 }
 
 function migrateState(s) {
-  if (!s.xp) s.xp = {
-    physique: { weekly: 0, weekKey: '' },
-    vitality: { weekly: 0, weekKey: '' },
-    presence: { weekly: 0, weekKey: '' },
-    craft:    { weekly: 0, weekKey: '' },
-    purpose:  { weekly: 0, weekKey: '' },
-  };
-  if (!s.levels) s.levels = { physique: 1, vitality: 1, presence: 1, craft: 1, purpose: 1 };
-  if (s.cfg.sleepDebt   === undefined) s.cfg.sleepDebt   = null;
-  if (s.cfg.sleepEff    === undefined) s.cfg.sleepEff    = null;
-  if (s.cfg.sleepCon    === undefined) s.cfg.sleepCon    = null;
-  if (s.cfg.pipelineUrl === undefined) s.cfg.pipelineUrl = '';
-  if (!s.preDate) s.preDate = {};
-  if (!s.sessionLog) s.sessionLog = { weekKey:'', dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
-  // ensure all mods exist
-  ['physique','vitality','presence','craft','purpose'].forEach(m => {
-    if (!s.xp[m]) s.xp[m] = { weekly: 0, weekKey: '' };
+  if (!s.xp) s.xp = {};
+  if (!s.levels) s.levels = {};
+  if (!s.cfg) s.cfg = {};
+
+  // ── Schema v1 → v2: presence splits into apollo + hestia ──
+  if (!s.schemaVersion || s.schemaVersion < 2) {
+    // Migrate presence XP → apollo
+    if (s.xp.presence && !s.xp.apollo) s.xp.apollo = { ...s.xp.presence };
+    // Migrate presence level → apollo (one level lower, min 1); hestia starts at 1
+    if (s.levels.presence !== undefined && s.levels.apollo === undefined) {
+      s.levels.apollo  = Math.max(1, (s.levels.presence || 1));
+      s.levels.hestia  = 1;
+    }
+    // 30-day grace period: Hestia excluded from Connection bottleneck
+    if (!s.cfg.hestiaGraceUntil) {
+      const graceEnd = new Date();
+      graceEnd.setDate(graceEnd.getDate() + 30);
+      s.cfg.hestiaGraceUntil = localDk(graceEnd);
+    }
+    s.cfg.levelConfirmed = false;  // trigger one-time confirmation prompt
+    s.schemaVersion = 2;
+  }
+
+  // ── Ensure all keys exist (forward-compat) ──
+  ['physique','vitality','apollo','hestia','craft','purpose'].forEach(m => {
+    if (!s.xp[m])           s.xp[m]     = { weekly: 0, weekKey: '' };
     if (s.levels[m] === undefined) s.levels[m] = 1;
   });
+
+  // Config defaults
+  if (s.cfg.sleepDebt       === undefined) s.cfg.sleepDebt       = null;
+  if (s.cfg.sleepEff        === undefined) s.cfg.sleepEff        = null;
+  if (s.cfg.sleepCon        === undefined) s.cfg.sleepCon        = null;
+  if (s.cfg.pipelineUrl     === undefined) s.cfg.pipelineUrl     = '';
+  if (s.cfg.hestiaGraceUntil=== undefined) s.cfg.hestiaGraceUntil= null;
+  if (s.cfg.levelConfirmed  === undefined) s.cfg.levelConfirmed  = true;
+
+  if (!s.preDate)    s.preDate    = {};
+  if (!s.sessionLog) s.sessionLog = { weekKey:'', dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
+
+  // Hestia state
+  if (!s.hestia) s.hestia = { friends:[], embodiedHoursLog:[], maintenanceMoves:[], deepeningLog:[], unoptimizedRelationship:'' };
+  if (!s.hestia.friends)                s.hestia.friends                = [];
+  if (!s.hestia.embodiedHoursLog)       s.hestia.embodiedHoursLog       = [];
+  if (!s.hestia.maintenanceMoves)       s.hestia.maintenanceMoves       = [];
+  if (!s.hestia.deepeningLog)           s.hestia.deepeningLog           = [];
+  if (s.hestia.unoptimizedRelationship  === undefined) s.hestia.unoptimizedRelationship = '';
+
+  // Seneca Capacity state
+  if (!s.senecaCapacity) s.senecaCapacity = { hardConversations:[], therapySessions:[], selectionReviews:[] };
+  if (!s.senecaCapacity.hardConversations) s.senecaCapacity.hardConversations = [];
+  if (!s.senecaCapacity.therapySessions)   s.senecaCapacity.therapySessions   = [];
+  if (!s.senecaCapacity.selectionReviews)  s.senecaCapacity.selectionReviews  = [];
+
   s.v = 3;
   return s;
 }
@@ -1942,7 +2113,8 @@ const TASK_INPUT = {}; // tasks that require detail-page input before checking o
   const blocks = {
     physique: ['am','aft','pm','wk'],
     vitality: ['am','pm'],
-    presence: ['daily'],
+    apollo:   ['daily'],
+    hestia:   ['daily'],
     purpose:  ['daily','weekly'],
     craft:    ['daily','weekly'],
   };
@@ -1985,15 +2157,40 @@ function addXP(mod, delta) {
 const XP_TARGETS = {
   physique: { 1:400, 2:450, 3:500, 4:510, 5:510, 6:510, 7:510, 8:510, 9:540, 10:540 },
   vitality: { 1:380, 2:420, 3:490, 4:490, 5:530, 6:550, 7:570, 8:590, 9:610, 10:630 },
-  presence: { 1:105, 2:200, 3:230, 4:230, 5:260, 6:280, 7:280, 8:300, 9:320, 10:350 },
+  apollo:   { 1:105, 2:200, 3:230, 4:230, 5:260, 6:280, 7:280, 8:300, 9:320, 10:350 },
+  hestia:   { 1:55,  2:110, 3:165, 4:200, 5:220, 6:240, 7:260, 8:280, 9:300, 10:320 },
   craft:    { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0 },
   purpose:  { 1:375, 2:415, 3:450, 4:450, 5:490, 6:490, 7:525, 8:525, 9:565, 10:565 },
 };
 
+// ── Connection stat — Apollo + Hestia bottleneck ──────────
+// Returns the effective Connection level.
+// During the 30-day Hestia grace period, Connection = Apollo level (Hestia excluded).
+// After grace period, Connection = min(apollo, hestia).
+function connectionLevel() {
+  const apollo = S.levels?.apollo || 1;
+  const hestia = S.levels?.hestia || 1;
+  const grace  = S.cfg?.hestiaGraceUntil;
+  if (grace && dk() <= grace) return apollo;  // grace: ignore hestia bottleneck
+  return Math.min(apollo, hestia);
+}
+
+// Returns the five "stat-level" values used for rank and bottleneck.
+// Connection replaces the old presence/apollo/hestia split.
+function statLevels() {
+  return {
+    physique:   S.levels?.physique  || 1,
+    vitality:   S.levels?.vitality  || 1,
+    connection: connectionLevel(),
+    craft:      S.levels?.craft     || 1,
+    purpose:    S.levels?.purpose   || 1,
+  };
+}
+
 // ── Rank calculation ───────────────────────────────────────
 function calcRank() {
-  if (!S.levels) return 'E';
-  const vals = Object.values(S.levels);
+  const sl   = statLevels();
+  const vals = Object.values(sl);
   const min  = Math.min(...vals);
   if (vals.every(l => l >= 9)) return 'S';
   if (vals.every(l => l >= 7)) return 'A';
@@ -2004,28 +2201,30 @@ function calcRank() {
 }
 
 // ── Bottleneck detection ───────────────────────────────────
-const MOD_NAMES = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', craft:'Prometheus', purpose:'Seneca' };
-const MOD_STAT  = { physique:'Physique', vitality:'Vitality', presence:'Presence', craft:'Craft', purpose:'Purpose' };
+// Operates on the 5-stat view (connection = min apollo+hestia).
+const MOD_NAMES = { physique:'Adonis', vitality:'Somnus', connection:'Connection', apollo:'Apollo', hestia:'Hestia', craft:'Prometheus', purpose:'Seneca' };
+const MOD_STAT  = { physique:'Physique', vitality:'Vitality', connection:'Connection', craft:'Craft', purpose:'Purpose' };
 
 function getBottleneck() {
-  if (!S.levels) return null;
-  const entries = Object.entries(S.levels);
-  const minLv   = Math.min(...entries.map(([,v]) => v));
-  const mods    = entries.filter(([,v]) => v === minLv).map(([k]) => k);
-  return { level: minLv, mods };
+  const sl     = statLevels();
+  const entries = Object.entries(sl);
+  const minLv  = Math.min(...entries.map(([,v]) => v));
+  const stats  = entries.filter(([,v]) => v === minLv).map(([k]) => k);
+  return { level: minLv, stats };
 }
 
 function bottleneckBanner() {
   const bn = getBottleneck();
   if (!bn) return '';
-  const vals  = Object.values(S.levels);
+  const sl    = statLevels();
+  const vals  = Object.values(sl);
   const maxLv = Math.max(...vals);
-  // Only surface the banner when modules have actually diverged.
-  // When all are equal the pulsing card borders already say it — no need for a full banner.
   if (maxLv === bn.level) return '';
-  const modLabel = bn.mods.map(m => MOD_NAMES[m]).join(' + ');
-  const gap      = maxLv - bn.level;
-  const subtext  = gap >= 2
+  const statLabel = bn.stats.map(s => ({
+    physique:'Adonis', vitality:'Somnus', connection:'Connection', craft:'Prometheus', purpose:'Seneca'
+  }[s] || s)).join(' + ');
+  const gap     = maxLv - bn.level;
+  const subtext = gap >= 2
     ? `${gap} LEVELS BEHIND THE PACK. THIS IS YOUR RANK CEILING.`
     : `ONE LEVEL BEHIND. ADVANCE TO ${lvStr(bn.level + 1)} TO UNLOCK THE NEXT RANK TIER.`;
   return `
@@ -2033,7 +2232,7 @@ function bottleneckBanner() {
     <div class="bn-ico">◈</div>
     <div>
       <div class="bn-tag">[ SYSTEM ALERT — CRITICAL PATH ]</div>
-      <div class="bn-ttl">${modLabel} · ${lvStr(bn.level)}</div>
+      <div class="bn-ttl">${statLabel} · ${lvStr(bn.level)}</div>
       <div class="bn-sub">${subtext}</div>
     </div>
   </div>`;
@@ -2155,7 +2354,7 @@ function flashLevelUp(col) {
 function promptLvUp(mod) {
   const lv  = S.levels?.[mod] || 1;
   const next = lv + 1;
-  const names = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', craft:'Prometheus', purpose:'Seneca' };
+  const names = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', apollo:'Apollo', hestia:'Hestia', craft:'Prometheus', purpose:'Seneca' };
   const msg = `[ THE SYSTEM — LEVEL UP VERIFICATION ]\n\n${names[mod].toUpperCase()} → ${lvStr(next)}\n\nBOTH GATES REQUIRED:\n· XP GATE — weekly target sustained ✓\n· OUTCOME GATE — real-world result confirmed\n\nVerify the ${lvStr(next)} outcome gate in your protocol doc before claiming.\n\n"The System does not grant power. It confirms what you have already earned."\n\nCONFIRM?`;
   if (confirm(msg)) {
     if (!S.levels) S.levels = {};
@@ -2391,7 +2590,8 @@ function allTasksToday() {
     ...(wk ? P.physique.wk : P.physique.pm),
     ...P.vitality.am,
     ...P.vitality.pm,
-    ...P.presence.daily,
+    ...P.apollo.daily,
+    ...P.hestia.daily,
     ...P.purpose.daily,
     ...(isSun ? P.purpose.weekly : []),
     ...P.craft.daily,
@@ -2413,7 +2613,9 @@ function modPct(mod) {
   const m = {
     physique: [...P.physique.am, ...P.physique.aft, ...(wk ? P.physique.wk : P.physique.pm)],
     vitality: [...P.vitality.am, ...P.vitality.pm],
-    presence: P.presence.daily,
+    apollo:   P.apollo.daily,
+    hestia:   P.hestia.daily,
+    presence: P.apollo.daily,   // legacy alias
     craft:    [...P.craft.daily, ...(isSun ? P.craft.weekly : [])],
     purpose:  [...P.purpose.daily, ...(isSun ? P.purpose.weekly : [])],
   };
@@ -2430,7 +2632,8 @@ function todayTasks(todFilter) {
     ...(wk ? P.physique.wk : P.physique.pm),
     ...P.vitality.am,
     ...P.vitality.pm,
-    ...P.presence.daily,
+    ...P.apollo.daily,
+    ...P.hestia.daily,
     ...P.purpose.daily,
     ...(isSun ? P.purpose.weekly : []),
     ...P.craft.daily,
@@ -2573,7 +2776,9 @@ function render(s) {
     case 'modules':  rModules();  break;
     case 'physique': rPhysique(); break;
     case 'vitality': rVitality(); break;
-    case 'presence': rPresence(); break;
+    case 'apollo':   rPresence(); break;  // Apollo screen (presence renamed)
+    case 'presence': rPresence(); break;  // legacy route
+    case 'hestia':   rHestia();   break;
     case 'craft':    rCraft();    break;
     case 'purpose':  rPurpose();  break;
     case 'settings': rSettings(); break;
@@ -2582,11 +2787,12 @@ function render(s) {
 
 // ── Module colour/icon/name lookup ─────────────────────────
 const MOD_META = {
-  physique: { ico:'💪', name:'Adonis',     stat:'Physique' },
-  vitality: { ico:'🌙', name:'Somnus',     stat:'Vitality' },
-  presence: { ico:'⚡', name:'Apollo',     stat:'Presence' },
-  craft:    { ico:'🔥', name:'Prometheus', stat:'Craft'    },
-  purpose:  { ico:'🎯', name:'Seneca',     stat:'Purpose'  },
+  physique: { ico:'💪', name:'Adonis',     stat:'Physique'   },
+  vitality: { ico:'🌙', name:'Somnus',     stat:'Vitality'   },
+  apollo:   { ico:'⚡', name:'Apollo',     stat:'Connection' },
+  hestia:   { ico:'🔥', name:'Hestia',     stat:'Connection' },
+  craft:    { ico:'🔨', name:'Prometheus', stat:'Craft'      },
+  purpose:  { ico:'🎯', name:'Seneca',     stat:'Purpose'    },
 };
 
 // ── Today (home) ───────────────────────────────────────────
@@ -2747,28 +2953,63 @@ function todToggle(id, el) {
 
 // ── Modules grid ───────────────────────────────────────────
 function rModules() {
-  const wk   = isWkDay();
-  const bn   = getBottleneck();
-  const bnMods = new Set(bn?.mods || []);
+  const bn      = getBottleneck();
+  const bnStats = new Set(bn?.stats || []);
 
-  const stats = [
-    { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪' },
-    { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙' },
-    { s:'presence', name:'Presence', mod:'Apollo',     ico:'⚡' },
-    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥' },
-    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯' },
+  // Build the five stat rows. Connection shows Apollo + Hestia nested.
+  const connLv     = connectionLevel();
+  const apolloLv   = S.levels?.apollo  || 1;
+  const hestiaLv   = S.levels?.hestia  || 1;
+  const connCol    = COLS.apollo;
+  const grace      = S.cfg?.hestiaGraceUntil;
+  const inGrace    = grace && dk() <= grace;
+  const isBnConn   = bnStats.has('connection');
+
+  // Pending tasks per module
+  const allT = todayTasks();
+  function pendingFor(mod) { return allT.filter(t => t.mod === mod && !done(t.id)).length; }
+
+  const apolloPending  = pendingFor('apollo');
+  const hestiaPending  = pendingFor('hestia');
+  const connPending    = apolloPending + hestiaPending;
+  const connComplete   = connPending === 0;
+
+  const connCard = `
+  <div class="sc ${isBnConn ? 'bn-stat' : ''}" style="--sc-color:${connCol}" onclick="go('apollo')">
+    <div class="sc-info">
+      <div class="sc-stat">Connection</div>
+      <div class="sc-mod">Apollo + Hestia</div>
+      ${connComplete
+        ? `<div class="sc-done">✓ COMPLETE</div>`
+        : `<div class="sc-due">▲ ${connPending} REMAINING</div>`}
+      <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
+        <div class="lv-sc-badge" style="--sc-color:${connCol}">${lvStr(connLv)}</div>
+        ${isBnConn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+      </div>
+      <div style="display:flex;gap:10px;margin-top:5px">
+        <div style="font-size:10px;color:var(--t3)">Apollo <span style="color:${connCol};font-weight:700">${lvStr(apolloLv)}</span></div>
+        <div style="font-size:10px;color:var(--t3)">Hestia <span style="color:var(--success);font-weight:700">${lvStr(hestiaLv)}</span>${inGrace ? ' <span style="color:var(--t3)">(grace)</span>' : ''}</div>
+      </div>
+    </div>
+    <div>${ring(connComplete ? 100 : Math.round((1 - connPending / Math.max(allT.filter(t=>t.mod==='apollo'||t.mod==='hestia').length, 1)) * 100), 48, 3.5, connCol)}</div>
+    <div class="sc-arrow">›</div>
+  </div>`;
+
+  const simpleStats = [
+    { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪', dest:'physique' },
+    { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', dest:'vitality' },
+    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', dest:'craft'    },
+    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', dest:'purpose'  },
   ];
 
-  const cardsH = stats.map(c => {
+  const simpleCardsH = simpleStats.map(c => {
     const col     = COLS[c.s];
     const cp      = modPct(c.s);
-    const isBn    = bnMods.has(c.s);
-    const pending = modPct(c.s) < 100
-      ? todayTasks().filter(t => t.mod === c.s && !done(t.id)).length
-      : 0;
-    const lv = S.levels?.[c.s] || 1;
+    const isBn    = bnStats.has(c.s);
+    const pending = pendingFor(c.s);
+    const lv      = S.levels?.[c.s] || 1;
     return `
-    <div class="sc ${isBn ? 'bn-stat' : ''}" style="--sc-color:${col}" onclick="go('${c.s}')">
+    <div class="sc ${isBn ? 'bn-stat' : ''}" style="--sc-color:${col}" onclick="go('${c.dest}')">
       <div class="sc-info">
         <div class="sc-stat">${c.name}</div>
         <div class="sc-mod">${c.mod}</div>
@@ -2785,6 +3026,33 @@ function rModules() {
     </div>`;
   }).join('');
 
+  // Build ordered cards: Physique, Vitality, Connection, Craft, Purpose
+  const allCards = [];
+  simpleStats.forEach((c, idx) => {
+    const col     = COLS[c.s];
+    const isBn    = bnStats.has(c.s);
+    const pending = pendingFor(c.s);
+    const lv      = S.levels?.[c.s] || 1;
+    allCards.push({ order: [0,1,3,4][idx], html: `
+    <div class="sc ${isBn ? 'bn-stat' : ''}" style="--sc-color:${col}" onclick="go('${c.dest}')">
+      <div class="sc-info">
+        <div class="sc-stat">${c.name}</div>
+        <div class="sc-mod">${c.mod}</div>
+        ${pending > 0
+          ? `<div class="sc-due">▲ ${pending} REMAINING</div>`
+          : `<div class="sc-done">✓ COMPLETE</div>`}
+        <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
+          <div class="lv-sc-badge" style="--sc-color:${col}">${lvStr(lv)}</div>
+          ${isBn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+        </div>
+      </div>
+      <div>${ring(modPct(c.s), 48, 3.5, col)}</div>
+      <div class="sc-arrow">›</div>
+    </div>` });
+  });
+  allCards.push({ order: 2, html: connCard });
+  allCards.sort((a,b) => a.order - b.order);
+
   document.getElementById('s-modules').innerHTML = `
   <div class="wrap">
     <div class="h-header" style="padding-bottom:12px">
@@ -2793,7 +3061,7 @@ function rModules() {
         <div class="h-greeting">All Stats</div>
       </div>
     </div>
-    <div class="stat-cards">${cardsH}</div>
+    <div class="stat-cards">${allCards.map(c => c.html).join('')}</div>
   </div>`;
 }
 
@@ -3574,8 +3842,8 @@ function rApLog() {
 }
 
 function rPresence() {
-  const col = COLS.presence;
-  const cp  = modPct('presence');
+  const col = COLS.apollo;
+  const cp  = modPct('apollo');
   const pipeUrl = S.cfg.pipelineUrl || '';
 
   const PRINCIPLES = [
@@ -3668,7 +3936,7 @@ function rPresence() {
   let tabContent = '';
   if (_apTab === 'today') {
     tabContent = `
-    ${proto('📲', 'Daily App Protocol', P.presence.daily, col, false)}
+    ${proto('📲', 'Daily App Protocol', P.apollo.daily, col, false)}
 
     <div class="apollo-pipe-btn" onclick="${pipeUrl ? `window.open('${pipeUrl}','_blank')` : `alert('Add your Notion pipeline URL in Settings → Apollo')`}">
       <div class="apollo-pipe-ico">🗂</div>
@@ -3686,6 +3954,31 @@ function rPresence() {
   } else {
     // REF tab
     tabContent = `
+    <div class="ref-card" id="r-target-profile">
+      <div class="ref-hd" onclick="toggleRef('r-target-profile')">
+        <div class="ref-ico">🎯</div>
+        <div class="ref-ttl" style="color:${col}">Target Profile — Who You're Looking For</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        <div class="text-rule" style="font-size:13px;font-weight:800;color:var(--t1);margin-bottom:6px">Type-B affect with type-A capability. Softness with bones.</div>
+        <div class="text-rule">A woman whose primary mode is feeling, warmth, and presence — <em>and</em> who is capable, has her own structure, and can hold her own. Not type-A presenting as type-B. Not type-B incapable. The integration of both. Reference archetype: <strong>Reze (Chainsaw Man)</strong>.</div>
+        <div style="margin-top:12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">The Criterion Test</div>
+        <div class="text-rule" style="font-style:italic;color:var(--t1)">"Does her emotional warmth feel like a gift she's giving freely — or like something she needs to give in order to feel okay?"</div>
+        <div class="text-rule">Warmth from abundance (bones underneath, capable of pushing back) = what you want. Warmth from anxiety management (compliance dressed as kindness) = long-term unhappy partnership.</div>
+        <div style="margin-top:12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">Failure Modes to Avoid</div>
+        <div class="text-rule"><strong>Warmth without bones</strong> — avoids hard conversations, can't push back. Surface attractive, structurally unstable.</div>
+        <div class="text-rule"><strong>Capability without warmth</strong> — the "fellow operator" pattern. Compatible professionally, misses the GPU-completion goal.</div>
+        <div class="text-rule"><strong>Aesthetic without trait</strong> — the Fit Girl aesthetic is a weak filter for the actual trait. Don't optimize for the surface.</div>
+        <div style="margin-top:12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">Age — Soft Prior</div>
+        <div class="text-rule">Target: 24–30. Sweet spot: 25–28. Hard line is <em>state not age</em>: avoid anyone whose dominant note is exhaustion with dating. A luminously open 31-year-old beats a cynical 25-year-old every time.</div>
+        <div style="margin-top:12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">Highest Signal Environments</div>
+        <div class="text-rule">🥇 <strong>Partner dance (bachata / salsa)</strong> — reveals whether she's at home in feeling and presence mode.</div>
+        <div class="text-rule">🥇 <strong>Othership / breathwork</strong> — post-session state is the most emotionally open social state available. Trait surfaces without probing.</div>
+        <div class="text-rule">🥈 <strong>Literary / creative events</strong> — McNally Jackson, Strand readings, small theatre. High signal density, low volume.</div>
+      </div>
+    </div>
+
     <div class="ref-card" id="r-predate">
       <div class="ref-hd" onclick="toggleRef('r-predate')">
         <div class="ref-ico">✅</div>
@@ -3701,7 +3994,7 @@ function rPresence() {
     <div class="ref-card" id="r-principles">
       <div class="ref-hd" onclick="toggleRef('r-principles')">
         <div class="ref-ico">🧠</div>
-        <div class="ref-ttl" style="color:var(--presence)">The 8 Principles — Behavioral OS</div>
+        <div class="ref-ttl" style="color:${col}">The 8 Principles — Behavioral OS</div>
         <div class="ref-toggle">⌄</div>
       </div>
       <div class="ref-body">${principlesH}</div>
@@ -3793,12 +4086,12 @@ function rPresence() {
     <div class="mod-header">
       <div class="back-btn" onclick="go('home')">‹</div>
       <div class="mod-ttl-g">
-        <div class="mod-stat-nm" style="color:${col}">Presence</div>
+        <div class="mod-stat-nm" style="color:${col}">Connection</div>
         <div class="mod-name">Apollo</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
-    ${lvBar('presence', col)}
+    ${lvBar('apollo', col)}
 
     <div class="ap-tabs">
       <div class="ap-tab ${_apTab === 'today' ? 'active' : ''}" onclick="_apTab='today';rPresence()">Today</div>
@@ -3809,7 +4102,7 @@ function rPresence() {
 
     ${tabContent}
 
-    <div class="footer-hint">Apollo · Social &amp; Romantic · Level ${S.levels?.presence || 1}</div>
+    <div class="footer-hint">Apollo · Romantic Pursuit &amp; Selection · Level ${S.levels?.apollo || 1}</div>
   </div>`;
 }
 
@@ -4232,9 +4525,443 @@ function rPurpose() {
       </div>
     </div>
 
-    <div class="footer-hint">Seneca · Philosophy &amp; Direction · Level ${S.levels?.purpose || 1}<br>
-      Weekly review + quarterly audit logged separately</div>
+    ${rSenecaCapacity(col)}
+
+    <div class="footer-hint">Seneca · Philosophy &amp; Direction · Level ${S.levels?.purpose || 1}</div>
   </div>`;
+}
+
+// ── Seneca Capacity Track ──────────────────────────────────
+function rSenecaCapacity(col) {
+  if (!S.senecaCapacity) S.senecaCapacity = { hardConversations:[], therapySessions:[], selectionReviews:[] };
+  const sc = S.senecaCapacity;
+  const curMonth = dk().slice(0, 7); // "YYYY-MM"
+  const curQtr   = Math.floor(new Date().getMonth() / 3);
+  const curYear  = new Date().getFullYear();
+
+  // Hard conversation this month?
+  const hcThisMonth = sc.hardConversations.some(c => c.date.slice(0, 7) === curMonth);
+  // Therapy this quarter?
+  const tqThis = sc.therapySessions.some(t => {
+    const d = new Date(t.date + 'T12:00:00');
+    return Math.floor(d.getMonth() / 3) === curQtr && d.getFullYear() === curYear;
+  });
+  // Selection review this quarter?
+  const srThis = sc.selectionReviews.some(r => {
+    const d = new Date(r.date + 'T12:00:00');
+    return Math.floor(d.getMonth() / 3) === curQtr && d.getFullYear() === curYear;
+  });
+
+  const recentHC = sc.hardConversations.slice(-5).reverse();
+  const recentTS = sc.therapySessions.slice(-4).reverse();
+  const recentSR = sc.selectionReviews.slice(-4).reverse();
+
+  return `
+  <div class="apollo-ref-sep" style="margin-top:20px">
+    <div class="apollo-ref-sep-line"></div>
+    <div class="apollo-ref-sep-lbl">Capacity Track</div>
+    <div class="apollo-ref-sep-line"></div>
+  </div>
+
+  <div class="ht-section" style="--sc-color:${col}">
+    <div class="ht-sec-hd" style="color:${col}">Monthly — Hard Conversation</div>
+    <div class="ht-sec-sub">One honest conversation you've been avoiding. With anyone — partner prospect, friend, colleague, self. +80 XP</div>
+    ${hcThisMonth
+      ? `<div class="ht-mm-done" style="background:color-mix(in srgb,${col} 10%,transparent);border-color:color-mix(in srgb,${col} 30%,transparent);color:${col}">✓ Logged this month</div>`
+      : `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <input id="sn-hc-who" class="ht-input" placeholder="Who + what it was about" style="flex:1;min-width:180px"/>
+          <div class="ht-log-btn" style="background:color-mix(in srgb,${col} 15%,transparent);border-color:color-mix(in srgb,${col} 40%,transparent);color:${col}" onclick="snLogHardConv()">Log +80 XP</div>
+        </div>`}
+    ${recentHC.length > 0 ? `
+    <div style="margin-top:12px">
+      ${recentHC.map(c => `
+        <div class="ht-log-entry">
+          <span class="ht-log-date">${c.date}</span>
+          <span class="ht-log-what" style="color:var(--t2)">${c.who}</span>
+        </div>`).join('')}
+    </div>` : ''}
+  </div>
+
+  <div class="ht-section">
+    <div class="ht-sec-hd" style="color:${col}">Quarterly — Therapy / Introspection</div>
+    <div class="ht-sec-sub">Therapy session or equivalent deep introspection. Once per quarter minimum. +100 XP</div>
+    ${tqThis
+      ? `<div class="ht-mm-done" style="background:color-mix(in srgb,${col} 10%,transparent);border-color:color-mix(in srgb,${col} 30%,transparent);color:${col}">✓ Logged this quarter</div>`
+      : `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <input id="sn-ts-format" class="ht-input" placeholder="Format + what surfaced (one sentence)" style="flex:1;min-width:180px"/>
+          <div class="ht-log-btn" style="background:color-mix(in srgb,${col} 15%,transparent);border-color:color-mix(in srgb,${col} 40%,transparent);color:${col}" onclick="snLogTherapy()">Log +100 XP</div>
+        </div>`}
+    ${recentTS.length > 0 ? `
+    <div style="margin-top:12px">
+      ${recentTS.map(t => `
+        <div class="ht-log-entry">
+          <span class="ht-log-date">${t.date}</span>
+          <span class="ht-log-what" style="color:var(--t2)">${t.format || t.surfaced || '—'}</span>
+        </div>`).join('')}
+    </div>` : ''}
+  </div>
+
+  <div class="ht-section">
+    <div class="ht-sec-hd" style="color:${col}">Quarterly — Selection Learning Review</div>
+    <div class="ht-sec-sub">Review closed + nurture Apollo leads. What drew you? What was missing? What did this reveal? Refine the target profile. +80 XP</div>
+    ${srThis
+      ? `<div class="ht-mm-done" style="background:color-mix(in srgb,${col} 10%,transparent);border-color:color-mix(in srgb,${col} 30%,transparent);color:${col}">✓ Logged this quarter</div>`
+      : `<div style="display:flex;gap:8px;flex-direction:column;margin-top:10px">
+          <textarea id="sn-sr-synthesis" class="ht-input" rows="3" placeholder="Synthesis — what did this quarter's data reveal about what you're actually looking for?" style="resize:vertical;line-height:1.5"></textarea>
+          <div class="ht-log-btn" style="background:color-mix(in srgb,${col} 15%,transparent);border-color:color-mix(in srgb,${col} 40%,transparent);color:${col}" onclick="snLogSelectionReview()">Log review +80 XP</div>
+        </div>`}
+    ${recentSR.length > 0 ? `
+    <div style="margin-top:12px">
+      ${recentSR.map(r => `
+        <div class="ht-log-entry">
+          <span class="ht-log-date">${r.date}</span>
+          <span class="ht-log-what" style="color:var(--t2)">${(r.synthesis || '—').slice(0, 80)}${r.synthesis?.length > 80 ? '…' : ''}</span>
+        </div>`).join('')}
+    </div>` : ''}
+  </div>`;
+}
+
+// ── Seneca Capacity action handlers ───────────────────────
+function snEnsure() {
+  if (!S.senecaCapacity) S.senecaCapacity = { hardConversations:[], therapySessions:[], selectionReviews:[] };
+}
+
+function snLogHardConv() {
+  snEnsure();
+  const inp = document.getElementById('sn-hc-who');
+  const who = inp ? inp.value.trim() : '';
+  if (!who) { alert('Fill in who + what it was about.'); return; }
+  const curMonth = dk().slice(0, 7);
+  const already  = S.senecaCapacity.hardConversations.some(c => c.date.slice(0, 7) === curMonth);
+  if (already) { alert('Already logged a hard conversation this month.'); return; }
+  S.senecaCapacity.hardConversations.push({ date: dk(), who });
+  S.senecaCapacity.hardConversations = S.senecaCapacity.hardConversations.slice(-24);
+  addXP('purpose', 80);
+  save();
+  rPurpose();
+}
+
+function snLogTherapy() {
+  snEnsure();
+  const inp    = document.getElementById('sn-ts-format');
+  const format = inp ? inp.value.trim() : '';
+  if (!format) { alert('Fill in the format + what surfaced.'); return; }
+  const curQtr  = Math.floor(new Date().getMonth() / 3);
+  const curYear = new Date().getFullYear();
+  const already = S.senecaCapacity.therapySessions.some(t => {
+    const d = new Date(t.date + 'T12:00:00');
+    return Math.floor(d.getMonth() / 3) === curQtr && d.getFullYear() === curYear;
+  });
+  if (already) { alert('Already logged a therapy/introspection session this quarter.'); return; }
+  S.senecaCapacity.therapySessions.push({ date: dk(), format });
+  S.senecaCapacity.therapySessions = S.senecaCapacity.therapySessions.slice(-12);
+  addXP('purpose', 100);
+  save();
+  rPurpose();
+}
+
+function snLogSelectionReview() {
+  snEnsure();
+  const el       = document.getElementById('sn-sr-synthesis');
+  const synthesis = el ? el.value.trim() : '';
+  if (!synthesis) { alert('Add a synthesis before logging.'); return; }
+  const curQtr  = Math.floor(new Date().getMonth() / 3);
+  const curYear = new Date().getFullYear();
+  const already = S.senecaCapacity.selectionReviews.some(r => {
+    const d = new Date(r.date + 'T12:00:00');
+    return Math.floor(d.getMonth() / 3) === curQtr && d.getFullYear() === curYear;
+  });
+  if (already) { alert('Already logged a Selection Learning Review this quarter.'); return; }
+  S.senecaCapacity.selectionReviews.push({ date: dk(), synthesis });
+  S.senecaCapacity.selectionReviews = S.senecaCapacity.selectionReviews.slice(-8);
+  addXP('purpose', 80);
+  save();
+  rPurpose();
+}
+
+// ── Hestia — Friendship & Belonging ───────────────────────
+let _htTab = 'today';
+
+function rHestia() {
+  const col  = COLS.hestia;
+  const cp   = modPct('hestia');
+  const wk   = wk_key();
+
+  // Ensure state branch exists
+  if (!S.hestia) S.hestia = { friends:[], embodiedHoursLog:[], maintenanceMoves:[], deepeningLog:[], unoptimizedRelationship:'' };
+
+  // ── Weekly embodied hours helpers
+  const ehEntry = S.hestia.embodiedHoursLog.find(e => e.weekKey === wk);
+  const ehHours = ehEntry ? ehEntry.hours : 0;
+  const EH_MIN  = 4;
+  const EH_TGT  = 6;
+  const ehPct   = Math.min(100, Math.round(ehHours / EH_TGT * 100));
+  const ehColor = ehHours >= EH_TGT ? col : ehHours >= EH_MIN ? 'var(--warning)' : 'var(--danger)';
+  const ehLabel = ehHours >= EH_TGT ? '✓ Target reached' : ehHours >= EH_MIN ? 'Minimum met' : 'Below minimum';
+
+  // ── Maintenance move this week (1 per week)
+  const mmThisWk = S.hestia.maintenanceMoves.filter(m => dateToWeekKey(m.date) === wk);
+  const mmDone = mmThisWk.length > 0;
+
+  // ── Friends list HTML
+  const friendsH = S.hestia.friends.length === 0
+    ? `<div style="color:var(--t3);font-size:13px;padding:8px 0">No friends added yet — add names below.</div>`
+    : S.hestia.friends.slice().sort((a,b) => {
+        if (!a.lastContact && !b.lastContact) return 0;
+        if (!a.lastContact) return 1;
+        if (!b.lastContact) return -1;
+        return a.lastContact.localeCompare(b.lastContact);
+      }).map(f => {
+        const daysSince = f.lastContact
+          ? Math.floor((Date.now() - new Date(f.lastContact + 'T12:00:00')) / 86400000)
+          : null;
+        const staleColor = daysSince === null ? 'var(--t3)'
+          : daysSince > 30 ? 'var(--danger)'
+          : daysSince > 14 ? 'var(--warning)'
+          : col;
+        const staleLabel = daysSince === null ? 'no contact logged'
+          : daysSince === 0 ? 'today'
+          : daysSince === 1 ? '1 day ago'
+          : `${daysSince}d ago`;
+        return `
+        <div class="ht-friend-row">
+          <div class="ht-friend-info">
+            <div class="ht-friend-name">${f.name}</div>
+            <div class="ht-friend-meta" style="color:${staleColor}">${staleLabel}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="ht-contact-btn" onclick="htLogContact('${f.id}')">✓ Contact</div>
+            <div class="ht-remove-btn" onclick="htRemoveFriend('${f.id}')">✕</div>
+          </div>
+        </div>`;
+      }).join('');
+
+  // ── Today tab
+  const todayTab = `
+    ${proto('🔥', 'Daily Protocol', P.hestia.daily, col, false)}
+
+    <div class="ht-section">
+      <div class="ht-sec-hd">Weekly Embodied Hours</div>
+      <div class="ht-sec-sub">Time with people — not dates, not work. Toward 4hr minimum / 6hr target.</div>
+      <div class="ht-eh-bar-wrap">
+        <div class="ht-eh-bar">
+          <div class="ht-eh-fill" style="width:${ehPct}%;background:${ehColor}"></div>
+          <div class="ht-eh-marker" style="left:${Math.round(EH_MIN/EH_TGT*100)}%"></div>
+        </div>
+        <div class="ht-eh-labels">
+          <span style="color:${ehColor}">${ehHours.toFixed(1)}h</span>
+          <span style="color:var(--t3)">target ${EH_TGT}h · ${ehLabel}</span>
+        </div>
+      </div>
+      <div class="ht-eh-btns">
+        <div class="ht-eh-btn" onclick="htAddHours(0.5)">+30 min</div>
+        <div class="ht-eh-btn" onclick="htAddHours(1)">+1 hr</div>
+        <div class="ht-eh-btn" onclick="htAddHours(2)">+2 hr</div>
+        <div class="ht-eh-btn" onclick="htAddHours(3)">+3 hr</div>
+        ${ehHours > 0 ? `<div class="ht-eh-btn ht-eh-undo" onclick="htAddHours(-0.5)">−30 min</div>` : ''}
+      </div>
+    </div>
+
+    <div class="ht-section">
+      <div class="ht-sec-hd">Maintenance Move — This Week</div>
+      <div class="ht-sec-sub">One deliberate move toward a friendship. Text, schedule, send something specific.</div>
+      ${mmDone
+        ? `<div class="ht-mm-done">✓ Done — "${mmThisWk[0].note || 'move logged'}"</div>`
+        : `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <input id="ht-mm-note" class="ht-input" placeholder="Who + what (e.g. 'Texted Marco, scheduled dinner')" style="flex:1;min-width:180px"/>
+            <div class="ht-log-btn" onclick="htLogMaintenance()">Log move +15 XP</div>
+          </div>`}
+    </div>
+
+    <div class="ht-section">
+      <div class="ht-sec-hd">Un-optimized Relationship</div>
+      <div class="ht-sec-sub">Name one relationship you haven't been investing in. Just naming it is the first move.</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <input id="ht-unopt" class="ht-input" value="${(S.hestia.unoptimizedRelationship || '').replace(/"/g,'&quot;')}" placeholder="e.g. 'Dad — haven't had a real call in months'" style="flex:1"/>
+        <div class="ht-log-btn" onclick="htSaveUnopt()">Save +20 XP</div>
+      </div>
+      ${S.hestia.unoptimizedRelationship ? `<div style="font-size:12px;color:var(--t3);margin-top:6px">Current: "${S.hestia.unoptimizedRelationship}"</div>` : ''}
+    </div>`;
+
+  // ── Friends tab
+  const friendsTab = `
+    <div class="ht-section">
+      <div class="ht-sec-hd">Friend List</div>
+      <div class="ht-sec-sub">Names + last contact only. Not a CRM — no pipelines, no due dates on people.</div>
+      <div class="ht-friends-list">${friendsH}</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <input id="ht-new-friend" class="ht-input" placeholder="Friend's name" style="flex:1"/>
+        <div class="ht-log-btn" onclick="htAddFriend()">Add</div>
+      </div>
+    </div>`;
+
+  // ── Log tab (deepening + history)
+  const recentMoves = S.hestia.maintenanceMoves.slice(-8).reverse();
+  const recentDeep  = S.hestia.deepeningLog.slice(-5).reverse();
+
+  const logTab = `
+    <div class="ht-section">
+      <div class="ht-sec-hd">Quarterly Deepening</div>
+      <div class="ht-sec-sub">A real conversation — disclosure and repair. Log after it happens. +60 XP</div>
+      <div style="display:flex;gap:8px;flex-direction:column;margin-top:10px">
+        <input id="ht-deep-who" class="ht-input" placeholder="Who"/>
+        <input id="ht-deep-what" class="ht-input" placeholder="What shifted — one sentence"/>
+        <div class="ht-log-btn" onclick="htLogDeepening()">Log deepening +60 XP</div>
+      </div>
+      ${recentDeep.length > 0 ? `
+      <div style="margin-top:14px">
+        ${recentDeep.map(d => `
+          <div class="ht-log-entry">
+            <span class="ht-log-date">${d.date}</span>
+            <span class="ht-log-who">${d.who}</span>
+            <span class="ht-log-what">${d.what}</span>
+          </div>`).join('')}
+      </div>` : ''}
+    </div>
+
+    <div class="ht-section">
+      <div class="ht-sec-hd">Maintenance History</div>
+      ${recentMoves.length === 0
+        ? `<div style="color:var(--t3);font-size:13px;padding:8px 0">No moves logged yet.</div>`
+        : recentMoves.map(m => `
+          <div class="ht-log-entry">
+            <span class="ht-log-date">${m.date}</span>
+            <span class="ht-log-what">${m.note || '—'}</span>
+          </div>`).join('')}
+    </div>`;
+
+  // ── Level bar note: Connection bottleneck
+  const grace = S.cfg?.hestiaGraceUntil;
+  const inGrace = grace && dk() <= grace;
+  const connNote = inGrace
+    ? `<div style="font-size:11px;color:var(--warning);margin-top:6px;letter-spacing:.5px">Grace period active until ${grace} — Hestia not yet counted in Connection bottleneck</div>`
+    : `<div style="font-size:11px;color:var(--t3);margin-top:6px;letter-spacing:.5px">Connection stat = min(Apollo L${S.levels?.apollo||1}, Hestia L${S.levels?.hestia||1})</div>`;
+
+  document.getElementById('s-hestia').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${col}">Connection</div>
+        <div class="mod-name">Hestia</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+    ${lvBar('hestia', col)}
+    ${connNote}
+
+    <div class="ap-tabs" style="margin-top:14px">
+      <div class="ap-tab ${_htTab === 'today'   ? 'active' : ''}" onclick="_htTab='today';rHestia()">Today</div>
+      <div class="ap-tab ${_htTab === 'friends' ? 'active' : ''}" onclick="_htTab='friends';rHestia()">Friends</div>
+      <div class="ap-tab ${_htTab === 'log'     ? 'active' : ''}" onclick="_htTab='log';rHestia()">Log</div>
+    </div>
+
+    ${_htTab === 'today'   ? todayTab   : ''}
+    ${_htTab === 'friends' ? friendsTab : ''}
+    ${_htTab === 'log'     ? logTab     : ''}
+
+    <div class="footer-hint">Hestia · Friendship &amp; Belonging · Connection L${S.levels?.hestia||1}</div>
+  </div>`;
+}
+
+// ── Hestia action handlers ─────────────────────────────────
+
+function htEnsure() {
+  if (!S.hestia) S.hestia = { friends:[], embodiedHoursLog:[], maintenanceMoves:[], deepeningLog:[], unoptimizedRelationship:'' };
+}
+
+// Convert a date string "YYYY-MM-DD" → the Monday-starting weekKey that contains it
+function dateToWeekKey(dateStr) {
+  if (!dateStr) return '';
+  const d   = new Date(dateStr + 'T12:00:00');
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(d.getFullYear(), d.getMonth(), diff);
+  return mon.toISOString().slice(0, 10);
+}
+
+function htAddHours(delta) {
+  htEnsure();
+  const wk = wk_key();
+  let entry = S.hestia.embodiedHoursLog.find(e => e.weekKey === wk);
+  if (!entry) {
+    entry = { weekKey: wk, hours: 0 };
+    S.hestia.embodiedHoursLog.push(entry);
+  }
+  const before = entry.hours;
+  entry.hours = Math.max(0, +(before + delta).toFixed(1));
+  // Mark ht1 done when first logging hours this day (ht1 has xp:0 so no double-XP risk)
+  if (delta > 0 && !done('ht1')) toggle('ht1');
+  save();
+  rHestia();
+}
+
+function htLogMaintenance() {
+  htEnsure();
+  const inp  = document.getElementById('ht-mm-note');
+  const note = inp ? inp.value.trim() : '';
+  const wk   = wk_key();
+  // Check if already logged this week
+  const already = S.hestia.maintenanceMoves.some(m => dateToWeekKey(m.date) === wk);
+  if (already) { alert('Maintenance move already logged this week.'); return; }
+  S.hestia.maintenanceMoves.push({ date: dk(), note });
+  S.hestia.maintenanceMoves = S.hestia.maintenanceMoves.slice(-52);
+  addXP('hestia', 15);
+  // Mark ht2 done if not already
+  if (!done('ht2')) toggle('ht2');
+  save();
+  rHestia();
+}
+
+function htSaveUnopt() {
+  htEnsure();
+  const inp = document.getElementById('ht-unopt');
+  const val = inp ? inp.value.trim() : '';
+  if (!val) return;
+  const isNew = !S.hestia.unoptimizedRelationship;
+  S.hestia.unoptimizedRelationship = val;
+  if (isNew) addXP('hestia', 20);
+  save();
+  rHestia();
+}
+
+function htAddFriend() {
+  htEnsure();
+  const inp  = document.getElementById('ht-new-friend');
+  const name = inp ? inp.value.trim() : '';
+  if (!name) return;
+  const id = 'f_' + Date.now();
+  S.hestia.friends.push({ id, name, lastContact: null });
+  save();
+  rHestia();
+}
+
+function htRemoveFriend(id) {
+  htEnsure();
+  if (!confirm('Remove this friend from the list?')) return;
+  S.hestia.friends = S.hestia.friends.filter(f => f.id !== id);
+  save();
+  rHestia();
+}
+
+function htLogContact(id) {
+  htEnsure();
+  const f = S.hestia.friends.find(x => x.id === id);
+  if (f) { f.lastContact = dk(); save(); rHestia(); }
+}
+
+function htLogDeepening() {
+  htEnsure();
+  const whoEl  = document.getElementById('ht-deep-who');
+  const whatEl = document.getElementById('ht-deep-what');
+  const who    = whoEl  ? whoEl.value.trim()  : '';
+  const what   = whatEl ? whatEl.value.trim() : '';
+  if (!who || !what) { alert('Fill in both fields.'); return; }
+  S.hestia.deepeningLog.push({ date: dk(), who, what });
+  S.hestia.deepeningLog = S.hestia.deepeningLog.slice(-20);
+  addXP('hestia', 60);
+  save();
+  rHestia();
 }
 
 // ── Prometheus / Craft ─────────────────────────────────────
@@ -4896,7 +5623,8 @@ function rSettings() {
       ${[
         { mod:'physique', name:'Adonis',     col:'var(--physique)' },
         { mod:'vitality', name:'Somnus',     col:'var(--vitality)' },
-        { mod:'presence', name:'Apollo',     col:'var(--presence)' },
+        { mod:'apollo',   name:'Apollo',     col:'var(--presence)' },
+        { mod:'hestia',   name:'Hestia',     col:'#34D399'         },
         { mod:'craft',    name:'Prometheus', col:'var(--craft)'    },
         { mod:'purpose',  name:'Seneca',     col:'var(--purpose)'  },
       ].map(({ mod, name, col }) => {
@@ -5129,7 +5857,7 @@ function tickClock() {
 // ── Init ───────────────────────────────────────────────────
 (function init() {
   const app = document.getElementById('app');
-  ['home','modules','physique','vitality','presence','craft','purpose','settings'].forEach(id => {
+  ['home','modules','physique','vitality','presence','apollo','hestia','craft','purpose','settings'].forEach(id => {
     const d = document.createElement('div');
     d.id = 's-' + id;
     d.className = 'screen' + (id === 'home' ? ' active' : '');
