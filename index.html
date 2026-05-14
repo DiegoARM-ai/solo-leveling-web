@@ -919,6 +919,264 @@ select.set-inp { width: auto; }
 }
 .predate-reset:active { color: var(--t2); }
 
+/* Apollo tab system */
+.ap-tabs {
+  display: flex; gap: 6px; margin-bottom: 18px;
+}
+.ap-tab {
+  flex: 1; padding: 8px 4px; text-align: center;
+  border-radius: 10px; border: 1.5px solid var(--border);
+  font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  cursor: pointer; color: var(--t3); background: var(--surface2);
+  transition: all .15s; -webkit-user-select: none; user-select: none;
+}
+.ap-tab.active {
+  background: rgba(192,132,252,.15); border-color: var(--presence);
+  color: var(--presence);
+}
+.ap-tab:active { opacity: .7; }
+
+/* Apollo date planner embed */
+.ap-plan-wrap {
+  background: var(--surface); border-radius: 14px;
+  border: 1px solid var(--border); overflow: hidden; margin-bottom: 16px;
+}
+.ap-plan-hd {
+  padding: 14px 16px 10px;
+  font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--presence); border-bottom: 1px solid var(--border);
+}
+.ap-wx-strip {
+  display: flex; gap: 5px; overflow-x: auto; padding: 12px 14px 8px;
+  scrollbar-width: none;
+}
+.ap-wx-strip::-webkit-scrollbar { display: none; }
+.ap-day-pill {
+  flex: 0 0 62px; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 8px 4px; text-align: center;
+  cursor: pointer; background: var(--surface2);
+  transition: all .15s; -webkit-user-select: none; user-select: none;
+}
+.ap-day-pill.active {
+  border-color: var(--presence); background: rgba(192,132,252,.12);
+}
+.ap-day-pill:active { opacity: .7; }
+.ap-dp-lbl { font-size: 9px; font-weight: 700; color: var(--t3); letter-spacing: .4px; text-transform: uppercase; }
+.ap-day-pill.active .ap-dp-lbl { color: var(--presence); }
+.ap-dp-emoji { font-size: 16px; margin: 2px 0; }
+.ap-dp-temp { font-size: 11px; font-weight: 600; color: var(--t1); }
+.ap-dp-rain { font-size: 9px; color: var(--t3); min-height: 12px; }
+.ap-today-badge {
+  background: var(--presence); color: #fff;
+  font-size: 8px; font-weight: 700; padding: 1px 4px;
+  border-radius: 3px; text-transform: uppercase; display: block; margin-bottom: 1px;
+}
+.ap-day-info {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.ap-day-emoji { font-size: 26px; }
+.ap-day-stats { flex:1; }
+.ap-day-title { font-size: 13px; font-weight: 600; color: var(--t1); }
+.ap-day-sub { font-size: 11px; color: var(--t2); margin-top: 2px; }
+.ap-cond-chip {
+  padding: 4px 10px; border-radius: 14px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.ap-chip-great, .ap-chip-mild { background: rgba(34,197,94,.15); color: #16a34a; }
+.ap-chip-rainy { background: rgba(59,130,246,.15); color: #2563eb; }
+.ap-chip-cold  { background: rgba(99,102,241,.15); color: #4f46e5; }
+.ap-chip-hot   { background: rgba(239,68,68,.15); color: #dc2626; }
+.ap-date-tabs {
+  display: flex; gap: 5px; padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.ap-dtype-tab {
+  flex: 1; padding: 7px 4px; text-align: center;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  cursor: pointer; background: var(--surface2);
+  transition: all .15s; -webkit-user-select: none; user-select: none;
+}
+.ap-dtype-tab.active { border-color: var(--presence); background: rgba(192,132,252,.12); }
+.ap-dtype-tab:active { opacity: .7; }
+.ap-dtype-title { font-size: 11px; font-weight: 600; color: var(--t2); }
+.ap-dtype-tab.active .ap-dtype-title { color: var(--presence); }
+.ap-dtype-sub { font-size: 9px; color: var(--t3); margin-top: 1px; }
+.ap-itin-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
+.ap-itin-vibe { font-size: 11px; font-style: italic; color: var(--t2); flex:1; padding-right: 8px; }
+.ap-budget-pill {
+  font-size: 11px; font-weight: 700; color: #16a34a;
+  background: rgba(34,197,94,.12); padding: 3px 9px;
+  border-radius: 12px; white-space: nowrap;
+}
+.ap-text-card {
+  margin: 10px 14px; padding: 11px 12px;
+  background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.25);
+  border-radius: 10px;
+}
+.ap-text-hd {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px;
+}
+.ap-text-lbl { font-size: 10px; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: #3b82f6; }
+.ap-copy-btn {
+  background: #2563eb; color: #fff; border: none;
+  border-radius: 6px; padding: 4px 10px; font-size: 11px;
+  font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: all .15s;
+}
+.ap-copy-btn.copied { background: #16a34a; }
+.ap-text-msg {
+  font-size: 12.5px; font-style: italic; color: var(--t1);
+  line-height: 1.5; padding: 8px 10px; margin-bottom: 6px;
+  background: rgba(255,255,255,.06); border-radius: 6px;
+  border: 1px solid rgba(59,130,246,.18);
+}
+.ap-text-fn { font-size: 10px; color: var(--t3); line-height: 1.5; }
+.ap-hh-banner {
+  display: flex; align-items: flex-start; gap: 7px;
+  margin: 8px 14px; padding: 8px 10px;
+  background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.35);
+  border-radius: 8px; font-size: 11px; color: #92400e; line-height: 1.5;
+}
+.ap-cf-wrap {
+  margin: 10px 14px; padding: 10px 12px;
+  border: 1.5px solid rgba(192,132,252,.3); border-radius: 10px;
+}
+.ap-cf-lbl { font-size: 10px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--presence); margin-bottom: 5px; }
+.ap-cf-framing { font-size: 11px; color: var(--t2); line-height: 1.55; margin-bottom: 9px; }
+.ap-cf-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 7px; border: 1px solid transparent;
+  text-decoration: none; color: var(--t1); transition: background .12s;
+}
+.ap-cf-link:active { background: var(--surface2); }
+.ap-cf-icon { font-size: 14px; flex-shrink: 0; }
+.ap-cf-name { font-size: 12px; font-weight: 500; flex:1; }
+.ap-cf-meta { font-size: 10px; color: var(--t3); white-space: nowrap; }
+.ap-cf-arrow { font-size: 10px; color: var(--t3); margin-left: 2px; }
+.ap-phases { display: flex; flex-direction: column; gap: 8px; padding: 10px 14px; }
+.ap-phase-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  position: relative; overflow: hidden;
+}
+.ap-phase-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--presence); opacity: .5;
+}
+.ap-phase-card.optional::before { opacity: .2; }
+.ap-phase-top {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;
+}
+.ap-phase-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 1.5px solid var(--presence); background: rgba(192,132,252,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--presence); flex-shrink: 0;
+}
+.ap-phase-card.optional .ap-phase-num { opacity: .5; }
+.ap-phase-title { font-size: 13px; font-weight: 600; color: var(--t1); flex:1; }
+.ap-phase-dur {
+  font-size: 10px; color: var(--t3); background: var(--surface);
+  padding: 2px 7px; border-radius: 5px; white-space: nowrap;
+}
+.ap-hh-badge {
+  font-size: 9px; font-weight: 700; color: #92400e;
+  background: rgba(251,191,36,.2); border: 1px solid rgba(251,191,36,.4);
+  padding: 2px 6px; border-radius: 4px; white-space: nowrap;
+}
+.ap-phase-desc { font-size: 12px; color: var(--t2); line-height: 1.55; margin-bottom: 7px; }
+.ap-phase-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.ap-tag { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 5px; }
+.ap-tag-cost { background: rgba(34,197,94,.12); color: #16a34a; }
+.ap-tag-hood { background: var(--surface); color: var(--t3); }
+.ap-tag-opt  { background: var(--surface); color: var(--t3); font-style: italic; }
+.ap-phase-tip {
+  margin-top: 7px; padding: 7px 10px;
+  background: rgba(192,132,252,.08); border-left: 2.5px solid var(--presence);
+  border-radius: 0 6px 6px 0; font-size: 11px; color: var(--t2); line-height: 1.5;
+}
+.ap-drink-note {
+  margin-top: 6px; padding: 7px 10px;
+  background: rgba(20,184,166,.08); border-left: 2.5px solid rgba(20,184,166,.5);
+  border-radius: 0 6px 6px 0; font-size: 11px; color: var(--t2); line-height: 1.5;
+}
+.ap-drink-note strong {
+  display: block; font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .4px; margin-bottom: 2px; color: #0f766e;
+}
+.ap-wx-loading { text-align: center; padding: 30px 20px; color: var(--t3); font-size: 13px; }
+.ap-wx-spinner {
+  width: 22px; height: 22px; border: 2px solid var(--border);
+  border-top-color: var(--presence); border-radius: 50%;
+  animation: spin .7s linear infinite; margin: 0 auto 10px;
+}
+
+/* Apollo session logger */
+.ap-log-wrap { padding: 4px 0 8px; }
+.ap-log-section {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px; margin-bottom: 10px;
+}
+.ap-log-sec-hd {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+}
+.ap-log-sec-title {
+  font-size: 12px; font-weight: 800; letter-spacing: .5px;
+  text-transform: uppercase; color: var(--presence);
+}
+.ap-log-sec-xp {
+  font-size: 11px; font-weight: 700; color: var(--t3);
+  background: var(--surface2); padding: 2px 8px; border-radius: 8px;
+}
+.ap-log-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-top: 1px solid var(--border);
+}
+.ap-log-row:first-of-type { border-top: none; padding-top: 0; }
+.ap-log-lbl { font-size: 13px; color: var(--t1); font-weight: 500; flex:1; }
+.ap-log-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
+.ap-log-toggle {
+  width: 36px; height: 20px; border-radius: 10px;
+  background: var(--surface2); border: 1.5px solid var(--border);
+  position: relative; cursor: pointer; flex-shrink: 0;
+  transition: all .2s; -webkit-user-select: none; user-select: none;
+}
+.ap-log-toggle::after {
+  content: ''; position: absolute; left: 2px; top: 2px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--t3); transition: all .2s;
+}
+.ap-log-toggle.on {
+  background: rgba(192,132,252,.25); border-color: var(--presence);
+}
+.ap-log-toggle.on::after { left: 18px; background: var(--presence); }
+.ap-log-counter {
+  display: flex; align-items: center; gap: 8px;
+}
+.ap-log-cnt-btn {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; color: var(--t2); line-height: 1;
+  -webkit-user-select: none; user-select: none; transition: background .12s;
+}
+.ap-log-cnt-btn:active { background: var(--border); }
+.ap-log-cnt-val {
+  min-width: 24px; text-align: center;
+  font-size: 15px; font-weight: 700; color: var(--t1);
+}
+.ap-log-total {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(192,132,252,.08); border: 1px solid rgba(192,132,252,.25);
+  border-radius: 10px; padding: 12px 14px; margin-bottom: 10px;
+}
+.ap-log-total-lbl { font-size: 12px; color: var(--t2); font-weight: 500; }
+.ap-log-total-xp { font-size: 18px; font-weight: 800; color: var(--presence); }
+.ap-log-note { font-size: 10.5px; color: var(--t3); line-height: 1.5; text-align: center; padding: 4px 0 8px; }
+
 /* ===== PROMETHEUS MODULE ===== */
 .craft-log-section {
   background: var(--card); border: 1px solid var(--border);
@@ -1471,8 +1729,8 @@ const P = {
     daily: [
       { id:'pr1', xp:5,  tod:'anytime',  mod:'presence', name:'Swipe session',                note:'Quality over volume — engage with profiles you\'re actually interested in' },
       { id:'pr2', xp:3,  tod:'anytime',  mod:'presence', name:'Respond to all matches',       note:'Within 24h — a dormant pipeline dies. Every unanswered match is a dead lead.' },
-      { id:'pr3', xp:4,  tod:'anytime',  mod:'presence', name:'Send openers to new matches',  note:'Hit your daily opener target. Lead with something specific — no "hey" or "what\'s up"' },
-      { id:'pr4', xp:3,  tod:'anytime',  mod:'presence', name:'Move conversations toward a date', note:'5–7 messages max — no pen pals. Propose within 3–5 exchanges. Specific venue + binary timing.' },
+      { id:'pr3', xp:4,  tod:'anytime',  mod:'presence', name:'Send openers to new matches',  note:'Only if Lead + Following Up in your pipeline is < 5. Mid-funnel first, top-of-funnel second. Lead with something specific — no "hey".' },
+      { id:'pr4', xp:5,  tod:'anytime',  mod:'presence', name:'Pipeline check — no My Move card overdue', note:'Open Notion → My Move filter → take action on anything due. 5 min max. Mid-funnel before apps.' },
     ],
   },
   purpose: {
@@ -1612,6 +1870,18 @@ function defaultState() {
     sleep:    {},   // dateKey → {good, oura, debt, rhr, auto}
     weight:   [],   // [{date, w}]
     preDate:  {},   // pre-date checklist state (pd1–pd7)
+    sessionLog: {   // Apollo weekly session log — resets each week
+      weekKey:      '',
+      dance:        false,
+      danceConvos:  0,
+      danceNumbers: 0,
+      runClub:      false,
+      runStayed:    false,
+      spikeEvent:   false,
+      approaches:   0,
+      numbers:      0,
+      dates:        0,
+    },
     xp: {
       physique: { weekly: 0, weekKey: '' },
       vitality: { weekly: 0, weekKey: '' },
@@ -1643,6 +1913,7 @@ function migrateState(s) {
   if (s.cfg.sleepCon    === undefined) s.cfg.sleepCon    = null;
   if (s.cfg.pipelineUrl === undefined) s.cfg.pipelineUrl = '';
   if (!s.preDate) s.preDate = {};
+  if (!s.sessionLog) s.sessionLog = { weekKey:'', dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
   // ensure all mods exist
   ['physique','vitality','presence','craft','purpose'].forEach(m => {
     if (!s.xp[m]) s.xp[m] = { weekly: 0, weekKey: '' };
@@ -2840,6 +3111,423 @@ function heatmap(ss) {
 }
 
 // ── Apollo ─────────────────────────────────────────────────
+// Date planner data (5 conditions × 4 date types = 20 itineraries)
+const AP_DATA = {
+  great: {
+    1: { vibe:"Low-key, conversational, zero pressure", budget:"$35–55", textMsg:"Hey – you free {day}? Was thinking coffee in the East Village, maybe walk around a bit. Super low-key.", hhNote:"💰 Ruffian has happy hour Mon–Thu 5–7pm. Start Phase 2 around 5pm and the first round is discounted.", phases:[
+      { n:1, title:"Tompkins Square Park", dur:"45 min", desc:"Grab coffees from Mud Coffee on Ave A & 9th and take them to the park. No agenda, totally low-stakes. The dog run is always good for five minutes of content. This is where you find out if there's actual chemistry before you've spent a dime.", cost:"~$10", hood:"East Village", tip:"Arrive at the park first, coffees already in hand. Small logistics detail that reads as attentive without being over-the-top." },
+      { n:2, title:"Ruffian Wine Bar", dur:"1–1.5 hrs", desc:"Two blocks away on E 7th between 1st and 2nd. Candlelit, intimate, natural wine list that gives the bartender something to talk about. Transitioning from coffee → drinks signals the evening is worth continuing.", cost:"~$35–40", hood:"East Village", hh:"Mon–Thu 5–7pm", tip:"Sit at the bar if there's space. Side-by-side is more intimate than across a table for a first date.", drinkNote:"Order sparkling water with a squeeze of lemon and orange bitters — it looks intentional and nobody blinks." },
+      { n:3, title:"LES Wander → Attaboy", dur:"Open", optional:true, desc:"If the energy is there, walk south toward the LES. Delancey Bridge looks good at night. One final drink at Attaboy on Rivington — no menu, they make what you'd like.", cost:"~$22", hood:"Lower East Side", tip:"Don't suggest this unless she's lingering. 'Want one more?' after two solid hours is a strong close.", drinkNote:"Attaboy is one of the best places in the city to not drink. No menu means they make to order — tell them you don't drink and want something interesting." }
+    ]},
+    2: { vibe:"More adventurous, shows your range beyond the neighborhood", budget:"$130–165", textMsg:"You free {day}? I want to take you to the High Line then dinner in Nolita – I know a good spot.", hhNote:"💰 Employees Only has happy hour Mon–Fri 5–7pm. Time Phase 3 to arrive before 7pm on a weekday.", phases:[
+      { n:1, title:"The High Line", dur:"1 hr", desc:"Lyft to the Gansevoort entrance and walk north. Beautiful elevated park, always something to look at, just enough movement to keep the energy up. End near Hudson Yards for the view.", cost:"Free + ~$15 Lyft", hood:"Chelsea", tip:"Go in the evening — the lighting and skyline are dramatically better after 7pm." },
+      { n:2, title:"Dinner at Estela", dur:"1.5 hrs", desc:"Drop into Estela on Houston without a reservation — sit at the bar. The food is genuinely exceptional (the beef tartare is famous). Sharing small plates is inherently more connective than ordering separately.", cost:"$80–100", hood:"Nolita", tip:"If the bar is full, Lure Fishbar two blocks west is a strong backup.", drinkNote:"Estela's staff are world-class — ask about NA pairings or sparkling water. A restaurant at this level takes every guest's glass seriously." },
+      { n:3, title:"Employees Only", dur:"1 hr", desc:"Walk to Employees Only on Hudson St — one of the best cocktail bars in the city, gorgeous 1920s interior. By this point you're deep into the evening and the vibe is set.", cost:"~$38", hood:"West Village", hh:"Mon–Fri 5–7pm", tip:"Get there before 11pm on weekends to skip a wait. Weeknights it's perfect.", drinkNote:"Tell the bartender you don't drink and want something worth drinking — EO's staff make excellent NA cocktails." }
+    ]},
+    3: { vibe:"Thoughtful and memorable — she'll tell her friends about this one", budget:"$210–260", textMsg:"Free {day} evening? I want to take you somewhere. I'll handle the plan.", phases:[
+      { n:1, title:"The Frick Collection", dur:"1.5 hrs", desc:"The most underrated date museum in the city — a small Gilded Age mansion with Vermeer, Rembrandt, and El Greco in rooms that feel like actual drawing rooms. Friday evenings are 'Frick on the Fly' with cocktails and acoustic music.", cost:"$35/person ($22 under 30)", hood:"Upper East Side", tip:"Book in advance at frick.org — they cap capacity. Walk the 5th Ave park wall afterward for the Central Park view." },
+      { n:2, title:"Amor y Amargo", dur:"45 min", desc:"Lyft back to your home turf — this tiny bitters bar on E 6th is obscure enough to be impressive. Let the bartenders do their thing. 'We like bitter things' is all you need to say.", cost:"~$28", hood:"East Village", hh:"Mon–Thu 5–7pm", tip:"It holds 20 people max. If it's full, Pouring Ribbons on Ave B is an excellent backup.", drinkNote:"Amor y Amargo is one of the best places in the city to not drink — they specialize in bitters and have a dedicated non-alcoholic menu. Ask for the NA bitters flight." },
+      { n:3, title:"Dinner at Cote", dur:"2 hrs", desc:"Michelin-starred Korean BBQ in Flatiron — the meat is cooked tableside, which makes the whole dinner interactive and tactile. Order the Butcher's Feast for two.", cost:"$140–165", hood:"Flatiron", tip:"Reserve on Resy 1–2 weeks ahead. Counter seats facing the grill are the best seats in the house.", drinkNote:"Ask about NA pairing options — Cote's service team is top-tier and will suggest something thoughtful, often yuzu or citrus-forward drinks." }
+    ]},
+    4: { vibe:"The city as the date — movement and curiosity, no agenda", budget:"$25–45", textMsg:"Hey – free {day}? I want to show you this floating park in the Hudson. Bring comfortable shoes.", phases:[
+      { n:1, title:"Essex Market picnic → Tompkins Square", dur:"1 hr", desc:"Essex Market on Delancey is a gourmet food hall — grab a few things (cheese, fruit, pastry, whatever looks good) and take them to Tompkins Square Park. Eating something simple in a park is an underrated first date move: low-stakes, no waiter interrupting.", cost:"~$18", hood:"East Village", tip:"$15–20 gets you something genuinely nice from Essex Market. Don't overpack it — the point is the walk, not the spread." },
+      { n:2, title:"Little Island", dur:"1 hr", desc:"Lyft to West 13th St and Hudson River Park — Little Island is a stunning elevated floating park built on tulip-shaped piers. Completely unique, beautiful views of the skyline. Almost nobody uses it as a date spot and it always lands.", cost:"Free + ~$20 Lyft", hood:"West Village / Hudson River", tip:"The 'hills' of the island have 360° views of the Hudson and skyline. Small enough to walk everything in 30 minutes, then find a spot on the grass." },
+      { n:3, title:"West Village dessert close", dur:"Open", optional:true, desc:"You're already in the West Village — 'want dessert?' is the most natural close imaginable. Maman on Christopher St for a cookie and coffee, or just keep walking and let the conversation decide.", cost:"~$12", hood:"West Village", tip:"The evening can extend into dinner from here easily if it's going well." }
+    ]}
+  },
+  mild: {
+    1: { vibe:"Crisp and cozy — shoulder season works in your favor", budget:"$35–55", textMsg:"Hey – free {day}? I know a really unusual coffee bar in the East Village worth checking out. Just a couple hours.", hhNote:"💰 Ruffian happy hour Mon–Thu 5–7pm. A 5pm start at Hi-Collar gets you discounted wine for Phase 2.", phases:[
+      { n:1, title:"Hi-Collar Kissaten", dur:"1 hr", desc:"A Japanese-style sitting coffee bar on E 10th — a barista hand-brews pour-overs while you sit at the counter. Possibly the most unique first date spot in the East Village. Nobody else in NYC is doing this and it's a guaranteed conversation starter.", cost:"~$14", hood:"East Village", tip:"They also pour sake and shochu in the evening. The format naturally creates a slow, unhurried pace.", drinkNote:"You're completely in your element here. The hand-poured pour-over and Japanese teas are the whole point. Order with full confidence." },
+      { n:2, title:"Ruffian Wine Bar", dur:"1–1.5 hrs", desc:"Two blocks away. Candlelit, intimate, great natural wine list. The walk between Hi-Collar and Ruffian takes two minutes and transitions the vibe from interesting → romantic.", cost:"~$35", hood:"East Village", hh:"Mon–Thu 5–7pm", tip:"The back room at Ruffian is quieter. Good for conversation.", drinkNote:"Order sparkling water with lemon and bitters. Ruffian's staff are naturals — they're used to this and will make it look intentional." },
+      { n:3, title:"The Wayland", dur:"Open", optional:true, desc:"If the night's going well, The Wayland on Ave C has a fireplace in the back room — perfect for a crisp evening. More lively than Ruffian, good for when the conversation has loosened up.", cost:"~$22", hood:"East Village", tip:"One more drink here, not two. Leaving on a high note matters more than extending the night.", drinkNote:"Full bar — ask for a sparkling citrus mocktail or soda with fresh lime." }
+    ]},
+    2: { vibe:"Brooklyn round-trip — shows you know how to make a plan", budget:"$130–160", textMsg:"Want to do Brooklyn on {day}? DUMBO, the bridge walk, then dinner in Williamsburg. I'll plan it if you're in.", hhNote:"💰 Maison Premiere has $1 oysters + $10 cocktails daily 4–6pm. Plan Phase 2 to start by 5:30pm.", phases:[
+      { n:1, title:"DUMBO + Brooklyn Bridge", dur:"1 hr", desc:"Lyft to DUMBO and walk toward the bridge archways — the framing of the Manhattan Bridge from Washington St is iconic. Then walk the Brooklyn Bridge back. It's a 30-minute walk with enough visual interest that you don't have to manufacture topics.", cost:"Free + ~$15 Lyft", hood:"DUMBO", tip:"Go at golden hour. The light through the archways 45 minutes before sunset is the shot." },
+      { n:2, title:"Maison Premiere", dur:"1–1.5 hrs", desc:"Head to Maison Premiere in Williamsburg — a gorgeous New Orleans-style oyster bar. Oysters on a second date are a strong move.", cost:"$45–55 with oysters", hood:"Williamsburg", hh:"Daily 4–6pm · $1 oysters, $10 cocktails", tip:"Walk-ins at the bar are usually available. The back garden is beautiful if it's not too cold.", drinkNote:"Maison Premiere's bar team makes excellent NA cocktails — ask for something botanical." },
+      { n:3, title:"Lilia", dur:"1.5 hrs", desc:"Stay in Williamsburg for dinner at Lilia — one of the best pasta restaurants in NYC. The mafaldini with pink peppercorns is famous. An excellent second date closer that shows you plan ahead.", cost:"$90–110", hood:"Williamsburg", tip:"Reserve on Resy — they release spots at midnight 28 days out. Bar walk-in often works for 2.", drinkNote:"Lilia's staff will suggest NA pairings without missing a beat. Sparkling water with a citrus wheel is entirely respected here." }
+    ]},
+    3: { vibe:"A full curated arc that shows depth and taste", budget:"$215–255", textMsg:"Free {day}? I want to take you to the Met — just the part worth seeing — then show you my neighborhood after.", phases:[
+      { n:1, title:"The Met — Temple of Dendur", dur:"1.5 hrs", desc:"Don't do the whole Met — go directly to the Sackler Wing and the Temple of Dendur, a real 1st-century BCE Egyptian temple reassembled inside a glass pavilion. The afternoon light through the windows is extraordinary.", cost:"Pay what you wish", hood:"Upper East Side", tip:"Friday and Saturday evenings the museum stays open until 9pm. The Roof Garden (seasonal) has city views worth seeing if open." },
+      { n:2, title:"Amor y Amargo", dur:"45 min", desc:"Lyft back to E 6th. Your home bar, your turf. Two rounds maximum — this is the transitional drink before dinner.", cost:"~$28", hood:"East Village", hh:"Mon–Thu 5–7pm", tip:"'I always stop here before dinner' signals that you have a life and routines. That's attractive.", drinkNote:"Ask for the non-alcoholic bitters tasting — Amor y Amargo's dedicated NA menu is genuinely excellent and a conversation piece in itself." },
+      { n:3, title:"Gramercy Tavern — Tavern Room", dur:"2 hrs", desc:"Walk over to Gramercy Tavern — no reservation needed for the Tavern Room. Consistently one of the best meals in New York, rustic American, seasonal menu that's always excellent.", cost:"$130–155", hood:"Gramercy", tip:"Arrive before 9:30pm. Sit at the bar in the Tavern Room if available — same kitchen, more intimate.", drinkNote:"Ask about their house-made NA sodas and shrubs — Gramercy Tavern's non-alcoholic program is serious." }
+    ]},
+    4: { vibe:"The East Village's best-kept secrets, one after another", budget:"$30–48", textMsg:"Free {day} afternoon? Bookshop, then the best tea house in the East Village — it's not what you expect.", phases:[
+      { n:1, title:"Strand Bookstore", dur:"45 min", desc:"18 miles of books on 12th & Broadway — browse together with no agenda. The move: split up briefly, find each other something interesting, reconvene. 'I found this and thought of you' creates good texture from almost nothing.", cost:"Free to browse", hood:"Union Square", tip:"The rare books room upstairs is worth seeing. Don't stay more than 45 minutes — you want to leave before it becomes work." },
+      { n:2, title:"Cha-An Tea House", dur:"1–1.5 hrs", desc:"Japanese teahouse on E 9th between 2nd and 3rd — a tiny, warm, beautifully designed room where you sit at a low counter and order tea and wagashi (Japanese sweets). Completely unique in the city, genuinely intimate. It will be the most memorable part of the date.", cost:"~$20", hood:"East Village", tip:"The matcha set with seasonal wagashi is the move. Go slow — the whole format rewards unhurried conversation.", drinkNote:"This is entirely your terrain. Sencha, hojicha, matcha — order with full authority and explain what each is. It's a natural way to lead the experience." },
+      { n:3, title:"Veniero's", dur:"30 min", optional:true, desc:"One block away on E 11th — a 130-year-old Italian pastry shop and an East Village institution. Cannoli, sfogliatelle, espresso, linzer tortes. 'Want to go around the corner for a cannoli?' is one of the best low-stakes closes there is.", cost:"~$12", hood:"East Village", tip:"In and out in 20 minutes. Leaving after a short, sweet close is better than lingering too long." }
+    ]}
+  },
+  rainy: {
+    1: { vibe:"Cozy and unhurried — rain makes staying feel natural", budget:"$40–55", textMsg:"Rain doesn't bother me – want to hang anyway on {day}? I have a good low-key rainy-day route.", phases:[
+      { n:1, title:"Hi-Collar Kissaten", dur:"1 hr", desc:"Japanese coffee bar on E 10th. Hand-poured coffee, counter seating, completely unique. On a rainy day the warm narrow bar is perfect — there's no pressure to move and no reason to.", cost:"~$14", hood:"East Village", tip:"Rainy evening = no one's leaving in a hurry. Let the conversation run.", drinkNote:"The pour-over coffee and Japanese teas are the headline here — you're completely in your element. Order with confidence." },
+      { n:2, title:"Housing Works Bookstore", dur:"45 min", desc:"Lyft to Housing Works on Crosby St in Soho — a charity bookstore with a cafe inside. Beautiful space, books to flip through together, no agenda. Browsing side by side tells you a lot about someone.", cost:"Free (buy a book if you want)", hood:"Soho", tip:"The second floor has quieter seating. It's a genuinely lovely building." },
+      { n:3, title:"Ten Bells", dur:"1.5 hrs", desc:"End at Ten Bells on Broome in the LES — low-lit wine bar, narrow space, excellent natural wine, great oysters. Rainy night plus candles plus good wine is a reliable formula.", cost:"~$40", hood:"Lower East Side", tip:"Arrive before 9pm to get a spot. It fills up on rainy nights specifically.", drinkNote:"Ten Bells' staff are natural wine enthusiasts who care about what's in every glass. Ask for sparkling water with herbs or a NA option." }
+    ]},
+    2: { vibe:"Cultural and intimate — rain is an asset indoors", budget:"$145–185", textMsg:"The rain's actually good timing – want to do museum stuff on {day}? I have a plan.", hhNote:"💰 Dante happy hour runs until 7pm weekdays. Time Phase 2 to start by 6pm for discounted cocktails.", phases:[
+      { n:1, title:"Neue Galerie", dur:"1.5 hrs", desc:"The most intimate major museum in NYC — a Gilded Age mansion on 5th Ave with German and Austrian Modernist art (Klimt, Schiele). Small enough that you actually look at things together instead of drifting apart.", cost:"$25/person", hood:"Upper East Side", tip:"Buy tickets in advance at neuegalerie.org. Weekdays are best — genuinely uncrowded.", drinkNote:"Café Sabarsky downstairs does extraordinary Viennese hot chocolate and coffee. You're in your element here — order the hot chocolate and explain the Viennese café tradition." },
+      { n:2, title:"Dante West Village", dur:"1 hr", desc:"Lyft to Dante on MacDougal — consistently voted among the world's best bars. Their Negroni variations are the move. Italian aperitivo format creates a good ritual mid-date.", cost:"~$40", hood:"West Village", hh:"Mon–Fri until 7pm", tip:"Let the bartender recommend — they're actually good at reading people.", drinkNote:"Dante's bar staff are world-class. Ask for a non-alcoholic Negroni variation — they've thought about this and will make you something genuinely excellent." },
+      { n:3, title:"Rule of Thirds", dur:"1.5 hrs", desc:"Lyft to Greenpoint — Rule of Thirds is exceptional Japanese food with a seriously beautiful space. A destination dinner that rewards the effort of getting there.", cost:"$90–110", hood:"Greenpoint", tip:"Reserve 2–3 days ahead at ruleofthirds.com. If unavailable, Oxomoco in NoHo is a strong backup.", drinkNote:"Ask about their NA pairings — yuzu-based drinks and hojicha are typical; their staff will make a genuine recommendation." }
+    ]},
+    3: { vibe:"Immersive and unforgettable — she will tell people about this", budget:"$260–330", textMsg:"Have you done Sleep No More? Want to go {day} evening? It's genuinely one of the best things in the city.", phases:[
+      { n:1, title:"Sleep No More", dur:"2.5–3 hrs", desc:"Immersive theater at McKittrick Hotel in Chelsea — you wander freely through a six-floor 1930s hotel while masked actors perform scenes from Macbeth around you. You wear masks, no talking allowed. The separation during the show creates an incredible debrief conversation afterward.", cost:"$120/person", hood:"Chelsea", tip:"Book 2+ weeks ahead at mckittrickhotel.com. Wear layers — the hotel runs cool." },
+      { n:2, title:"Gallow Green Rooftop Bar", dur:"1 hr", desc:"The rooftop bar at McKittrick — overgrown, theatrical, perfectly on theme. This is where you debrief the show and the energy is always electric.", cost:"~$35", hood:"Chelsea", tip:"Don't rush out of the show to leave — the bar is part of the night.", drinkNote:"Gallow Green's bar leans theatrical — ask for something botanical and spirit-free." },
+      { n:3, title:"Dinner at Oxomoco", dur:"1.5 hrs", desc:"Lyft to Oxomoco on Great Jones St in NoHo — inventive wood-fired Mexican with a beautiful interior. By now you've had an unforgettable evening and this closes the loop with a great meal.", cost:"$95–115", hood:"NoHo", tip:"Reserve on Resy up to 2 weeks out. Late-night bar walk-ins work too.", drinkNote:"Oxomoco has excellent NA cocktails — ask about their agua fresca program and house-made NA drinks." }
+    ]},
+    4: { vibe:"Rainy days were made for bookshops, tea, and staying longer than you planned", budget:"$30–50", textMsg:"Rain day? There's a bookshop in Soho I like. Then tea in the East Village. Free {day}?", phases:[
+      { n:1, title:"Housing Works Bookstore", dur:"45 min", desc:"Charity bookshop on Crosby St in Soho with a cafe inside — a beautiful, high-ceilinged space that feels completely intentional. Browse together, buy something if it catches you. The charity angle is a natural conversation topic.", cost:"Free to browse", hood:"Soho", tip:"The upstairs seating area is quieter and more intimate. Rainy-day bookshops have their own atmosphere — let it breathe." },
+      { n:2, title:"Cha-An Tea House", dur:"1–1.5 hrs", desc:"Lyft to Cha-An on E 9th — a Japanese teahouse with exceptional teas, wagashi (Japanese sweets), and a warm, unhurried atmosphere. On a rainy day this is the best possible stop in the city: warm, intimate, no pressure to leave.", cost:"~$20", hood:"East Village", tip:"On a rainy night, nobody is in a rush and nobody wants to go back outside. Stay as long as the conversation warrants.", drinkNote:"You're leading this one — know the teas, order with confidence, maybe explain what hojicha is vs. sencha." },
+      { n:3, title:"Spot Dessert Bar", dur:"45 min", optional:true, desc:"If the energy is still good, Spot Dessert Bar on E 9th is two blocks from Cha-An — creative Asian-inspired desserts, a playful format, and a natural easy close.", cost:"~$20", hood:"East Village", tip:"The honey toast and matcha mochi are the moves. This works best if she has a sweet tooth — read it first." }
+    ]}
+  },
+  cold: {
+    1: { vibe:"Warm and tactile — cold weather is actually good for closeness", budget:"$40–58", textMsg:"Cold doesn't scare you right? Coffee somewhere warm in the East Village on {day}, figure it out from there.", hhNote:"💰 Mayahuel happy hour Mon–Thu 5–7pm. Phase 2 around 5:30pm saves on the mezcal flight.", phases:[
+      { n:1, title:"Hi-Collar or B Cup Cafe", dur:"1 hr", desc:"Cold nights make sitting in a warm narrow coffee bar feel exactly right. Hi-Collar on E 10th for the most interesting experience, or B Cup on Ave B for something more low-key. Either way: hot drinks, a warm seat, and no rush.", cost:"~$12", hood:"East Village", tip:"Arrive first. Having something warm already waiting when she walks in from the cold is a small thing that lands.", drinkNote:"This is fully your terrain. Hot pour-over, chai, or Japanese tea — order whatever you want with complete confidence." },
+      { n:2, title:"Mayahuel Mezcal Bar", dur:"1.5 hrs", desc:"Walk to Mayahuel on E 6th — one of the best mezcal bars in the country, right on your doorstep. Dark, candlelit, warm room, great cocktails. The mezcal tasting flights are a good shared activity.", cost:"~$38", hood:"East Village", hh:"Mon–Thu 5–7pm", tip:"Order the smoky Oaxacan flight and let the bartender walk you through it. It becomes a ten-minute shared experience.", drinkNote:"Mayahuel's bartenders make excellent NA drinks with Mexican herbs, hibiscus, tamarind, and citrus. Ask for something without mezcal in the same spirit." },
+      { n:3, title:"Ivan Ramen", dur:"1 hr", optional:true, desc:"End at Ivan Ramen on Clinton St — exceptional ramen, warm room, perfect cold-weather food. The kind of place that signals you know where to eat.", cost:"~$28", hood:"Lower East Side", tip:"The clam broth ramen is the move. Works if she eats well and isn't precious about food." }
+    ]},
+    2: { vibe:"Playful and physical — turns cold weather into the whole point", budget:"$120–155", textMsg:"Ok hear me out – ice skating in Central Park on {day}. Yes really. Then dinner back in the East Village.", phases:[
+      { n:1, title:"Wollman Rink, Central Park", dur:"1.5 hrs", desc:"Ice skating is one of the few date activities that is universally good — it's playful, physical, hilarious if one of you can't skate, and the setting is genuinely beautiful. Cold weather stops being a problem when it becomes the point. Holding onto someone on the ice is natural.", cost:"$20 + skate rental ~$15/person", hood:"Central Park", tip:"Go on a weekday evening if possible — weekends get crowded. The midtown 59th St entrance is the one you want." },
+      { n:2, title:"Warm up: Tavern on the Green", dur:"45 min", desc:"Warm up immediately after skating at Tavern on the Green (right there in the park). Hot drinks, wool coats, adrenaline from the ice. This is an excellent state for the conversation to shift from playful → real.", cost:"~$25", hood:"Central Park / UWS", tip:"Hot cider or coffee here. Don't skip this step — the warmth contrast is part of the arc.", drinkNote:"Order hot apple cider or a non-alcoholic hot toddy variation — Tavern on the Green is full-service and handles it gracefully." },
+      { n:3, title:"Dinner at Hearth", dur:"1.5 hrs", desc:"Lyft back to the East Village for dinner at Hearth on E 12th — genuinely excellent Italian-American, a warm room, and one of the best date restaurants in the neighborhood.", cost:"$90–110", hood:"East Village", tip:"Reserve on Resy a few days ahead. Ask for a table in the back — quieter, more intimate.", drinkNote:"Ask about Hearth's NA options or house-made sodas — they take the full dining experience seriously." }
+    ]},
+    3: { vibe:"Sensory and intimate — she won't have done this before", budget:"$285–330", textMsg:"Free {day} evening? I want to take you somewhere – it involves a Roman bathhouse in Tribeca. Long story, trust me.", phases:[
+      { n:1, title:"Aire Ancient Baths", dur:"1.5–2 hrs", desc:"A Roman-style bathhouse in a candlelit Tribeca cellar — you move between pools of different temperatures, the architecture is extraordinary, and silence is encouraged in most rooms. It's the most intimate non-intimate experience in the city. Third date only — you need to be comfortable with each other.", cost:"$80–100/person", hood:"Tribeca", tip:"Book 1–2 weeks ahead at beaire.com/nyc. Evening slot is best. Towels, robes, and slippers all provided." },
+      { n:2, title:"Cocktails at Macao Trading Co.", dur:"45 min", desc:"A post-bath drink nearby — Macao Trading Co. on Church St has a good speakeasy atmosphere right in Tribeca.", cost:"~$30", hood:"Tribeca", tip:"Keep it to one drink. You're heading into dinner with good energy — don't dilute it.", drinkNote:"Ask for something spirit-free — Macao's tropical and citrus-forward style translates well to NA drinks." },
+      { n:3, title:"Dinner at Locanda Verde", dur:"1.5 hrs", desc:"Robert De Niro's Italian restaurant in the Greenwich Hotel — exceptional food, beautiful room. The lamb meatballs and pastas are excellent.", cost:"$115–135", hood:"Tribeca", tip:"Reserve at Resy — book 3–5 days ahead. The bar area has walk-in spots if you're flexible on timing.", drinkNote:"Locanda Verde has an excellent NA program — Italian-inspired house shrubs and non-alcoholic drinks that complement the food." }
+    ]},
+    4: { vibe:"Two of the warmest, most interesting spots in the neighborhood, back to back", budget:"$28–42", textMsg:"Want to do the coziest date in the East Village on {day}? Two stops, warm the whole time.", phases:[
+      { n:1, title:"Hi-Collar Kissaten", dur:"1 hr", desc:"Japanese pour-over coffee bar on E 10th — counter seating, a barista who's genuinely doing something unusual, and the kind of unhurried warmth that a cold evening requires. The format does the work: slow coffee, close proximity, no noise.", cost:"~$14", hood:"East Village", tip:"Let the barista explain the process without rushing it. The pour-over ritual gives the first 20 minutes a built-in structure.", drinkNote:"The pour-over and Japanese teas are the whole point. You're completely at home here — order with confidence." },
+      { n:2, title:"Cha-An Tea House", dur:"1 hr", desc:"One block away on E 9th — a Japanese teahouse with exceptional teas and wagashi (Japanese sweets). The most intimate $20 you can spend on a date in the East Village.", cost:"~$20", hood:"East Village", tip:"The matcha set is the signature. Go slow — the format rewards unhurried conversation and cold weather gives you every reason to stay.", drinkNote:"Lead this one: know the teas, order with confidence. Explaining the difference between hojicha and sencha positions you as someone who knows things." },
+      { n:3, title:"Veniero's cannoli close", dur:"20 min", optional:true, desc:"One block up on E 11th — a 130-year-old Italian pastry shop. 'Want to go around the corner for a cannoli?' is a perfect low-stakes close on a cold night.", cost:"~$10", hood:"East Village", tip:"Don't extend it. A quick cannoli and a warm goodbye beats lingering past the point of no returns." }
+    ]}
+  },
+  hot: {
+    1: { vibe:"Breezy evening energy — use the city's summer version", budget:"$30–50", textMsg:"Free {day} evening, post 7pm? I know a good waterfront spot in Williamsburg once the heat breaks.", hhNote:"💰 Mr. Purple happy hour Mon–Fri 4–7pm. Time Phase 2 to arrive between 5–6pm on a weekday.", phases:[
+      { n:1, title:"Domino Park after 7pm", dur:"1 hr", desc:"Lyft to Williamsburg — Domino Park on the waterfront is outstanding in summer once the heat breaks after 7pm. Grab cold drinks from a nearby bodega or the park kiosk. Walking the waterfront with the Manhattan skyline in front of you is a strong first date format: relaxed, beautiful, no agenda.", cost:"~$12", hood:"Williamsburg", tip:"The piers at the south end of the park have the best skyline views. 7:30–8pm for golden hour.", drinkNote:"A Mexican Coke or sparkling water with lime from the bodega is perfect here. Just grab what you want, no navigation needed." },
+      { n:2, title:"Mr. Purple Rooftop Bar", dur:"1.5 hrs", desc:"Lyft back to the LES — Mr. Purple is a rooftop bar on top of Hotel Indigo with good outdoor seating and city views. You go from a neighborhood park vibe → a slightly elevated setting, which transitions the date well.", cost:"~$40", hood:"Lower East Side", hh:"Mon–Fri 4–7pm", tip:"Arrive before 9pm on weekends to skip a wait.", drinkNote:"Ask for a sparkling mocktail or cucumber-mint soda — rooftop bar staff are very used to this. Mr. Purple is about the view." },
+      { n:3, title:"Veselka", dur:"45 min", optional:true, desc:"End at Veselka on 2nd Ave — 24-hour Ukrainian diner and an East Village institution. 'Want to go get pierogies?' is an unexpectedly effective close because it's specific, unpretentious, and only a local would say it.", cost:"~$20", hood:"East Village", tip:"This only works if the night has real momentum. Don't force it — but if she's not leaving, this is perfect." }
+    ]},
+    2: { vibe:"Governors Island is a summer cheat code almost nobody uses", budget:"$100–140", textMsg:"Want to take the ferry to Governors Island on {day}? Bikes, hammocks, the whole thing.", phases:[
+      { n:1, title:"Governors Island", dur:"3 hrs", desc:"Free ferry from the Battery Maritime Building to a car-free park with hammock groves, food vendors, bike rentals, and a stunning view of lower Manhattan and the Statue of Liberty. This is the best summer day date in NYC and almost nobody does it.", cost:"Free ferry + food/drinks ~$30", hood:"Governors Island", tip:"Take the 10am or 11am ferry. Stake a hammock early. Last ferry back is 7pm on weekdays, later on weekends.", drinkNote:"The island has cold brew, lemonade, and fresh juice vendors — you're completely sorted here." },
+      { n:2, title:"Sunset drinks: Ophelia terrace", dur:"1 hr", desc:"Ferry back to the city and grab sunset drinks somewhere with an outdoor terrace. Ophelia on the East River at 34th St has unbeatable views. The move from a day date into an evening setting deepens the sense of shared time.", cost:"~$38", hood:"Midtown East", tip:"The transition from 'day together' to 'now it's evening' deepens the sense of shared time. Don't rush back.", drinkNote:"Ophelia does solid NA cocktails — elderflower or cucumber-based options are their style." },
+      { n:3, title:"Dinner at Don Angie", dur:"1.5 hrs", desc:"West Village — one of the best Italian restaurants in the city right now. The pinwheel lasagna is genuinely famous. After a full day together the dinner table conversation has real depth.", cost:"$95–120", hood:"West Village", tip:"Resy releases 28 days out and books immediately — set an alert. Bar walk-in often available for 2.", drinkNote:"Don Angie's bar team is excellent. Ask for a Sicilian-style NA option or house sparkling." }
+    ]},
+    3: { vibe:"Rockaway Beach — an A-train adventure that becomes a story", budget:"$90–130", textMsg:"Hear me out – A train to Rockaway Beach on {day}, back to the city for dinner. All day. You in?", phases:[
+      { n:1, title:"Rockaway Beach", dur:"3–4 hrs", desc:"A train to the end of the line. Rockaway Beach is a real ocean beach, 45 minutes from East Village on the subway, free with your MetroCard. Swimming, boardwalk, the actual Atlantic. Nobody takes their third date to the beach via subway and it's incredible when you do.", cost:"$5 subway + food/drinks ~$25", hood:"Rockaway, Queens", tip:"Weekdays are dramatically less crowded. Beach 116th St stop is the classic. Tacoway Beach food truck does excellent fish tacos.", drinkNote:"Cold fresh-pressed juices, coconut water, and Mexican Cokes are everywhere on the beach." },
+      { n:2, title:"Rockaway Hotel Rooftop", dur:"1 hr", desc:"The Rockaway Hotel has a rooftop bar and pool area — transition from beach to a nicer setting while staying out there. Sunset drink while you watch the sky change.", cost:"~$25", hood:"Rockaway, Queens", tip:"Check if they require advance booking for rooftop access in peak summer — it varies by season.", drinkNote:"After a day in the sun, a cold fresh-pressed juice or sparkling lemonade is exactly right." },
+      { n:3, title:"Dinner back in the city", dur:"1.5 hrs", desc:"After a full beach day, a simple excellent dinner hits exactly right — L'Artusi in the West Village for pasta, or Via Carota if you prefer something more casual.", cost:"$85–105", hood:"West Village", tip:"Don't over-engineer the dinner after a beach day. The day was the experience — great food and good conversation is all you need.", drinkNote:"Via Carota does a great Limonata and sparkling water with fresh herbs. L'Artusi will suggest NA pairings with the pasta." }
+    ]},
+    4: { vibe:"Ice cream, a bridge walk, and boba — the best $30 date in summer", budget:"$20–38", textMsg:"Ice cream then walk the Williamsburg Bridge? {day} evening when it cools down.", phases:[
+      { n:1, title:"Van Leeuwen or Davey's Ice Cream", dur:"30 min", desc:"Grab scoops from Van Leeuwen (E 7th) or Davey's (E 12th) and start walking immediately. Eating ice cream while moving is better than sitting — it's playful, physical, and leaves your hands doing something other than reaching for your phone.", cost:"~$10", hood:"East Village", tip:"Order and immediately start walking east toward the bridge. Don't sit down — the walking is the date." },
+      { n:2, title:"Walk the Williamsburg Bridge", dur:"1 hr", desc:"The Williamsburg Bridge has a dedicated pedestrian path on the south side — about 30 minutes each way. The views of the skyline, East River, and Brooklyn are genuinely beautiful. You can continue into Williamsburg or turn back — read the energy.", cost:"Free", hood:"EV → Williamsburg", tip:"Start at the Manhattan side on Delancey and walk to Williamsburg. Evening light on this bridge is excellent." },
+      { n:3, title:"Boba or Taiyaki in Williamsburg", dur:"30 min", optional:true, desc:"If you walked all the way to Williamsburg, Taiyaki NYC on Bedford Ave does excellent Japanese-style fish-shaped soft serve and matcha cones. Or find boba tea anywhere on the strip. A low-key sweet close that keeps the tone playful all the way to the end.", cost:"~$12", hood:"Williamsburg", tip:"Don't force this. If she's tired or it's late, the bridge walk was the whole thing.", drinkNote:"Boba tea, matcha, Thai iced tea — you're in your element here. Order with confidence; this is completely NA-forward by nature." }
+    ]}
+  }
+};
+
+// Apollo tab state (in-memory)
+let _apTab = 'today';
+// Apollo date planner state (in-memory)
+let _apDays = [], _apSelDay = 0, _apSelType = 1;
+
+// Apollo session log XP calculation
+function calcSessionXP() {
+  const sl = S.sessionLog;
+  let xp = 0;
+  if (sl.dance)        xp += 30;
+  if (sl.danceConvos)  xp += Math.min(sl.danceConvos, 3) * 5;
+  if (sl.danceNumbers) xp += sl.danceNumbers * 25;
+  if (sl.runClub)      xp += sl.runStayed ? 20 : 10;
+  if (sl.spikeEvent)   xp += 20;
+  if (sl.approaches)   xp += sl.approaches * 25;
+  if (sl.numbers)      xp += sl.numbers * 5; // extra numbers beyond dance
+  if (sl.dates)        xp += sl.dates * 35;
+  return xp;
+}
+
+function updateSessionLog(key, val) {
+  const wk = wk_key();
+  if (S.sessionLog.weekKey !== wk) {
+    S.sessionLog = { weekKey:wk, dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
+  }
+  S.sessionLog[key] = val;
+  save();
+  rPresence();
+}
+
+function incSessionLog(key, delta) {
+  const wk = wk_key();
+  if (S.sessionLog.weekKey !== wk) {
+    S.sessionLog = { weekKey:wk, dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
+  }
+  S.sessionLog[key] = Math.max(0, (S.sessionLog[key] || 0) + delta);
+  save();
+  rPresence();
+}
+
+function wk_key() {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(d.setDate(diff));
+  return mon.toISOString().slice(0, 10);
+}
+
+// Apollo weather/date planner
+const AP_LAT = 40.7589, AP_LON = -73.9851;
+const AP_DAYS_OF_WEEK = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const AP_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function apWxEmoji(code) {
+  if (code===0) return '☀️';
+  if (code<=2)  return '⛅';
+  if (code===3) return '☁️';
+  if (code>=45&&code<=48) return '🌫️';
+  if (code>=51&&code<=67) return '🌧️';
+  if (code>=71&&code<=77) return '❄️';
+  if (code>=80&&code<=86) return '🌦️';
+  if (code>=95) return '⛈️';
+  return '🌡️';
+}
+
+function apGetCondition(high, precip, code) {
+  if (high >= 84) return 'hot';
+  if (precip > 40 || (code >= 61 && code <= 67) || (code >= 80 && code <= 99)) return 'rainy';
+  if (high < 46) return 'cold';
+  if (high < 55) return 'mild';
+  return 'great';
+}
+
+const AP_COND_LABELS = {
+  hot:'🥵 Hot', great:'✅ Great', mild:'🌤️ Shoulder', rainy:'🌧️ Rain', cold:'🧣 Cold'
+};
+const AP_COND_CHIPS = {
+  hot:'ap-chip-hot', great:'ap-chip-great', mild:'ap-chip-mild', rainy:'ap-chip-rainy', cold:'ap-chip-cold'
+};
+
+async function apLoadWeather() {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${AP_LAT}&longitude=${AP_LON}`
+    + `&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode,windspeed_10m_max`
+    + `&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FNew_York&forecast_days=10`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json();
+  _apDays = j.daily.time.map((t, i) => ({
+    dateStr: t, date: new Date(t + 'T12:00:00'),
+    high: Math.round(j.daily.temperature_2m_max[i]),
+    low:  Math.round(j.daily.temperature_2m_min[i]),
+    precip: j.daily.precipitation_probability_max[i],
+    code: j.daily.weathercode[i],
+    wind: Math.round(j.daily.windspeed_10m_max[i]),
+  }));
+  _apSelDay = 0;
+  rPresence();
+}
+
+function apSelectDay(i)  { _apSelDay = i;  rPresence(); }
+function apSelectType(n) { _apSelType = n; rPresence(); }
+
+function apCopyText(text, btnId) {
+  const finish = () => {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+  };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(finish).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta); finish();
+    });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); finish();
+  }
+}
+
+function rApPlan() {
+  if (_apDays.length === 0) {
+    apLoadWeather().catch(() => {});
+    return `<div class="ap-wx-loading"><div class="ap-wx-spinner"></div>Loading Manhattan forecast…</div>`;
+  }
+  const d    = _apDays[_apSelDay];
+  const cond = apGetCondition(d.high, d.precip, d.code);
+  const itin = AP_DATA[cond][_apSelType];
+  const isWalk = _apSelType === 4;
+  const dayLabel = `${AP_DAYS_OF_WEEK[d.date.getDay()]}, ${AP_MONTHS[d.date.getMonth()]} ${d.date.getDate()}`;
+  const dow = d.date.getDay();
+  const isWeekday = dow >= 1 && dow <= 4;
+  const ebLink = `https://www.eventbrite.com/d/ny--new-york/things-to-do/?start_date=${d.dateStr}&end_date=${d.dateStr}&distance=5&location=East+Village+New+York+NY`;
+  const textMsg = itin.textMsg ? itin.textMsg.replace('{day}', dayLabel) : '';
+  const msgId = 'ap-copy-' + Math.random().toString(36).slice(2);
+
+  const DATE_TABS = [
+    [1, '1st Date', 'Low key · EV', false],
+    [2, '2nd Date', 'Adventurous', false],
+    [3, '3rd Date', 'Impressive', false],
+    [4, '🌿 Walk', '$20–40', true],
+  ];
+
+  const phasesH = itin.phases.map(p => `
+    <div class="ap-phase-card ${p.optional ? 'optional' : ''}">
+      <div class="ap-phase-top">
+        <div class="ap-phase-num">${p.n}</div>
+        <div class="ap-phase-title">${p.title}</div>
+        <div class="ap-phase-dur">${p.dur}</div>
+        ${p.hh ? `<div class="ap-hh-badge">🍹 HH: ${p.hh}</div>` : ''}
+      </div>
+      <div class="ap-phase-desc">${p.desc}</div>
+      <div class="ap-phase-tags">
+        <span class="ap-tag ap-tag-cost">${p.cost}</span>
+        <span class="ap-tag ap-tag-hood">📍 ${p.hood}</span>
+        ${p.optional ? '<span class="ap-tag ap-tag-opt">optional</span>' : ''}
+      </div>
+      ${p.tip ? `<div class="ap-phase-tip">💡 ${p.tip}</div>` : ''}
+      ${p.drinkNote ? `<div class="ap-drink-note"><strong>🥤 Your drink</strong>${p.drinkNote}</div>` : ''}
+    </div>`).join('');
+
+  return `
+  <div class="ap-plan-wrap">
+    <div class="ap-plan-hd">📅 Date Planner — East Village, NYC</div>
+    <div class="ap-wx-strip">
+      ${_apDays.map((day, i) => `
+        <div class="ap-day-pill ${i === _apSelDay ? 'active' : ''}" onclick="apSelectDay(${i})">
+          ${i === 0 ? '<span class="ap-today-badge">Today</span>' : ''}
+          <div class="ap-dp-lbl">${AP_DAYS_OF_WEEK[day.date.getDay()]}</div>
+          <div class="ap-dp-emoji">${apWxEmoji(day.code)}</div>
+          <div class="ap-dp-temp">${day.high}°/${day.low}°</div>
+          <div class="ap-dp-rain">${day.precip > 20 ? '🌧 ' + day.precip + '%' : ''}</div>
+        </div>`).join('')}
+    </div>
+    <div class="ap-day-info">
+      <div class="ap-day-emoji">${apWxEmoji(d.code)}</div>
+      <div class="ap-day-stats">
+        <div class="ap-day-title">${dayLabel}</div>
+        <div class="ap-day-sub">${d.high}°F high · ${d.low}°F low · 🌧 ${d.precip}% · 💨 ${d.wind} mph</div>
+      </div>
+      <div class="ap-cond-chip ${AP_COND_CHIPS[cond]}">${AP_COND_LABELS[cond]}</div>
+    </div>
+    <div class="ap-date-tabs">
+      ${DATE_TABS.map(([n, label, sub]) => `
+        <div class="ap-dtype-tab ${_apSelType === n ? 'active' : ''}" onclick="apSelectType(${n})">
+          <div class="ap-dtype-title">${label}</div>
+          <div class="ap-dtype-sub">${sub}</div>
+        </div>`).join('')}
+    </div>
+    <div class="ap-itin-meta">
+      <div class="ap-itin-vibe">"${itin.vibe}"</div>
+      <div class="ap-budget-pill">${itin.budget}</div>
+    </div>
+    ${textMsg ? `
+    <div class="ap-text-card">
+      <div class="ap-text-hd">
+        <div class="ap-text-lbl">💬 Send this text</div>
+        <button class="ap-copy-btn" id="${msgId}" onclick="apCopyText(${JSON.stringify(textMsg)}, '${msgId}')">📋 Copy</button>
+      </div>
+      <div class="ap-text-msg">"${textMsg}"</div>
+      <div class="ap-text-fn">Don't mention you don't drink in the text — just order confidently when you get there. If she asks: "I just don't drink, but don't let that stop you."</div>
+    </div>` : ''}
+    ${itin.hhNote && isWeekday && !isWalk ? `
+    <div class="ap-hh-banner">
+      <span>💰</span>
+      <div>${itin.hhNote.replace('💰 ', '')}</div>
+    </div>` : ''}
+    <div class="ap-cf-wrap">
+      <div class="ap-cf-lbl">✦ Start here</div>
+      <div class="ap-cf-framing">Check these first. A date built around something you'd do anyway beats a constructed one every time.</div>
+      <a class="ap-cf-link" href="${ebLink}" target="_blank"><span class="ap-cf-icon">🎟️</span><span class="ap-cf-name">Eventbrite — East Village</span><span class="ap-cf-meta">${dayLabel}</span><span class="ap-cf-arrow">↗</span></a>
+      <a class="ap-cf-link" href="https://secretnyc.co/category/things-to-do/" target="_blank"><span class="ap-cf-icon">🗽</span><span class="ap-cf-name">Secret NYC</span><span class="ap-cf-meta">Hidden gems</span><span class="ap-cf-arrow">↗</span></a>
+      <a class="ap-cf-link" href="https://www.timeout.com/newyork/events-calendar" target="_blank"><span class="ap-cf-icon">🗓️</span><span class="ap-cf-name">Time Out New York</span><span class="ap-cf-meta">Editors' picks</span><span class="ap-cf-arrow">↗</span></a>
+      <a class="ap-cf-link" href="https://feverup.com/en/new-york" target="_blank"><span class="ap-cf-icon">✨</span><span class="ap-cf-name">Fever NYC</span><span class="ap-cf-meta">Experiences &amp; pop-ups</span><span class="ap-cf-arrow">↗</span></a>
+      <a class="ap-cf-link" href="https://www.theinfatuation.com/new-york/guides/happy-hour-nyc" target="_blank"><span class="ap-cf-icon">🍹</span><span class="ap-cf-name">Happy Hour Guide</span><span class="ap-cf-meta">By neighborhood</span><span class="ap-cf-arrow">↗</span></a>
+    </div>
+    <div class="ap-phases">${phasesH}</div>
+  </div>`;
+}
+
+function rApLog() {
+  const sl = S.sessionLog;
+  const wk = wk_key();
+  // reset if new week
+  if (sl.weekKey && sl.weekKey !== wk) {
+    S.sessionLog = { weekKey:wk, dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
+    save();
+  }
+  const totalXP = calcSessionXP();
+
+  function toggle(field) { return `updateSessionLog('${field}', !S.sessionLog['${field}'])`; }
+  function cnt(field, delta) { return `incSessionLog('${field}', ${delta})`; }
+
+  function cntRow(label, sub, field) {
+    const v = sl[field] || 0;
+    return `<div class="ap-log-row">
+      <div><div class="ap-log-lbl">${label}</div>${sub ? `<div class="ap-log-sub">${sub}</div>` : ''}</div>
+      <div class="ap-log-counter">
+        <div class="ap-log-cnt-btn" onclick="${cnt(field, -1)}">−</div>
+        <div class="ap-log-cnt-val">${v}</div>
+        <div class="ap-log-cnt-btn" onclick="${cnt(field, 1)}">+</div>
+      </div>
+    </div>`;
+  }
+
+  function togRow(label, sub, field) {
+    const on = sl[field] ? 'on' : '';
+    return `<div class="ap-log-row">
+      <div><div class="ap-log-lbl">${label}</div>${sub ? `<div class="ap-log-sub">${sub}</div>` : ''}</div>
+      <div class="ap-log-toggle ${on}" onclick="${toggle(field)}"></div>
+    </div>`;
+  }
+
+  return `<div class="ap-log-wrap">
+    <div class="ap-log-total">
+      <div class="ap-log-total-lbl">This week's field XP</div>
+      <div class="ap-log-total-xp">+${totalXP} XP</div>
+    </div>
+
+    <div class="ap-log-section">
+      <div class="ap-log-sec-hd">
+        <div class="ap-log-sec-title">💃 Dance Class</div>
+        <div class="ap-log-sec-xp">30 XP + bonuses</div>
+      </div>
+      ${togRow('Attended', 'Bachata / salsa / tango this week', 'dance')}
+      ${cntRow('Convos before/after', '+5 XP each (cap 3)', 'danceConvos')}
+      ${cntRow('Numbers / IGs collected', '+25 XP each', 'danceNumbers')}
+    </div>
+
+    <div class="ap-log-section">
+      <div class="ap-log-sec-hd">
+        <div class="ap-log-sec-title">🏃 Lunge Run Club</div>
+        <div class="ap-log-sec-xp">20 XP (stayed after)</div>
+      </div>
+      ${togRow('Attended', 'Wednesday run club', 'runClub')}
+      ${togRow('Stayed after 15+ min', '+10 XP bonus — the window is after the run', 'runStayed')}
+    </div>
+
+    <div class="ap-log-section">
+      <div class="ap-log-sec-hd">
+        <div class="ap-log-sec-title">⚡ Spike Event</div>
+        <div class="ap-log-sec-xp">20 XP</div>
+      </div>
+      ${togRow('Attended this week', 'Othership / cultural event / SweatPals find', 'spikeEvent')}
+    </div>
+
+    <div class="ap-log-section">
+      <div class="ap-log-sec-hd">
+        <div class="ap-log-sec-title">🎯 Approaches & Dates</div>
+        <div class="ap-log-sec-xp">25 XP / approach</div>
+      </div>
+      ${cntRow('Approaches made', '+25 XP each — any environment', 'approaches')}
+      ${cntRow('Numbers / IGs total', 'All environments combined', 'numbers')}
+      ${cntRow('Dates completed', '+35 XP each', 'dates')}
+    </div>
+
+    <div class="ap-log-note">Resets each Monday · XP flows to Presence weekly total</div>
+  </div>`;
+}
+
 function rPresence() {
   const col = COLS.presence;
   const cp  = modPct('presence');
@@ -2931,34 +3619,38 @@ function rPresence() {
     </div>`;
   }).join('');
 
-  document.getElementById('s-presence').innerHTML = `
-  <div class="wrap" style="--sc-color:${col}">
-    <div class="mod-header">
-      <div class="back-btn" onclick="go('home')">‹</div>
-      <div class="mod-ttl-g">
-        <div class="mod-stat-nm" style="color:${col}">Presence</div>
-        <div class="mod-name">Apollo</div>
-      </div>
-      <div>${ring(cp, 46, 3.5, col)}</div>
-    </div>
-    ${lvBar('presence', col)}
-
+  // Tab content
+  let tabContent = '';
+  if (_apTab === 'today') {
+    tabContent = `
     ${proto('📲', 'Daily App Protocol', P.presence.daily, col, false)}
 
     <div class="apollo-pipe-btn" onclick="${pipeUrl ? `window.open('${pipeUrl}','_blank')` : `alert('Add your Notion pipeline URL in Settings → Apollo')`}">
       <div class="apollo-pipe-ico">🗂</div>
       <div class="apollo-pipe-info">
         <div class="apollo-pipe-lbl">Pipeline</div>
-        <div class="apollo-pipe-ttl">Open Social CRM</div>
+        <div class="apollo-pipe-ttl">Open Social CRM in Notion</div>
         <div class="apollo-pipe-sub">${pipeUrl ? 'Prospect → Lead → Following Up → … → Closed' : 'Add your Notion URL in Settings → Apollo'}</div>
       </div>
       <div class="apollo-pipe-arrow">›</div>
-    </div>
-
-    <div class="apollo-ref-sep">
-      <div class="apollo-ref-sep-line"></div>
-      <div class="apollo-ref-sep-lbl">Reference</div>
-      <div class="apollo-ref-sep-line"></div>
+    </div>`;
+  } else if (_apTab === 'plan') {
+    tabContent = rApPlan();
+  } else if (_apTab === 'log') {
+    tabContent = rApLog();
+  } else {
+    // REF tab
+    tabContent = `
+    <div class="ref-card" id="r-predate">
+      <div class="ref-hd" onclick="toggleRef('r-predate')">
+        <div class="ref-ico">✅</div>
+        <div class="ref-ttl">Pre-Date Checklist — Run before Date 2+</div>
+        <div class="ref-toggle">⌄</div>
+      </div>
+      <div class="ref-body">
+        ${preDateH}
+        <div class="predate-reset" onclick="resetPreDate()">↩ Reset checklist</div>
+      </div>
     </div>
 
     <div class="ref-card" id="r-principles">
@@ -2978,11 +3670,7 @@ function rPresence() {
       </div>
       <div class="ref-body">
         <table class="sig-table">
-          <tr>
-            <th>Signal</th>
-            <th>What it looks like</th>
-            <th>Do</th>
-          </tr>
+          <tr><th>Signal</th><th>What it looks like</th><th>Do</th></tr>
           <tr>
             <td><span class="sig-g">Green</span></td>
             <td>Sustained eye contact, seeking your proximity, touching you first, laughing easily, mirroring your energy, staying past the natural conversation end</td>
@@ -3033,20 +3721,50 @@ function rPresence() {
       </div>
     </div>
 
-    <div class="ref-card" id="r-predate">
-      <div class="ref-hd" onclick="toggleRef('r-predate')">
-        <div class="ref-ico">✅</div>
-        <div class="ref-ttl">Pre-Date Checklist — Run before Date 2+</div>
+    <div class="ref-card" id="r-field">
+      <div class="ref-hd" onclick="toggleRef('r-field')">
+        <div class="ref-ico">📍</div>
+        <div class="ref-ttl">Field Strategy — Where to Be</div>
         <div class="ref-toggle">⌄</div>
       </div>
       <div class="ref-body">
-        ${preDateH}
-        <div class="predate-reset" onclick="resetPreDate()">↩ Reset checklist</div>
+        <div class="text-rule" style="font-size:13px;font-weight:700;color:var(--presence);margin-bottom:4px">The 3 Non-Negotiables</div>
+        <div class="text-rule">1. <strong>Thursday bachata class — every week, same venue.</strong> Highest ROI behavior available. Physical contact built in, rotation = 8–12 approaches, target type is the core demographic, close is natural after class.</div>
+        <div class="text-rule">2. <strong>Wednesday Lunge — stay after for 15 minutes.</strong> You're already there. The run isn't the window. The hang is. Talk before AND after.</div>
+        <div class="text-rule">3. <strong>Sunday scan → lock one spike event per week.</strong> SweatPals / ClassPass / RA / Eventbrite. Prevents calcification. Adds Dream Girl exposure.</div>
+        <div style="margin-top:12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">Environment Ranking</div>
+        <div class="text-rule">🥇 <strong>Bachata class</strong> — approach anxiety eliminated, rotation = volume, skill compounds, target type dense</div>
+        <div class="text-rule">🥈 <strong>Lunge Run Club</strong> — recurring → familiarity → escalation window. Stay after.</div>
+        <div class="text-rule">🥉 <strong>Othership</strong> — post-breathwork debrief is the most open social state you'll find. Low-pressure close works here.</div>
+        <div class="text-rule">🏅 <strong>TMPL</strong> — preselection only, not approach. Be seen. Approach only after multiple sightings + clear signal.</div>
+        <div style="margin-top:12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3)">Bachata — After Class Window</div>
+        <div class="text-rule">Stay 15+ min after. Anyone with good energy: "That was fun — do you come every week?" → "I'm going to keep coming — we should dance again." Direct close: "I'm grabbing a drink — want to come?" One ask. Drop it either way.</div>
       </div>
+    </div>`;
+  }
+
+  document.getElementById('s-presence').innerHTML = `
+  <div class="wrap" style="--sc-color:${col}">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('home')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${col}">Presence</div>
+        <div class="mod-name">Apollo</div>
+      </div>
+      <div>${ring(cp, 46, 3.5, col)}</div>
+    </div>
+    ${lvBar('presence', col)}
+
+    <div class="ap-tabs">
+      <div class="ap-tab ${_apTab === 'today' ? 'active' : ''}" onclick="_apTab='today';rPresence()">Today</div>
+      <div class="ap-tab ${_apTab === 'plan'  ? 'active' : ''}" onclick="_apTab='plan';rPresence()">Plan</div>
+      <div class="ap-tab ${_apTab === 'log'   ? 'active' : ''}" onclick="_apTab='log';rPresence()">Log</div>
+      <div class="ap-tab ${_apTab === 'ref'   ? 'active' : ''}" onclick="_apTab='ref';rPresence()">Ref</div>
     </div>
 
-    <div class="footer-hint">Apollo · Social &amp; Romantic · Level ${S.levels?.presence || 1}<br>
-      Field sessions + approaches logged in weekly review</div>
+    ${tabContent}
+
+    <div class="footer-hint">Apollo · Social &amp; Romantic · Level ${S.levels?.presence || 1}</div>
   </div>`;
 }
 
