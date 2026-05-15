@@ -2220,7 +2220,7 @@ function bottleneckBanner() {
   }[s] || s)).join(' + ');
   const gap     = maxLv - bn.level;
   const subtext = gap >= 2
-    ? `${gap} LEVELS BEHIND THE PACK. THIS IS YOUR RANK CEILING.`
+    ? `${gap} LEVELS BEHIND. THIS STAT IS BOTTLENECKING YOUR RANK.`
     : `ONE LEVEL BEHIND. ADVANCE TO ${lvStr(bn.level + 1)} TO UNLOCK THE NEXT RANK TIER.`;
   return `
   <div class="bn-banner">
@@ -2982,7 +2982,7 @@ function rModules() {
           : `<div class="sc-done">✓ COMPLETE</div>`}
         <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
           <div class="lv-sc-badge" style="--sc-color:${connCol}">${lvStr(apolloLv)}</div>
-          ${isBnConn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+          ${isBnConn ? `<div class="bn-crit-badge">[ BOTTLENECK ]</div>` : ''}
         </div>
       </div>
       <div>${ring(modPct('apollo'), 48, 3.5, connCol)}</div>
@@ -2990,7 +2990,7 @@ function rModules() {
     </div>
     <div class="sc" style="--sc-color:${hestiaCol}" onclick="go('hestia')">
       <div class="sc-info">
-        <div class="sc-stat">Connection</div>
+        <div class="sc-stat" style="opacity:.45">↳ Connection</div>
         <div class="sc-mod">Hestia</div>
         ${hestiaPending > 0
           ? `<div class="sc-due">▲ ${hestiaPending} REMAINING</div>`
@@ -3028,7 +3028,7 @@ function rModules() {
           : `<div class="sc-done">✓ COMPLETE</div>`}
         <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
           <div class="lv-sc-badge" style="--sc-color:${col}">${lvStr(lv)}</div>
-          ${isBn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+          ${isBn ? `<div class="bn-crit-badge">[ BOTTLENECK ]</div>` : ''}
         </div>
       </div>
       <div>${ring(cp, 48, 3.5, col)}</div>
@@ -3053,7 +3053,7 @@ function rModules() {
           : `<div class="sc-done">✓ COMPLETE</div>`}
         <div style="display:flex;gap:5px;align-items:center;margin-top:3px">
           <div class="lv-sc-badge" style="--sc-color:${col}">${lvStr(lv)}</div>
-          ${isBn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+          ${isBn ? `<div class="bn-crit-badge">[ BOTTLENECK ]</div>` : ''}
         </div>
       </div>
       <div>${ring(modPct(c.s), 48, 3.5, col)}</div>
