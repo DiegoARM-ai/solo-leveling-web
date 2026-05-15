@@ -10,6 +10,9 @@ Everything lives here so Cursor and Codex can read it directly — no copy-pasti
 
 ```
 _product/
+├── README.md           ← this file — workflow instructions for you
+├── AGENTS.md           ← instructions for AI agents — read this first
+├── CONTEXT.md          ← what this app is, target stack, current goals
 ├── BACKLOG.md          ← raw capture inbox — ideas, bugs, UX thoughts
 ├── BRIEFS/
 │   ├── 000-template.md ← copy this for every new brief
@@ -18,6 +21,8 @@ _product/
     ├── 000-template-review.md ← copy this for every new review
     └── 001-[slug]-review.md   ← Codex output after each build
 ```
+
+**When setting up a new repo:** fill in `CONTEXT.md` first, before running any agent. It's the file that tells every agent what the app is, where it's going, and what done looks like. Without it, agents are guessing.
 
 ---
 

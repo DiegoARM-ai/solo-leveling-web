@@ -59,6 +59,7 @@ Because it is a static app, a local browser can open `index.html` directly for b
 - `manifest.json`: PWA metadata, scope, start URL, theme colors, and inline SVG icon.
 - `sw.js`: cache-first service worker with network refresh fallback. Cache version must be bumped when shipping changes that should reliably invalidate old app shells.
 - `_product/README.md`: product workflow for backlog, briefs, builds, reviews, and shipping.
+- `_product/AGENTS.md`: agent workflow rules, including brief lifecycle and review ownership.
 - `_product/BACKLOG.md`: raw inbox for ideas, bugs, UX notes, debt, and experiments.
 - `_product/BRIEFS/000-template.md`: implementation brief template.
 - `_product/REVIEWS/000-template-review.md`: review template.
@@ -79,6 +80,7 @@ Main state is created by `defaultState()` and upgraded by `migrateState()`. Curr
 - `cfg`
 - `streaks`
 - `log`
+- `mfFresh` — MacroFactor freshness checkpoints per day (`dateKey → [bool, bool, bool]` for first food, midday, final log)
 - `sleep`
 - `weight`
 - `preDate`
@@ -185,7 +187,7 @@ The app writes last-night protocol status back into Somnus via `logNight(status)
 
 ### Home
 
-Home is the daily dashboard. It shows date/time, block, overall completion ring, streak, rank, awakening state, sleep warning, bottleneck warning, deep work bar, and time-grouped tasks.
+Home is the daily dashboard. It shows date/time, block, overall completion ring, streak, rank, awakening state, sleep warning, bottleneck warning, MacroFactor freshness bar, deep work bar, and time-grouped tasks.
 
 The greeting currently hardcodes Diego's name.
 
@@ -291,7 +293,7 @@ Use `_product/` for product thinking:
 4. Review against acceptance criteria and write `_product/REVIEWS/[number]-[slug]-review.md`.
 5. Mark the brief done when ready to ship.
 
-If a request has no brief and is more than a tiny fix, create or ask for a brief before building.
+Follow `_product/AGENTS.md` for the exact brief lifecycle. Cursor implements and updates Implementation notes; Codex reviews and updates the Review section/status.
 
 ## Suggested manual checks
 

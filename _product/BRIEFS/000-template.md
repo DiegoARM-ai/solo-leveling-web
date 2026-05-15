@@ -1,6 +1,7 @@
 # Brief [NUMBER] — [Feature Name]
 
-Status: `draft` / `ready` / `in-progress` / `done`
+Status: `draft` → `ready` → `in-progress` → `built/pending review` → `done`
+Current status: `draft`
 Created: [date]
 Backlog entry: [link or paste original idea]
 
@@ -84,14 +85,29 @@ Keep the diff small and focused on this brief only.
 Avoid unrelated refactors.
 Ask before adding new dependencies.
 After editing, run the narrowest useful build check.
+Then update the Implementation notes section of the brief.
 ```
+
+---
+
+## Implementation notes
+
+*Cursor fills this in after building. Do not edit the sections above — they are the record of intent.*
+
+- Status update: `in-progress` → `built/pending review`
+- What was actually built: [summary]
+- Any deviations from the brief and why: [notes or "none"]
+- Anything left out and why: [notes or "none"]
+- Branch: `[branch-name]`
+- Commit: `[commit reference]`
 
 ---
 
 ## Review
 
-After Codex review, paste summary here or link to _product/REVIEWS/[NUMBER]-[slug]-review.md
+*Codex fills this in after reviewing. See full output in _product/REVIEWS/[NUMBER]-[slug]-review.md*
 
 - Review status: `pending` / `complete`
-- Issues found: [summary]
-- Ship status: `ready to ship` / `needs fixes`
+- Issues found: [summary or "none"]
+- Ship status: `ready to ship` / `needs fixes — see review`
+- Status update: `built/pending review` → `done` or back to `in-progress`

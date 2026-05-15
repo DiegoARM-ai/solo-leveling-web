@@ -238,6 +238,42 @@ body::before {
 .dw-bar-pip.pip-target { background: rgba(0,200,150,.15); color: var(--success); }
 .dw-bar-pip.pip-elite  { background: rgba(168,85,247,.15); color: var(--sys); }
 
+/* MacroFactor freshness bar */
+.mf-bar-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 11px 14px;
+  margin-bottom: 12px; transition: border-color .3s, box-shadow .3s;
+}
+.mf-bar-wrap.mf-partial { border-color: rgba(0,212,160,.25); }
+.mf-bar-wrap.mf-done {
+  border-color: rgba(0,212,160,.5);
+  box-shadow: 0 0 18px rgba(0,212,160,.12);
+}
+.mf-bar-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.mf-bar-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--t3); }
+.mf-bar-status { font-size: 11px; font-weight: 700; }
+.mf-bar-track {
+  height: 5px; background: var(--border-b); border-radius: 3px;
+  overflow: hidden; margin-bottom: 7px;
+}
+.mf-bar-fill { height: 100%; border-radius: 3px; transition: width .5s ease; }
+.mf-bar-pips { display: flex; gap: 6px; }
+.mf-bar-pip {
+  flex: 1; text-align: center; font-size: 9px; font-weight: 600;
+  line-height: 1.25; color: var(--t3); padding: 8px 4px;
+  border-radius: 5px; background: var(--border-b);
+  cursor: pointer; -webkit-user-select: none; user-select: none;
+  transition: background .3s, color .3s, box-shadow .2s;
+}
+.mf-bar-pip:active { opacity: .85; }
+.mf-bar-pip.done {
+  background: rgba(0,212,160,.15); color: var(--physique);
+  box-shadow: inset 0 0 0 1px rgba(0,212,160,.25);
+}
+
 /* Now banner */
 .now-banner {
   background: var(--card); border: 1px solid var(--border);
@@ -1812,7 +1848,7 @@ const P = {
     ],
     aft: [
       { id:'f2', xp:15, tod:'afternoon', mod:'physique', name:'Hit protein target',         note:'170g today — track in your app' },
-      { id:'f3', xp:30, tod:'afternoon', mod:'physique', name:'Lift session',               note:'V-taper priority: lat pulldowns, overhead press, incline bench, rows. 350–400 cal deficit.' },
+      { id:'f3', xp:30, tod:'afternoon', mod:'physique', name:'Training / sweat session',   note:'Priority is scheduled lift. If gym is impossible, log a quick run, incline walk, circuit, or other intentional sweat. Do not use this to skip lifting when lifting is available.' },
       { id:'f4', xp:2,  tod:'afternoon', mod:'physique', name:'Supplements (dinner)',       note:'Zinc picolinate 25mg with food — not near workout (blocks absorption). Magnesium glycinate 400mg pre-bed.' },
     ],
     pm: [
@@ -1993,6 +2029,7 @@ function defaultState() {
       overall: { n: 0, last: null },
     },
     log:      {},   // dateKey → {taskId: bool}
+    mfFresh:  {},   // dateKey → [bool, bool, bool] — MacroFactor checkpoints
     sleep:    {},   // dateKey → {good, oura, debt, rhr, auto}
     weight:   [],   // [{date, w}]
     preDate:  {},   // pre-date checklist state (pd1–pd7)
@@ -2078,6 +2115,7 @@ function migrateState(s) {
   if (s.cfg.levelConfirmed  === undefined) s.cfg.levelConfirmed  = true;
 
   if (!s.preDate)    s.preDate    = {};
+  if (!s.mfFresh || typeof s.mfFresh !== 'object' || Array.isArray(s.mfFresh)) s.mfFresh = {};
   if (!s.sessionLog) s.sessionLog = { weekKey:'', dance:false, danceConvos:0, danceNumbers:0, runClub:false, runStayed:false, spikeEvent:false, approaches:0, numbers:0, dates:0 };
 
   // Hestia state
@@ -2514,6 +2552,58 @@ function greeting() {
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
 }
 
+const MF_CHECKPOINTS = [
+  'First food logged',
+  'Midday check done',
+  'Final log complete',
+];
+
+function mfFreshToday(key = dk()) {
+  if (!S.mfFresh || typeof S.mfFresh !== 'object' || Array.isArray(S.mfFresh)) S.mfFresh = {};
+  const raw = S.mfFresh[key];
+  if (!Array.isArray(raw) || raw.length !== 3) return [false, false, false];
+  return raw.map(Boolean);
+}
+
+function toggleMfCheckpoint(i, e) {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
+  const key = dk();
+  const arr = mfFreshToday(key);
+  arr[i] = !arr[i];
+  S.mfFresh[key] = arr;
+  save();
+  if (document.getElementById('s-home')?.classList.contains('active')) rHome();
+}
+
+function mfBarHTML() {
+  const checks = mfFreshToday();
+  const n = checks.filter(Boolean).length;
+  const wrapClass = n === 0 ? '' : n === 3 ? 'mf-done' : 'mf-partial';
+  const statusText = n === 0
+    ? '<span style="color:var(--warning)">Not updated yet</span>'
+    : n === 3
+    ? '<span style="color:var(--physique)">Locked in — MacroFactor current ✓</span>'
+    : '<span style="color:var(--t2)">' + n + '/3 checkpoints</span>';
+  const fillPct = n / 3 * 100;
+  const fillCol = n === 0 ? 'var(--border-b)' : n === 3 ? 'var(--physique)' : 'rgba(0,212,160,.65)';
+  const pipShort = ['First food', 'Midday', 'Final log'];
+  const pipsH = MF_CHECKPOINTS.map((label, i) => {
+    const cls = checks[i] ? 'mf-bar-pip done' : 'mf-bar-pip';
+    return '<div class="' + cls + '" onclick="toggleMfCheckpoint(' + i + ', event)" title="' + label + '">' + pipShort[i] + '</div>';
+  }).join('');
+  return `
+  <div class="mf-bar-wrap ${wrapClass}">
+    <div class="mf-bar-hd">
+      <div class="mf-bar-lbl">💪 MacroFactor today</div>
+      <div class="mf-bar-status">${statusText}</div>
+    </div>
+    <div class="mf-bar-track">
+      <div class="mf-bar-fill" style="width:${fillPct}%;background:${fillCol}"></div>
+    </div>
+    <div class="mf-bar-pips">${pipsH}</div>
+  </div>`;
+}
+
 function dwBarHTML() {
   // Count today's logged deep work sessions
   let sessions = [];
@@ -2916,6 +3006,7 @@ function rHome() {
     </div>` : ''}
     ${sleepFocusBanner()}
     ${bottleneckBanner()}
+    ${mfBarHTML()}
     ${dwBarHTML()}
 
     <div class="tod-list">
