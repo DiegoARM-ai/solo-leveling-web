@@ -23,6 +23,7 @@ draft → ready → in-progress → built/pending review → done
 If fixes are needed after review: `done` → back to `in-progress` → `built/pending review` → `done`
 
 **Never rewrite or delete content above the Implementation notes section.** The brief above that line is the permanent record of intent. Only add to it, never change it.
+
 ---
 
 ## Your rules
