@@ -78,6 +78,34 @@ If this project uses a different stack, it is noted in the Project overrides sec
 - Add complexity to solve a problem that doesn't exist yet
 - Use local storage for anything that needs to persist or sync — use Supabase
 - Deploy or push anything without telling me what you're about to do
+- Push or commit directly — I always review and commit via GitHub Desktop
+
+---
+
+## Git and commits
+
+I use GitHub Desktop to review and push all changes. Never push or commit automatically.
+
+After every build or meaningful change, provide a ready-to-paste commit summary following this format:
+
+**Commit title** (50 chars max, imperative tense):
+```
+Add [feature] / Fix [bug] / Update [thing] / Remove [thing]
+```
+
+**Commit description** (what and why, not how):
+```
+- What changed and why it matters to the user
+- Any edge cases or tradeoffs made
+- Brief number this implements (e.g. "Implements _product/BRIEFS/001-feature.md")
+```
+
+**Branch naming** (when starting new work):
+- Feature: `feature/[short-slug]`
+- Bug fix: `fix/[short-slug]`
+- Migration: `migration/[short-slug]`
+
+Always remind me to create a branch before building anything non-trivial. Never work directly on main.
 
 ---
 
