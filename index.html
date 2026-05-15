@@ -1770,11 +1770,6 @@ html.awaken-arise .ni.active .ni-pip {
     <div class="ni-pip"></div>
     <div class="ni-lbl">Stats</div>
   </div>
-  <div class="ni" data-s="hestia"          onclick="go('hestia')">
-    <div class="ni-ico">🔥</div>
-    <div class="ni-pip"></div>
-    <div class="ni-lbl">Hestia</div>
-  </div>
   <div class="ni" data-s="settings"        onclick="go('settings')">
     <div class="ni-ico">⚙️</div>
     <div class="ni-pip"></div>
@@ -2974,25 +2969,43 @@ function rModules() {
   const connPending    = apolloPending + hestiaPending;
   const connComplete   = connPending === 0;
 
+  const hestiaCol = COLS.hestia;
+  const totalConnTasks = allT.filter(t => t.mod === 'apollo' || t.mod === 'hestia').length;
+  const connRingPct = totalConnTasks > 0
+    ? Math.round((1 - connPending / totalConnTasks) * 100)
+    : (connComplete ? 100 : 0);
+
   const connCard = `
-  <div class="sc ${isBnConn ? 'bn-stat' : ''}" style="--sc-color:${connCol}" onclick="go('apollo')">
-    <div class="sc-info">
-      <div class="sc-stat">Connection</div>
-      <div class="sc-mod">Apollo + Hestia</div>
-      ${connComplete
-        ? `<div class="sc-done">✓ COMPLETE</div>`
-        : `<div class="sc-due">▲ ${connPending} REMAINING</div>`}
-      <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
-        <div class="lv-sc-badge" style="--sc-color:${connCol}">${lvStr(connLv)}</div>
-        ${isBnConn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div class="sc ${isBnConn ? 'bn-stat' : ''}" style="--sc-color:${connCol};border-bottom-left-radius:6px;border-bottom-right-radius:6px" onclick="go('apollo')">
+      <div class="sc-info">
+        <div class="sc-stat">Connection</div>
+        <div class="sc-mod" style="color:${connCol}">Apollo · Romantic</div>
+        ${apolloPending > 0
+          ? `<div class="sc-due">▲ ${apolloPending} REMAINING</div>`
+          : `<div class="sc-done">✓ COMPLETE</div>`}
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
+          <div class="lv-sc-badge" style="--sc-color:${connCol}">${lvStr(apolloLv)}</div>
+          ${isBnConn ? `<div class="bn-crit-badge">[ RANK CEILING ]</div>` : ''}
+        </div>
       </div>
-      <div style="display:flex;gap:10px;margin-top:5px">
-        <div style="font-size:10px;color:var(--t3)">Apollo <span style="color:${connCol};font-weight:700">${lvStr(apolloLv)}</span></div>
-        <div style="font-size:10px;color:var(--t3)">Hestia <span style="color:var(--success);font-weight:700">${lvStr(hestiaLv)}</span>${inGrace ? ' <span style="color:var(--t3)">(grace)</span>' : ''}</div>
-      </div>
+      <div>${ring(modPct('apollo'), 48, 3.5, connCol)}</div>
+      <div class="sc-arrow">›</div>
     </div>
-    <div>${ring(connComplete ? 100 : Math.round((1 - connPending / Math.max(allT.filter(t=>t.mod==='apollo'||t.mod==='hestia').length, 1)) * 100), 48, 3.5, connCol)}</div>
-    <div class="sc-arrow">›</div>
+    <div class="sc" style="--sc-color:${hestiaCol};border-top-left-radius:6px;border-top-right-radius:6px" onclick="go('hestia')">
+      <div class="sc-info">
+        <div class="sc-mod" style="color:${hestiaCol}">Hestia · Friendship</div>
+        ${hestiaPending > 0
+          ? `<div class="sc-due">▲ ${hestiaPending} REMAINING</div>`
+          : `<div class="sc-done">✓ COMPLETE</div>`}
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
+          <div class="lv-sc-badge" style="--sc-color:${hestiaCol}">${lvStr(hestiaLv)}</div>
+          ${inGrace ? `<div style="font-size:9px;color:var(--t3);letter-spacing:.3px">grace period</div>` : ''}
+        </div>
+      </div>
+      <div>${ring(modPct('hestia'), 48, 3.5, hestiaCol)}</div>
+      <div class="sc-arrow" style="color:${hestiaCol}">›</div>
+    </div>
   </div>`;
 
   const simpleStats = [
@@ -4081,7 +4094,7 @@ function rPresence() {
     </div>`;
   }
 
-  document.getElementById('s-presence').innerHTML = `
+  document.getElementById('s-apollo').innerHTML = `
   <div class="wrap" style="--sc-color:${col}">
     <div class="mod-header">
       <div class="back-btn" onclick="go('home')">‹</div>
