@@ -1,7 +1,7 @@
-# .cursorrules — Diego's Default
+# .cursorrules — Template
 
-Copy this file into the root of any project as `.cursorrules`.
-Adjust the stack section to match the specific project before building.
+Copy this file into the root of any project and rename it `.cursorrules`.
+Fill in the stack and project-specific overrides before running any agent.
 
 ---
 
@@ -22,65 +22,69 @@ Unless the project specifies otherwise, assume:
 - **Styling:** Tailwind CSS
 - **Backend / Database / Auth:** Supabase
 - **Deployment:** Vercel
-- **Language:** TypeScript (but keep types simple — avoid complex generics)
+- **Language:** TypeScript (keep types simple — avoid complex generics)
 
-If the project uses a different stack, there will be a note at the top of this file overriding these defaults.
+If this project uses a different stack, it is noted in the Project overrides section below.
 
 ---
 
 ## How to work with me
 
 **Before building:**
-- If the brief or request is ambiguous, incomplete, or missing key details — ask me questions before writing any code.
-- Ask one focused question at a time, not a list of five.
-- If you see a better approach than what I described, say so before implementing. I want your judgment, not just execution.
+- Read `_product/AGENTS.md` and `_product/CONTEXT.md` before doing anything.
+- If a brief exists for the current task, read it completely before touching any code.
+- If no brief exists, say so and ask for one before proceeding.
+- If the brief or request is ambiguous or missing key details, ask one focused question before building. Do not guess.
+- If you see a better approach than what I described, say so before implementing.
 
 **While building:**
-- Follow the existing patterns in this codebase exactly. Do not introduce new patterns without asking.
+- Follow the existing patterns in this codebase exactly.
 - Keep diffs small and focused. One thing at a time.
 - Never touch files outside the scope of the current task.
 - Never refactor unrelated code — even if it looks messy.
-- Never add a new dependency without asking me first and explaining why it's necessary.
+- Never add a new dependency without asking me first and explaining why it's needed.
 
 **After building:**
 - Always explain what you changed and why in plain English.
 - Flag anything you're uncertain about.
 - Tell me if there's something I should test or check manually.
-- If the change has any edge cases or risks I should know about, say so.
+- Note any edge cases or risks I should know about.
 
 ---
 
 ## Code quality rules
 
 - Prefer simple, readable code over clever or abstract code.
-- Avoid unnecessary abstractions, utility files, or helper layers unless the project clearly needs them.
-- Write comments for anything non-obvious — I need to understand what the code is doing.
-- If something could break for a real user (empty state, network failure, bad input), handle it.
+- Avoid unnecessary abstractions unless the project clearly needs them.
+- Write comments for anything non-obvious.
+- Handle failure states — empty inputs, network errors, unexpected user behavior.
 - Mobile-first. Everything should work well on a phone.
 
 ---
 
-## What I care about in outputs
+## What good output looks like
 
-1. Does it work for a real user on a real device?
-2. Is it simple enough that I can explain what it does?
-3. Does it follow the existing codebase patterns?
-4. Is the diff focused — no unrelated changes?
-
-If the answer to any of these is no, fix it before showing me.
+1. It works for a real user on a real device
+2. It follows existing codebase patterns
+3. The diff is focused — no unrelated changes
+4. I can understand what changed from your plain English explanation
 
 ---
 
-## Mistakes to avoid
+## What to never do
 
-- Do not silently change things I didn't ask about.
-- Do not assume I understand an error message — explain it.
-- Do not add complexity to solve a problem that doesn't exist yet.
-- Do not use local storage for anything that needs to persist or sync — use Supabase.
-- Do not deploy or push anything without telling me what you're about to do.
+- Silently change things I didn't ask about
+- Assume I understand an error message — explain it
+- Add complexity to solve a problem that doesn't exist yet
+- Use local storage for anything that needs to persist or sync — use Supabase
+- Deploy or push anything without telling me what you're about to do
 
 ---
 
-## Project-specific overrides
+## Project overrides
 
-[Add any project-specific notes here — current stack if different from default, known quirks, files to avoid, etc.]
+[Fill in anything specific to this project — stack differences, files to avoid, known quirks, architectural decisions already made.]
+
+Project name:
+Stack (if different from default):
+Notes:
