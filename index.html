@@ -2771,9 +2771,10 @@ function render(s) {
     case 'modules':  rModules();  break;
     case 'physique': rPhysique(); break;
     case 'vitality': rVitality(); break;
-    case 'apollo':   rPresence(); break;  // Apollo screen (presence renamed)
-    case 'presence': rPresence(); break;  // legacy route
-    case 'hestia':   rHestia();   break;
+    case 'connection': rConnection(); break;
+    case 'apollo':     rPresence();  break;
+    case 'presence':   rPresence();  break;  // legacy route
+    case 'hestia':     rHestia();    break;
     case 'craft':    rCraft();    break;
     case 'purpose':  rPurpose();  break;
     case 'settings': rSettings(); break;
@@ -2970,39 +2971,27 @@ function rModules() {
   const connComplete   = connPending === 0;
 
   const hestiaCol = COLS.hestia;
+  const connRingPct = Math.round((modPct('apollo') + modPct('hestia')) / 2);
 
   const connCard = `
-  <div style="display:flex;flex-direction:column;gap:8px">
-    <div class="sc ${isBnConn ? 'bn-stat' : ''}" style="--sc-color:${connCol}" onclick="go('apollo')">
-      <div class="sc-info">
-        <div class="sc-stat">Connection</div>
-        <div class="sc-mod">Apollo</div>
-        ${apolloPending > 0
-          ? `<div class="sc-due">▲ ${apolloPending} REMAINING</div>`
-          : `<div class="sc-done">✓ COMPLETE</div>`}
-        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
-          <div class="lv-sc-badge" style="--sc-color:${connCol}">${lvStr(apolloLv)}</div>
-          ${isBnConn ? `<div class="bn-crit-badge">[ BOTTLENECK ]</div>` : ''}
-        </div>
+  <div class="sc ${isBnConn ? 'bn-stat' : ''}" style="--sc-color:${connCol}" onclick="go('connection')">
+    <div class="sc-info">
+      <div class="sc-stat">Connection</div>
+      <div class="sc-mod">Apollo + Hestia</div>
+      ${connComplete
+        ? `<div class="sc-done">✓ COMPLETE</div>`
+        : `<div class="sc-due">▲ ${connPending} REMAINING</div>`}
+      <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
+        <div class="lv-sc-badge" style="--sc-color:${connCol}">${lvStr(connLv)}</div>
+        ${isBnConn ? `<div class="bn-crit-badge">[ BOTTLENECK ]</div>` : ''}
       </div>
-      <div>${ring(modPct('apollo'), 48, 3.5, connCol)}</div>
-      <div class="sc-arrow">›</div>
-    </div>
-    <div class="sc" style="--sc-color:${hestiaCol}" onclick="go('hestia')">
-      <div class="sc-info">
-        <div class="sc-stat" style="opacity:.45">↳ Connection</div>
-        <div class="sc-mod">Hestia</div>
-        ${hestiaPending > 0
-          ? `<div class="sc-due">▲ ${hestiaPending} REMAINING</div>`
-          : `<div class="sc-done">✓ COMPLETE</div>`}
-        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:4px">
-          <div class="lv-sc-badge" style="--sc-color:${hestiaCol}">${lvStr(hestiaLv)}</div>
-          ${inGrace ? `<div style="font-size:9px;color:var(--warning);letter-spacing:.3px">[ GRACE ]</div>` : ''}
-        </div>
+      <div style="display:flex;gap:12px;margin-top:6px">
+        <div style="font-size:10px;color:var(--t3)">Apollo <span style="color:${connCol};font-weight:700">${lvStr(apolloLv)}</span></div>
+        <div style="font-size:10px;color:var(--t3)">Hestia <span style="color:${hestiaCol};font-weight:700">${lvStr(hestiaLv)}</span></div>
       </div>
-      <div>${ring(modPct('hestia'), 48, 3.5, hestiaCol)}</div>
-      <div class="sc-arrow">›</div>
     </div>
+    <div>${ring(connRingPct, 48, 3.5, connCol)}</div>
+    <div class="sc-arrow">›</div>
   </div>`;
 
   const simpleStats = [
@@ -4689,6 +4678,68 @@ function snLogSelectionReview() {
   rPurpose();
 }
 
+// ── Connection landing ─────────────────────────────────────
+function rConnection() {
+  const apolloCol  = COLS.apollo;
+  const hestiaCol  = COLS.hestia;
+  const apolloLv   = S.levels?.apollo || 1;
+  const hestiaLv   = S.levels?.hestia || 1;
+  const connLv     = connectionLevel();
+  const grace      = S.cfg?.hestiaGraceUntil;
+  const inGrace    = grace && dk() <= grace;
+
+  const allT = todayTasks();
+  const apolloPending = allT.filter(t => t.mod === 'apollo' && !done(t.id)).length;
+  const hestiaPending = allT.filter(t => t.mod === 'hestia' && !done(t.id)).length;
+
+  document.getElementById('s-connection').innerHTML = `
+  <div class="wrap">
+    <div class="mod-header">
+      <div class="back-btn" onclick="go('modules')">‹</div>
+      <div class="mod-ttl-g">
+        <div class="mod-stat-nm" style="color:${apolloCol}">Connection</div>
+        <div class="mod-name">LV.${String(connLv).padStart(2,'0')}</div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;color:var(--t2);line-height:1.6;padding:0 2px 18px">
+      Two modules, one stat. Connection level = the lower of the two.${inGrace
+        ? ' Hestia is in its 30-day grace period and not yet counted in the bottleneck.'
+        : ''}
+    </div>
+
+    <div class="sc" style="--sc-color:${apolloCol};margin-bottom:10px" onclick="go('apollo')">
+      <div class="sc-info">
+        <div class="sc-stat">Romantic</div>
+        <div class="sc-mod">Apollo</div>
+        ${apolloPending > 0
+          ? `<div class="sc-due">▲ ${apolloPending} REMAINING</div>`
+          : `<div class="sc-done">✓ COMPLETE</div>`}
+        <div style="margin-top:4px">
+          <div class="lv-sc-badge" style="--sc-color:${apolloCol}">${lvStr(apolloLv)}</div>
+        </div>
+      </div>
+      <div>${ring(modPct('apollo'), 48, 3.5, apolloCol)}</div>
+      <div class="sc-arrow">›</div>
+    </div>
+
+    <div class="sc" style="--sc-color:${hestiaCol}" onclick="go('hestia')">
+      <div class="sc-info">
+        <div class="sc-stat">Friendship</div>
+        <div class="sc-mod">Hestia</div>
+        ${hestiaPending > 0
+          ? `<div class="sc-due">▲ ${hestiaPending} REMAINING</div>`
+          : `<div class="sc-done">✓ COMPLETE</div>`}
+        <div style="margin-top:4px">
+          <div class="lv-sc-badge" style="--sc-color:${hestiaCol}">${lvStr(hestiaLv)}</div>
+        </div>
+      </div>
+      <div>${ring(modPct('hestia'), 48, 3.5, hestiaCol)}</div>
+      <div class="sc-arrow">›</div>
+    </div>
+  </div>`;
+}
+
 // ── Hestia — Friendship & Belonging ───────────────────────
 let _htTab = 'today';
 
@@ -5867,7 +5918,7 @@ function tickClock() {
 // ── Init ───────────────────────────────────────────────────
 (function init() {
   const app = document.getElementById('app');
-  ['home','modules','physique','vitality','presence','apollo','hestia','craft','purpose','settings'].forEach(id => {
+  ['home','modules','physique','vitality','presence','apollo','hestia','connection','craft','purpose','settings'].forEach(id => {
     const d = document.createElement('div');
     d.id = 's-' + id;
     d.className = 'screen' + (id === 'home' ? ' active' : '');
