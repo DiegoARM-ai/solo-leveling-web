@@ -470,6 +470,15 @@ body::before {
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.mod-sub {
+  font-size: 0.7rem;
+  opacity: 0.55;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+  color: var(--t2);
+  font-weight: 600;
+}
 
 /* ===== PROTOCOL SECTIONS ===== */
 .proto-sec { margin-bottom: 20px; }
@@ -2197,7 +2206,7 @@ function calcRank() {
 
 // ── Bottleneck detection ───────────────────────────────────
 // Operates on the 5-stat view (connection = min apollo+hestia).
-const MOD_NAMES = { physique:'Adonis', vitality:'Somnus', connection:'Connection', apollo:'Apollo', hestia:'Hestia', craft:'Prometheus', purpose:'Seneca' };
+const MOD_NAMES = { physique:'Adonis', vitality:'Somnus', connection:'Connection', apollo:'Eros', hestia:'Hestia', craft:'Prometheus', purpose:'Janus' };
 const MOD_STAT  = { physique:'Physique', vitality:'Vitality', connection:'Connection', craft:'Craft', purpose:'Purpose' };
 
 function getBottleneck() {
@@ -2216,7 +2225,7 @@ function bottleneckBanner() {
   const maxLv = Math.max(...vals);
   if (maxLv === bn.level) return '';
   const statLabel = bn.stats.map(s => ({
-    physique:'Adonis', vitality:'Somnus', connection:'Connection', craft:'Prometheus', purpose:'Seneca'
+    physique:'Adonis', vitality:'Somnus', connection:'Connection', craft:'Prometheus', purpose:'Janus'
   }[s] || s)).join(' + ');
   const gap     = maxLv - bn.level;
   const subtext = gap >= 2
@@ -2349,7 +2358,7 @@ function flashLevelUp(col) {
 function promptLvUp(mod) {
   const lv  = S.levels?.[mod] || 1;
   const next = lv + 1;
-  const names = { physique:'Adonis', vitality:'Somnus', presence:'Apollo', apollo:'Apollo', hestia:'Hestia', craft:'Prometheus', purpose:'Seneca' };
+  const names = { physique:'Adonis', vitality:'Somnus', presence:'Eros', apollo:'Eros', hestia:'Hestia', craft:'Prometheus', purpose:'Janus' };
   const msg = `[ THE SYSTEM — LEVEL UP VERIFICATION ]\n\n${names[mod].toUpperCase()} → ${lvStr(next)}\n\nBOTH GATES REQUIRED:\n· XP GATE — weekly target sustained ✓\n· OUTCOME GATE — real-world result confirmed\n\nVerify the ${lvStr(next)} outcome gate in your protocol doc before claiming.\n\n"The System does not grant power. It confirms what you have already earned."\n\nCONFIRM?`;
   if (confirm(msg)) {
     if (!S.levels) S.levels = {};
@@ -2783,12 +2792,12 @@ function render(s) {
 
 // ── Module colour/icon/name lookup ─────────────────────────
 const MOD_META = {
-  physique: { ico:'💪', name:'Adonis',     stat:'Physique'   },
-  vitality: { ico:'🌙', name:'Somnus',     stat:'Vitality'   },
-  apollo:   { ico:'⚡', name:'Apollo',     stat:'Connection' },
-  hestia:   { ico:'🔥', name:'Hestia',     stat:'Connection' },
-  craft:    { ico:'🔨', name:'Prometheus', stat:'Craft'      },
-  purpose:  { ico:'🎯', name:'Seneca',     stat:'Purpose'    },
+  physique: { ico:'💪', name:'Adonis',     stat:'Physique',   sub:'Body & Grooming' },
+  vitality: { ico:'🌙', name:'Somnus',     stat:'Vitality',   sub:'Sleep & Recovery' },
+  apollo:   { ico:'⚡', name:'Eros',       stat:'Connection', sub:'Romantic Pursuit & Selection' },
+  hestia:   { ico:'🔥', name:'Hestia',     stat:'Connection', sub:'Friendship & Belonging' },
+  craft:    { ico:'🔨', name:'Prometheus', stat:'Craft',      sub:'Craft & Mastery' },
+  purpose:  { ico:'🎯', name:'Janus',      stat:'Purpose',    sub:'Direction & Reflection' },
 };
 
 // ── Today (home) ───────────────────────────────────────────
@@ -2977,7 +2986,8 @@ function rModules() {
   <div class="sc ${isBnConn ? 'bn-stat' : ''}" style="--sc-color:${connCol}" onclick="go('connection')">
     <div class="sc-info">
       <div class="sc-stat">Connection</div>
-      <div class="sc-mod">Apollo + Hestia</div>
+      <div class="sc-mod">Eros + Hestia</div>
+      <div class="mod-sub" style="margin-top:3px">Romantic pursuit & selection · Friendship & belonging</div>
       ${connComplete
         ? `<div class="sc-done">✓ COMPLETE</div>`
         : `<div class="sc-due">▲ ${connPending} REMAINING</div>`}
@@ -2986,7 +2996,7 @@ function rModules() {
         ${isBnConn ? `<div class="bn-crit-badge">[ BOTTLENECK ]</div>` : ''}
       </div>
       <div style="display:flex;gap:12px;margin-top:6px">
-        <div style="font-size:10px;color:var(--t3)">Apollo <span style="color:${connCol};font-weight:700">${lvStr(apolloLv)}</span></div>
+        <div style="font-size:10px;color:var(--t3)">Eros <span style="color:${connCol};font-weight:700">${lvStr(apolloLv)}</span></div>
         <div style="font-size:10px;color:var(--t3)">Hestia <span style="color:${hestiaCol};font-weight:700">${lvStr(hestiaLv)}</span></div>
       </div>
     </div>
@@ -2995,10 +3005,10 @@ function rModules() {
   </div>`;
 
   const simpleStats = [
-    { s:'physique', name:'Physique', mod:'Adonis',     ico:'💪', dest:'physique' },
-    { s:'vitality', name:'Vitality', mod:'Somnus',     ico:'🌙', dest:'vitality' },
-    { s:'craft',    name:'Craft',    mod:'Prometheus', ico:'🔥', dest:'craft'    },
-    { s:'purpose',  name:'Purpose',  mod:'Seneca',     ico:'🎯', dest:'purpose'  },
+    { s:'physique', name:'Physique', mod:'Adonis',     sub:'Body & Grooming',              ico:'💪', dest:'physique' },
+    { s:'vitality', name:'Vitality', mod:'Somnus',     sub:'Sleep & Recovery',             ico:'🌙', dest:'vitality' },
+    { s:'craft',    name:'Craft',    mod:'Prometheus', sub:'Craft & Mastery',              ico:'🔥', dest:'craft'    },
+    { s:'purpose',  name:'Purpose',  mod:'Janus',      sub:'Direction & Reflection',       ico:'🎯', dest:'purpose'  },
   ];
 
   const simpleCardsH = simpleStats.map(c => {
@@ -3012,6 +3022,7 @@ function rModules() {
       <div class="sc-info">
         <div class="sc-stat">${c.name}</div>
         <div class="sc-mod">${c.mod}</div>
+        <div class="mod-sub" style="margin-top:3px">${c.sub}</div>
         ${pending > 0
           ? `<div class="sc-due">▲ ${pending} REMAINING</div>`
           : `<div class="sc-done">✓ COMPLETE</div>`}
@@ -3037,6 +3048,7 @@ function rModules() {
       <div class="sc-info">
         <div class="sc-stat">${c.name}</div>
         <div class="sc-mod">${c.mod}</div>
+        <div class="mod-sub" style="margin-top:3px">${c.sub}</div>
         ${pending > 0
           ? `<div class="sc-due">▲ ${pending} REMAINING</div>`
           : `<div class="sc-done">✓ COMPLETE</div>`}
@@ -3086,6 +3098,7 @@ function rPhysique() {
       <div class="mod-ttl-g">
         <div class="mod-stat-nm">Physique</div>
         <div class="mod-name">Adonis</div>
+        <div class="mod-sub">Body & Grooming</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
@@ -3228,6 +3241,7 @@ function rVitality() {
       <div class="mod-ttl-g">
         <div class="mod-stat-nm">Vitality</div>
         <div class="mod-name">Somnus</div>
+        <div class="mod-sub">Sleep & Recovery</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
@@ -3836,7 +3850,7 @@ function rApLog() {
       ${cntRow('Dates completed', '+35 XP each', 'dates')}
     </div>
 
-    <div class="ap-log-note">Resets each Monday · XP flows to Presence weekly total</div>
+    <div class="ap-log-note">Resets each Monday · XP flows to Eros weekly total</div>
   </div>`;
 }
 
@@ -3937,12 +3951,12 @@ function rPresence() {
     tabContent = `
     ${proto('📲', 'Daily App Protocol', P.apollo.daily, col, false)}
 
-    <div class="apollo-pipe-btn" onclick="${pipeUrl ? `window.open('${pipeUrl}','_blank')` : `alert('Add your Notion pipeline URL in Settings → Apollo')`}">
+    <div class="apollo-pipe-btn" onclick="${pipeUrl ? `window.open('${pipeUrl}','_blank')` : `alert('Add your Notion pipeline URL in Settings → Eros')`}">
       <div class="apollo-pipe-ico">🗂</div>
       <div class="apollo-pipe-info">
         <div class="apollo-pipe-lbl">Pipeline</div>
         <div class="apollo-pipe-ttl">Open Social CRM in Notion</div>
-        <div class="apollo-pipe-sub">${pipeUrl ? 'Prospect → Lead → Following Up → … → Closed' : 'Add your Notion URL in Settings → Apollo'}</div>
+        <div class="apollo-pipe-sub">${pipeUrl ? 'Prospect → Lead → Following Up → … → Closed' : 'Add your Notion URL in Settings → Eros'}</div>
       </div>
       <div class="apollo-pipe-arrow">›</div>
     </div>`;
@@ -4086,7 +4100,8 @@ function rPresence() {
       <div class="back-btn" onclick="go('home')">‹</div>
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${col}">Connection</div>
-        <div class="mod-name">Apollo</div>
+        <div class="mod-name">Eros</div>
+        <div class="mod-sub">Romantic Pursuit & Selection</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
@@ -4101,7 +4116,7 @@ function rPresence() {
 
     ${tabContent}
 
-    <div class="footer-hint">Apollo · Romantic Pursuit &amp; Selection · Level ${S.levels?.apollo || 1}</div>
+    <div class="footer-hint">Eros · Romantic Pursuit &amp; Selection · Level ${S.levels?.apollo || 1}</div>
   </div>`;
 }
 
@@ -4376,7 +4391,8 @@ function rPurpose() {
       <div class="back-btn" onclick="go('home')">‹</div>
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${col}">Purpose</div>
-        <div class="mod-name">Seneca</div>
+        <div class="mod-name">Janus</div>
+        <div class="mod-sub">Direction & Reflection</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
@@ -4398,15 +4414,18 @@ function rPurpose() {
         <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
           <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:8px">Q3 Goals — May 11 → Aug 31</div>
           ${[
-            { mod:'Adonis',     goal:'10–12% BF · WSR ≤ 0.63', col:'var(--physique)' },
-            { mod:'Somnus',     goal:'Oura consistency ≥ 85% · Whoop debt < 45 min for 3+ weeks', col:'var(--vitality)' },
-            { mod:'Apollo',     goal:'12+ first dates · 2–3 women worth pursuing beyond date 1', col:'var(--presence)' },
-            { mod:'Prometheus', goal:'Formal raise conversation done · clear outcome in hand', col:'var(--craft)' },
-            { mod:'Seneca',     goal:'Morning ignition + evening close automatic for 8 consecutive weeks', col:'var(--purpose)' },
+            { mod:'Adonis',     sub:'Body & Grooming',              goal:'10–12% BF · WSR ≤ 0.63', col:'var(--physique)' },
+            { mod:'Somnus',     sub:'Sleep & Recovery',             goal:'Oura consistency ≥ 85% · Whoop debt < 45 min for 3+ weeks', col:'var(--vitality)' },
+            { mod:'Eros',       sub:'Romantic Pursuit & Selection', goal:'12+ first dates · 2–3 women worth pursuing beyond date 1', col:'var(--presence)' },
+            { mod:'Prometheus', sub:'Craft & Mastery',              goal:'Formal raise conversation done · clear outcome in hand', col:'var(--craft)' },
+            { mod:'Janus',      sub:'Direction & Reflection',       goal:'Morning ignition + evening close automatic for 8 consecutive weeks', col:'var(--purpose)' },
             { mod:'Parents',    goal:'Complete retirement model · confirmed 2027 trip dates', col:'var(--t2)' },
           ].map(g => `
             <div style="display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)">
-              <div style="font-size:11px;font-weight:800;color:${g.col};min-width:80px;flex-shrink:0">${g.mod}</div>
+              <div style="min-width:100px;flex-shrink:0">
+                <div style="font-size:11px;font-weight:800;color:${g.col}">${g.mod}</div>
+                ${g.sub ? `<div class="mod-sub" style="margin-top:2px;opacity:.65">${g.sub}</div>` : ''}
+              </div>
               <div style="font-size:12px;color:var(--t2);line-height:1.4">${g.goal}</div>
             </div>`).join('')}
         </div>
@@ -4476,7 +4495,7 @@ function rPurpose() {
     <div class="ref-card" id="r-reading">
       <div class="ref-hd" onclick="toggleRef('r-reading')">
         <div class="ref-ico">📚</div>
-        <div class="ref-ttl">Reading List — Seneca Domain</div>
+        <div class="ref-ttl">Reading List — Janus Domain</div>
         <div class="ref-toggle">⌄</div>
       </div>
       <div class="ref-body">
@@ -4504,7 +4523,7 @@ function rPurpose() {
         </div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🧠</div>
-          <div class="ref-st"><strong style="color:var(--t1)">Coherence Breathing — McCraty / HRV research</strong><br>5s in / 5s out rhythm maximizes HRV by synchronizing respiratory and cardiovascular cycles. Immediate parasympathetic activation; HRV improvement measurable on Whoop within 2–3 weeks of consistent practice. Direct Somnus–Seneca positive feedback loop.</div></div>
+          <div class="ref-st"><strong style="color:var(--t1)">Coherence Breathing — McCraty / HRV research</strong><br>5s in / 5s out rhythm maximizes HRV by synchronizing respiratory and cardiovascular cycles. Immediate parasympathetic activation; HRV improvement measurable on Whoop within 2–3 weeks of consistent practice. Direct Somnus–Janus positive feedback loop.</div></div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🧠</div>
           <div class="ref-st"><strong style="color:var(--t1)">Focused Attention Meditation — Hölzel et al. (2011)</strong><br>8 weeks of daily practice: measurable gray matter increase in PFC (attention, decision quality) + reduced amygdala reactivity (stress response). Equanimity is a trained capacity, not a mindset. Coherence breathing pre-loads the calm that makes focused attention more accessible.</div>
@@ -4519,14 +4538,14 @@ function rPurpose() {
         </div>
         <div class="ref-step">
           <div class="ref-sn" style="background:color-mix(in srgb,${col} 12%,transparent);color:${col};border:1px solid color-mix(in srgb,${col} 25%,transparent)">🌀</div>
-          <div class="ref-st"><strong style="color:var(--t1)">Seneca as the Force Multiplier</strong><br>The strategic direction layer determines where effort in all 5 modules gets allocated. A clear 90-day goal makes every rep in Adonis, Somnus, Apollo, and Prometheus more intentional. The inner state practice makes you more resilient when any of those modules is hard.</div>
+          <div class="ref-st"><strong style="color:var(--t1)">Janus as the Force Multiplier</strong><br>The strategic direction layer determines where effort in all 5 modules gets allocated. A clear 90-day goal makes every rep in Adonis, Somnus, Eros, and Prometheus more intentional. The inner state practice makes you more resilient when any of those modules is hard.</div>
         </div>
       </div>
     </div>
 
     ${rSenecaCapacity(col)}
 
-    <div class="footer-hint">Seneca · Philosophy &amp; Direction · Level ${S.levels?.purpose || 1}</div>
+    <div class="footer-hint">Janus · Direction &amp; Reflection · Level ${S.levels?.purpose || 1}</div>
   </div>`;
 }
 
@@ -4602,7 +4621,7 @@ function rSenecaCapacity(col) {
 
   <div class="ht-section">
     <div class="ht-sec-hd" style="color:${col}">Quarterly — Selection Learning Review</div>
-    <div class="ht-sec-sub">Review closed + nurture Apollo leads. What drew you? What was missing? What did this reveal? Refine the target profile. +80 XP</div>
+    <div class="ht-sec-sub">Review closed + nurture Eros leads. What drew you? What was missing? What did this reveal? Refine the target profile. +80 XP</div>
     ${srThis
       ? `<div class="ht-mm-done" style="background:color-mix(in srgb,${col} 10%,transparent);border-color:color-mix(in srgb,${col} 30%,transparent);color:${col}">✓ Logged this quarter</div>`
       : `<div style="display:flex;gap:8px;flex-direction:column;margin-top:10px">
@@ -4699,6 +4718,7 @@ function rConnection() {
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${apolloCol}">Connection</div>
         <div class="mod-name">LV.${String(connLv).padStart(2,'0')}</div>
+        <div class="mod-sub">Eros + Hestia · one stat</div>
       </div>
     </div>
 
@@ -4711,7 +4731,8 @@ function rConnection() {
     <div class="sc" style="--sc-color:${apolloCol};margin-bottom:10px" onclick="go('apollo')">
       <div class="sc-info">
         <div class="sc-stat">Romantic</div>
-        <div class="sc-mod">Apollo</div>
+        <div class="sc-mod">Eros</div>
+        <div class="mod-sub" style="margin-top:3px">Romantic Pursuit & Selection</div>
         ${apolloPending > 0
           ? `<div class="sc-due">▲ ${apolloPending} REMAINING</div>`
           : `<div class="sc-done">✓ COMPLETE</div>`}
@@ -4727,6 +4748,7 @@ function rConnection() {
       <div class="sc-info">
         <div class="sc-stat">Friendship</div>
         <div class="sc-mod">Hestia</div>
+        <div class="mod-sub" style="margin-top:3px">Friendship & Belonging</div>
         ${hestiaPending > 0
           ? `<div class="sc-due">▲ ${hestiaPending} REMAINING</div>`
           : `<div class="sc-done">✓ COMPLETE</div>`}
@@ -4896,7 +4918,7 @@ function rHestia() {
   const inGrace = grace && dk() <= grace;
   const connNote = inGrace
     ? `<div style="font-size:11px;color:var(--warning);margin-top:6px;letter-spacing:.5px">Grace period active until ${grace} — Hestia not yet counted in Connection bottleneck</div>`
-    : `<div style="font-size:11px;color:var(--t3);margin-top:6px;letter-spacing:.5px">Connection stat = min(Apollo L${S.levels?.apollo||1}, Hestia L${S.levels?.hestia||1})</div>`;
+    : `<div style="font-size:11px;color:var(--t3);margin-top:6px;letter-spacing:.5px">Connection stat = min(Eros L${S.levels?.apollo||1}, Hestia L${S.levels?.hestia||1})</div>`;
 
   document.getElementById('s-hestia').innerHTML = `
   <div class="wrap" style="--sc-color:${col}">
@@ -4905,6 +4927,7 @@ function rHestia() {
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${col}">Connection</div>
         <div class="mod-name">Hestia</div>
+        <div class="mod-sub">Friendship & Belonging</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
@@ -5266,6 +5289,7 @@ function rCraft() {
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${col}">Craft</div>
         <div class="mod-name">Prometheus</div>
+        <div class="mod-sub">Craft & Mastery</div>
       </div>
       <div>${ring(cp, 46, 3.5, col)}</div>
     </div>
@@ -5532,7 +5556,8 @@ function _saveSession(data) {
 // ── Scaffold ───────────────────────────────────────────────
 const SCAFFOLD_INFO = {
   presence: {
-    ico:'⚡', ttl:'Presence', mod:'Apollo',
+    ico:'⚡', ttl:'Connection', mod:'Eros',
+    sub:'Romantic Pursuit & Selection',
     body:'Social & romantic abundance · charisma · attraction · relationship depth · close bonds. Protocol in development.',
     sci:`Waldinger & Schulz (Harvard, 80yr) — close relationships #1 predictor of happiness and longevity<br>
          Holt-Lunstad — social isolation carries same mortality risk as smoking 15 cigarettes/day<br>
@@ -5541,6 +5566,7 @@ const SCAFFOLD_INFO = {
   },
   craft: {
     ico:'🔥', ttl:'Craft', mod:'Prometheus',
+    sub:'Craft & Mastery',
     body:'Deep work · skill compounding · career · financial hygiene · wealth building. Protocol in development.',
     sci:`Ericsson & Pool — deliberate practice and expertise development<br>
          Newport "Deep Work" — distraction-free work produces disproportionate value<br>
@@ -5559,6 +5585,7 @@ function rScaffold(s) {
       <div class="mod-ttl-g">
         <div class="mod-stat-nm" style="color:${col}">${i.ttl}</div>
         <div class="mod-name">${i.mod}</div>
+        ${i.sub ? `<div class="mod-sub">${i.sub}</div>` : ''}
       </div>
     </div>
     ${lvBar(s, col)}
@@ -5647,9 +5674,9 @@ function rSettings() {
     </div>
 
     <div class="set-sec">
-      <div class="set-sec-ttl">Apollo</div>
+      <div class="set-sec-ttl">Eros</div>
       <div style="padding:4px 0 10px;font-size:12px;color:var(--t3);line-height:1.5">
-        Paste your Notion pipeline page URL here. The "Open Social CRM" button in Apollo will link directly to it.
+        Paste your Notion pipeline page URL here. The "Open Social CRM" button in Eros will link directly to it.
       </div>
       <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:8px">
         <div class="set-row-lbl">Notion Pipeline URL</div>
@@ -5684,19 +5711,21 @@ function rSettings() {
       ${[
         { mod:'physique', name:'Adonis',     col:'var(--physique)' },
         { mod:'vitality', name:'Somnus',     col:'var(--vitality)' },
-        { mod:'apollo',   name:'Apollo',     col:'var(--presence)' },
+        { mod:'apollo',   name:'Eros',       col:'var(--presence)' },
         { mod:'hestia',   name:'Hestia',     col:'#34D399'         },
         { mod:'craft',    name:'Prometheus', col:'var(--craft)'    },
-        { mod:'purpose',  name:'Seneca',     col:'var(--purpose)'  },
+        { mod:'purpose',  name:'Janus',      col:'var(--purpose)'  },
       ].map(({ mod, name, col }) => {
         const lv    = S.levels?.[mod] || 1;
         const wxp   = getWeeklyXP(mod);
         const tgt   = XP_TARGETS[mod]?.[lv] || 0;
         const atTgt = tgt > 0 && wxp >= tgt;
+        const sub   = (MOD_META[mod] && MOD_META[mod].sub) || '';
         return `
         <div class="set-row">
           <div>
             <div class="set-row-lbl" style="color:${col}">${name}</div>
+            ${sub ? `<div class="mod-sub" style="margin-top:2px">${sub}</div>` : ''}
             <div class="set-row-sub">${wxp} XP this week${tgt > 0 ? ' · target ' + tgt : ''}</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
